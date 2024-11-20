@@ -7,6 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\vistassincontroller\about.html" />
+    <None Include="wwwroot\vistassincontroller\blog.html" />
+    <None Include="wwwroot\vistassincontroller\contact.html" />
+    <None Include="wwwroot\vistassincontroller\index.html" />
+    <None Include="wwwroot\vistassincontroller\price.html" />
+    <None Include="wwwroot\vistassincontroller\service.html" />
+    <None Include="wwwroot\vistassincontroller\single.html" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
   </ItemGroup>
