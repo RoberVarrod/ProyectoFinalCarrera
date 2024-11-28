@@ -1,0 +1,120 @@
+﻿@{
+    ViewData["Title"] = "Registro de Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Registration Page Start -->
+<div class="container-fluid bg-secondary my-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 py-5 py-lg-0">
+                <h6 class="text-primary text-uppercase font-weight-bold">Crea tu cuenta</h6>
+                <h1 class="mb-4">Regístrate y únete a nosotros</h1>
+                <p class="mb-4">Completa los campos para gestionar tus datos, rastrear paquetes y disfrutar de nuestras funciones.</p>
+            </div>
+            <div class="col-lg-6">
+                <div class="bg-primary py-5 px-4 px-sm-5">
+                    <form class="py-5" method="post" action="/Acceso/Registro" id="registrationForm">
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 p-4" placeholder="Nombre" name="Nombre" required="required" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 p-4" placeholder="Primer Apellido" name="PrimerApellido" required="required" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 p-4" placeholder="Segundo Apellido" name="SegundoApellido" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 p-4" placeholder="Cédula (Ejemplo: 1011110111)" name="Cedula"
+                                   pattern="\d{10}" title="La cédula debe tener 10 dígitos." required="required" />
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control border-0 p-4" placeholder="Correo Electrónico" name="Email" required="required" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 p-4" placeholder="Teléfono (Ejemplo: 88888888)" name="Telefono"
+                                   pattern="\d{8}" title="El número de teléfono debe tener 8 dígitos." required="required" />
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control border-0 p-4" id="password" placeholder="Contraseña"
+                                   name="Password" required="required" />
+                            <div class="bg-light p-3 mt-2" id="passwordHelp" style="display: none; border-radius: 5px;">
+                                <p class="mb-1">La contraseña debe cumplir con:</p>
+                                <ul class="mb-0">
+                                    <li id="length" class="text-danger">Mínimo 8 caracteres</li>
+                                    <li id="uppercase" class="text-danger">Una letra mayúscula</li>
+                                    <li id="lowercase" class="text-danger">Una letra minúscula</li>
+                                    <li id="number" class="text-danger">Un número</li>
+                                    <li id="special" class="text-danger">Un carácter especial (#$%^&+=!)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control border-0 p-4" id="confirm-password" placeholder="Confirmar Contraseña"
+                                   name="ConfirmPassword" required="required" />
+                            <div id="passwordMismatch" class="alert alert-danger mt-2" style="display: none;">
+                                <strong>Las contraseñas no coinciden.</strong>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn-dark btn-block border-0 py-3" type="submit">Registrarse</button>
+                        </div>
+                        <div class="text-center mt-3">
+                            <p class="text-white">¿Ya tienes una cuenta? <a href="/Acceso/InicioSesion" class="text-dark font-weight-bold">Inicia Sesión</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Registration Page End -->
+
+<script>
+    // Password validation
+    document.getElementById("password").addEventListener("input", function () {
+        const password = this.value;
+        const length = document.getElementById("length");
+        const uppercase = document.getElementById("uppercase");
+        const lowercase = document.getElementById("lowercase");
+        const number = document.getElementById("number");
+        const special = document.getElementById("special");
+        const passwordHelp = document.getElementById("passwordHelp");
+
+        passwordHelp.style.display = "block";
+
+        // Validations
+        length.classList.toggle("text-success", password.length >= 8);
+        length.classList.toggle("text-danger", password.length < 8);
+
+        uppercase.classList.toggle("text-success", /[A-Z]/.test(password));
+        uppercase.classList.toggle("text-danger", !/[A-Z]/.test(password));
+
+        lowercase.classList.toggle("text-success", /[a-z]/.test(password));
+        lowercase.classList.toggle("text-danger", !/[a-z]/.test(password));
+
+        number.classList.toggle("text-success", /\d/.test(password));
+        number.classList.toggle("text-danger", !/\d/.test(password));
+
+        special.classList.toggle("text-success", /[#$%^&+=!]/.test(password));
+        special.classList.toggle("text-danger", !/[#$%^&+=!]/.test(password));
+    });
+
+    // Password match validation
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirm-password');
+    const passwordMismatch = document.getElementById('passwordMismatch');
+
+    function validarContraseña() {
+        if (passwordInput.value !== confirmPasswordInput.value) {
+            confirmPasswordInput.setCustomValidity('Las contraseñas no coinciden');
+            passwordMismatch.style.display = "block";
+        } else {
+            confirmPasswordInput.setCustomValidity('');
+            passwordMismatch.style.display = "none";
+        }
+    }
+
+    passwordInput.addEventListener('input', validarContraseña);
+    confirmPasswordInput.addEventListener('input', validarContraseña);
+</script>

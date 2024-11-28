@@ -59,8 +59,8 @@
     <div class="container-fluid p-0">
         <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-lg-5">
             <a class="navbar-brand ml-lg-3" asp-area="" asp-controller="Home" asp-action="Index">
-                    <h1 class="m-0 display-5 text-uppercase text-primary"><i class="fa fa-truck mr-2"></i>Transportes a Costa Rica</h1>
-                </a>
+                <h1 class="m-0 display-5 text-uppercase text-primary"><i class="fa fa-truck mr-2"></i>Transportes a Costa Rica</h1>
+            </a>
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -68,7 +68,6 @@
                 <div class="navbar-nav m-auto py-0">
                     <!--     <a href="Views/vistassincontroller/index.html" class="nav-item nav-link active">Home sin controller </a> home sin controller -->
                     <a href="@Url.Action("Index","Home")" class="nav-item nav-link active">Inicio</a> <!--  home con controller -->
-                    <a class="nav-item nav-link" asp-area="" asp-controller="Home" asp-action="Configuracion">Configuracion</a>
                     <a href="vistassincontroller/about.html" class="nav-item nav-link">Nosotros</a>
                     <a href="vistassincontroller/service.html" class="nav-item nav-link">Servicios</a>
                     <a href="vistassincontroller/price.html" class="nav-item nav-link">Tarifas</a>
@@ -86,10 +85,6 @@
         </nav>
     </div>
     <!-- Navbar End -->
-
-
-
-
     @RenderBody()
 
 
