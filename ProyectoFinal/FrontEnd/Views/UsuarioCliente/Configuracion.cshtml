@@ -1,0 +1,193 @@
+﻿@{
+    ViewData["Title"] = "Configuración";
+    Layout = "~/Views/Shared/_LayoutClientes.cshtml";
+}
+
+<!-- Header Start -->
+<div class="jumbotron jumbotron-fluid mb-5">
+    <div class="container text-center py-5">
+        <h1 class="text-primary mb-4">Perfil</h1>
+        <h1 class="text-white display-3 mb-5">Configura tus datos</h1>
+    </div>
+</div>
+<!-- Header End -->
+<!-- Página de Configuración de Usuario Start -->
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Header del Perfil Start -->
+            <div class="text-center bg-primary py-4 rounded-top">
+                <img src="~/assets/img/profile.jpg" class="rounded-circle border border-light mb-3" alt="Imagen de Perfil" style="width: 120px; height: 120px;">
+                <h4 class="text-white mb-1">Juan Mora López</h4>
+                <a href="#" data-toggle="modal" data-target="#changeProfilePicModal" class="text-white small">
+                    <span class="fas fa-camera"></span> Cambiar Foto de Perfil
+                </a>
+            </div>
+            <!-- Header del Perfil End -->
+            <!-- Cuerpo del Perfil Start -->
+            <div class="bg-light py-4 px-3 rounded-bottom shadow">
+                <!-- Información Personal Start -->
+                <h5 class="text-dark">Información Personal</h5>
+                <p><strong>Cédula:</strong> 88888888</p>
+                <p><strong>Correo Electrónico:</strong> juanm@gmail.com</p>
+                <p><strong>Teléfono:</strong> 12345678</p>
+                <p><strong>Dirección:</strong> Calle Ficticia 123, Provincia, Cantón, Distrito, 10101</p>
+                
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="#" data-toggle="collapse" data-target="#editInfoForm" class="btn btn-outline-dark">
+                        <span class="fas fa-edit"></span> Editar Información
+                    </a>
+                    <a href="#" data-toggle="collapse" data-target="#changePasswordForm" class="btn btn-outline-dark">
+                        <span class="fas fa-lock"></span> Cambiar Contraseña
+                    </a>
+                </div>
+
+                <!-- Formulario para Editar Información Start -->
+                <div id="editInfoForm" class="collapse mt-4">
+                    <form method="post" action="/Usuario/EditarInformacion">
+                        <div class="form-group">
+                            <label>Nombre</label>
+                            <input type="text" class="form-control" name="Nombre" value="Juan" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Primer Apellido</label>
+                            <input type="text" class="form-control" name="PrimerApellido" value="Mora" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Segundo Apellido</label>
+                            <input type="text" class="form-control" name="SegundoApellido" value="López" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Correo Electrónico</label>
+                            <input type="email" class="form-control" name="Correo" value="juanm@gmail.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Número de Teléfono Principal</label>
+                            <input type="text" class="form-control" name="Telefono" value="88888888" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Número de Teléfono Secundario</label>
+                            <input type="text" class="form-control" name="Telefono" value="88888888" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Provincia</label>
+                            <input type="text" class="form-control" name="Provincia" value="Provincia" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Cantón</label>
+                            <input type="text" class="form-control" name="Canton" value="Cantón" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Distrito</label>
+                            <input type="text" class="form-control" name="Distrito" value="Distrito" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Código Postal</label>
+                            <input type="text" class="form-control" name="CodigoPostal" value="10101">
+                        </div>
+                        <div class="form-group">
+                            <label>Dirección</label>
+                            <textarea class="form-control" name="Direccion" required>Calle Ficticia 123</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-dark btn-block">Guardar Cambios</button>
+                    </form>
+                </div>
+                <!-- Formulario para Editar Información End -->
+                <!-- Formulario para Cambiar Contraseña Start -->
+                <div id="changePasswordForm" class="collapse mt-4">
+                    <form method="post" action="/Usuario/CambiarContraseña">
+                        <div class="form-group">
+                            <label>Contraseña Actual</label>
+                            <input type="password" class="form-control" id="passwordActual" name="PasswordActual" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Nueva Contraseña</label>
+                            <input type="password" class="form-control" id="nuevaPassword" name="NuevaPassword" required>
+                            <div class="bg-light p-3 mt-2" id="passwordHelp" style="display: none; border-radius: 5px;">
+                                <p class="mb-1">La contraseña debe cumplir con:</p>
+                                <ul class="mb-0">
+                                    <li id="length" class="text-danger">Mínimo 8 caracteres</li>
+                                    <li id="uppercase" class="text-danger">Una letra mayúscula</li>
+                                    <li id="lowercase" class="text-danger">Una letra minúscula</li>
+                                    <li id="number" class="text-danger">Un número</li>
+                                    <li id="special" class="text-danger">Un carácter especial (#$%^&+=!)</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Confirmar Nueva Contraseña</label>
+                            <input type="password" class="form-control" id="confirmNuevaPassword" name="ConfirmarPassword" required>
+                            <div id="passwordMismatch" class="alert alert-danger mt-2" style="display: none;">
+                                <strong>Las contraseñas no coinciden.</strong>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-dark btn-block">Actualizar Contraseña</button>
+                    </form>
+                </div>
+            </div>
+            <!-- Cuerpo del Perfil End -->
+            <!-- Modal para Cambiar la Foto Start -->
+            <div class="modal fade" id="changeProfilePicModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Cambiar Foto de Perfil</h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <span>&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" action="/Usuario/CambiarFotoPerfil" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label>Subir nueva foto</label>
+                                    <input type="file" class="form-control" name="ProfileImage" accept=".jpg,.png" required>
+                                    <small class="form-text text-muted">El archivo debe ser .jpg o .png y no exceder los 300MB.</small>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal para Cambiar la Foto End -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // Validación de la nueva contraseña
+    document.getElementById("nuevaPassword").addEventListener("input", function () {
+        const password = this.value;
+        const length = document.getElementById("length");
+        const uppercase = document.getElementById("uppercase");
+        const lowercase = document.getElementById("lowercase");
+        const number = document.getElementById("number");
+        const special = document.getElementById("special");
+        const passwordHelp = document.getElementById("passwordHelp");
+
+        passwordHelp.style.display = "block";
+
+        // Validaciones
+        length.classList.toggle("text-success", password.length >= 8);
+        length.classList.toggle("text-danger", password.length < 8);
+        uppercase.classList.toggle("text-success", /[A-Z]/.test(password));
+        uppercase.classList.toggle("text-danger", !/[A-Z]/.test(password));
+
+        lowercase.classList.toggle("text-success", /[a-z]/.test(password));
+        lowercase.classList.toggle("text-danger", !/[a-z]/.test(password));
+
+        number.classList.toggle("text-success", /\d/.test(password));
+        number.classList.toggle("text-danger", !/\d/.test(password));
+
+        special.classList.toggle("text-success", /[!#$%^&*(),.?":{}|<>]/.test(password));
+        special.classList.toggle("text-danger", !/[!#$%^&*(),.?":{}|<>]/.test(password));
+    });
+
+    // Validación de coincidencia de contraseñas
+    document.getElementById("confirmNuevaPassword").addEventListener("input", function () {
+        const password = document.getElementById("nuevaPassword").value;
+        const confirmPassword = this.value;
+        const passwordMismatch = document.getElementById("passwordMismatch");
+        passwordMismatch.style.display = (password !== confirmPassword) ? "block" : "none";
+    });
+</script>

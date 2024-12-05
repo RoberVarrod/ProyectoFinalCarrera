@@ -3,14 +3,14 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<!-- Registration Page Start -->
+<!-- Registro Start -->
 <div class="container-fluid bg-secondary my-5">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 py-5 py-lg-0">
                 <h6 class="text-primary text-uppercase font-weight-bold">Crea tu cuenta</h6>
                 <h1 class="mb-4">Regístrate y únete a nosotros</h1>
-                <p class="mb-4">Completa los campos para gestionar tus datos, rastrear paquetes y disfrutar de nuestras funciones.</p>
+                <p class="mb-4">Completa los campos para gestionar tus datos, rastrear paquetes y disfrutar de nuestros servicios.</p>
             </div>
             <div class="col-lg-6">
                 <div class="bg-primary py-5 px-4 px-sm-5">
@@ -68,10 +68,10 @@
         </div>
     </div>
 </div>
-<!-- Registration Page End -->
+<!-- Registro End -->
 
 <script>
-    // Password validation
+    // Validación de la nueva contraseña
     document.getElementById("password").addEventListener("input", function () {
         const password = this.value;
         const length = document.getElementById("length");
@@ -83,7 +83,7 @@
 
         passwordHelp.style.display = "block";
 
-        // Validations
+        // Validaciones
         length.classList.toggle("text-success", password.length >= 8);
         length.classList.toggle("text-danger", password.length < 8);
 
@@ -100,7 +100,7 @@
         special.classList.toggle("text-danger", !/[#$%^&+=!]/.test(password));
     });
 
-    // Password match validation
+    // Validación de coincidencia de contraseñas
     const passwordInput = document.getElementById('password');
     const confirmPasswordInput = document.getElementById('confirm-password');
     const passwordMismatch = document.getElementById('passwordMismatch');

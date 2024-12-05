@@ -18,11 +18,6 @@ namespace FrontEnd.Controllers
             return View();
         }
 
-        public IActionResult Configuracion()
-        {
-            return View();
-        }
-
         /*    public IActionResult Privacy()
           {
               return View();
