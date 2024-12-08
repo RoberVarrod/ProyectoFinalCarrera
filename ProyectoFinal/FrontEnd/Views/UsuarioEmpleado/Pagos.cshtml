@@ -1,0 +1,87 @@
+﻿@{
+    ViewData["Title"] = "Pagos";
+    Layout = "~/Views/Shared/_LayoutEmpleados.cshtml";
+}
+
+<!-- Header Start -->
+<div class="jumbotron jumbotron-fluid mb-5">
+    <div class="container text-center py-5">
+        <h1 class="text-primary mb-4">Pago Seguro</h1>
+        <h1 class="text-white display-3 mb-5">Historial pagos de clientes</h1>
+    </div>
+</div>
+<!-- Header End -->
+<!-- Lista de Pagos Start  -->
+<div class="container-fluid py-4">
+    <h4 class="mb-4 text-primary">Lista de Pagos</h4>
+    <table class="table table-hover table-striped shadow-sm">
+        <thead class="thead-dark">
+            <tr>
+                <th>Nombre</th>
+                <th>Fecha de Pago</th>
+                <th>Estado</th>
+                <th>Monto</th>
+                <th>Cliente</th>
+                <th>Detalles</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Pago 1</td>
+                <td>04/12/2024</td>
+                <td><strong style="color: #9E1218;">Cancelado</strong></td>
+                <td>$50.00</td>
+                <td>Daniel Hernandez</td>
+                <td>
+                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal"><i class="fas fa-ellipsis-h"></i></button>
+                </td>
+            </tr>
+            <tr>
+                <td>Pago 2</td>
+                <td>05/12/2024</td>
+                <td><strong style="color: #1F1F2E;">Pendiente</strong></td>
+                <td>$20.00</td>
+                <td>Esteban Hernandez</td>
+                <td>
+                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal"><i class="fas fa-ellipsis-h"></i></button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!-- Lista de Pagos End  -->
+<!-- Modal Start -->
+<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalLabel">Detalles del Pago</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Pago ID:</strong> 789456</p>
+                <p><strong>Tracking ID:</strong> 12345678</p>
+                <p><strong>Nombre del Pago:</strong> Pago 1</p>
+                <p><strong>Método:</strong> Sinpe</p>
+                <p><strong>Fecha de Pago:</strong> 04/12/2024</p>
+                <p><strong>Estado:</strong> Pendiente</p>
+                <p><strong>Monto:</strong> $50.00</p>
+                <p><strong>Cliente:</strong> Daniel Hernandez</p>
+                <hr />
+
+                <h5 class="mt-3">Importante</h5>
+                <p>Si el cliente realizó el pago, regirstre el pago en el menú de pagos</p>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal End -->
+
+

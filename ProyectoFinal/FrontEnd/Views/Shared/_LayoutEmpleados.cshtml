@@ -67,35 +67,30 @@
             </button>
             <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav m-auto py-0">
-                    <!--     <a href="Views/vistassincontroller/index.html" class="nav-item nav-link active">Home sin controller </a> home sin controller -->
-                    <a href="@Url.Action("Index","Home")" class="nav-item nav-link active">Inicio</a> <!--  home con controller -->
-                    <a href="@Url.Action("IndexEmpleado","Home")" class="nav-item nav-link active">Menu de empleados</a>
-
-                    <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioCliente" asp-action="Configuracion">Configuracion</a>
-
-                    <!--<a href="vistassincontroller/about.html" class="nav-item nav-link">Nosotros</a> -->
-                    <!--<a href="vistassincontroller/service.html" class="nav-item nav-link">Servicios</a> -->
-                    <!--<a href="vistassincontroller/price.html" class="nav-item nav-link">Tarifas</a> -->
-
-
+                    
+                    <a href="@Url.Action("Index","Home")" class="nav-item nav-link active"> Regresar a menu principal</a>   <!-- menu clientes -->
+                    <a class="nav-item nav-link" asp-area="" asp-controller="Paquete" asp-action="RegistrarPaquete">Registrar paquete</a>
+                    <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="ActualizarPago">Actualizar Pagos</a>
+                    <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="Pagos">Registro de Pagos</a>
+                    <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="Notificaciones">Notificaciones</a>
+                    <a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="InicioSesionEmpleado">Iniciar sesión</a>
+                    <a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="RegistroEmpleado">Registrarse</a>
+                    <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="Administracion">Administracion</a>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Tracking</a>
                         <div class="dropdown-menu rounded-0 m-0">
-                            <a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="InicioSesion">Iniciar sesión</a>
-                            <a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="Registro">Registrarse</a>
+                            <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="Paquetes">Gestion de paquetes</a>
+                            <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="EstadoPaquetes">Estado de Paquetes</a>
+                            <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="OrdenesProceso">Ordenes en Proceso</a>
                         </div>
                     </div>
-                    <a href="vistassincontroller/contact.html" class="nav-item nav-link">Contáctenos</a>
+                    <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="Configuracion">Configuracion</a>
                 </div>
-                <!-- <a href="" class="btn btn-primary py-2 px-4 d-none d-lg-block">Get A Quote</a>-->
+                <a href="@Url.Action("Index","Home")" class="btn btn-primary py-2 px-4 d-none d-lg-block">Cerrar Sesión</a>
             </div>
         </nav>
     </div>
     <!-- Navbar End -->
-
-
-
-
     @RenderBody()
 
 
@@ -122,7 +117,7 @@
                     <div class="col-md-6 mb-5">
                         <h3 class="text-primary mb-4">Links rápidos</h3>
                         <div class="d-flex flex-column justify-content-start">
-                            <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Inicio</a>
+                            <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Home</a>
                             <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Nosotros</a>
                             <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Servicios</a>
                             <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Tarifas</a>

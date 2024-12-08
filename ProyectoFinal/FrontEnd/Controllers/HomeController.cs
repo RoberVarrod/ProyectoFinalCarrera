@@ -25,6 +25,13 @@ namespace FrontEnd.Controllers
 
          */
 
+        public IActionResult IndexEmpleado()
+        {
+            return View();
+        }
+
+      
+
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

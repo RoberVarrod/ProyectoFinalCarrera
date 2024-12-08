@@ -16,6 +16,17 @@ namespace FrontEnd.Controllers
         {
             return View();
         }
+
+
+        public IActionResult RegistroEmpleado()
+        {
+            return View();
+        }
+
+        public IActionResult InicioSesionEmpleado()
+        {
+            return View();
+        }
     }
 }
 

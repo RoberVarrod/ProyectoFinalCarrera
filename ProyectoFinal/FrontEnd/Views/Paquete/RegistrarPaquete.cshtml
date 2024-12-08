@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "Registro de Usuario";
+    Layout = "~/Views/Shared/_LayoutEmpleados.cshtml";
+}
+
+<!-- Registro Start -->
+<div class="container-fluid bg-secondary my-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 py-5 py-lg-0">
+                <h6 class="text-primary text-uppercase font-weight-bold">Nuevo paquete en el sistema</h6>
+                <h1 class="mb-4">Registra un paquete en el sistema</h1>
+                <p class="mb-4">La cédula del cliente completará los datos del cliente y dirección del paquete.</p>
+
+
+            </div>
+            <div class="col-lg-6">
+                <div class="bg-primary py-5 px-4 px-sm-5">
+                    <form class="py-5" method="post" action="/Acceso/Registro" id="registrationForm">
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 p-4" placeholder="Tracking ID" name="Tracking" required="required" />
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 p-4" placeholder="10 cm" name="Alto" required="required" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 p-4" placeholder="20 cm" name="Largo" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 p-4" placeholder="40 cm" name="Ancho" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 p-4" placeholder="40 cm" name="Descripción" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 p-4" placeholder="10$ " name="Precio" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 p-4" placeholder="Cédula cliente (Ejemplo: 111111111)" name="Cedula"
+                                   pattern="\d{10}" title="La cédula debe tener 10 dígitos." required="required" />
+                        </div>
+                        <div class="form-group">
+                            <input type="email" class="form-control border-0 p-4" placeholder="Correo Electrónico cliente" name="Email" required="required" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 p-4" placeholder="Teléfono cliente (Ejemplo: 88888888)" name="Telefono"
+                                   pattern="\d{8}" title="El número de teléfono debe tener 8 dígitos." required="required" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 p-4" placeholder="Dirección paquete" name="Direccion" required="required" />
+                        </div>
+                        <div>
+                            <button id="registrarPaquete"class="btn btn-dark btn-block border-0 py-3" type="submit">Registrar paquete</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Registro End -->
+
+<script>
+    // Validación de la nueva contraseña
+    document.getElementById("registrarPaquete").addEventListener("click", function () { alert("Paquete registrado"); });
+</script>

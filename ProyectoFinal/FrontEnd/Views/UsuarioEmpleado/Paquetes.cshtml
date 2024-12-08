@@ -1,0 +1,310 @@
+﻿@{
+    ViewData["Title"] = "Gestion de paquetes";
+    Layout = "~/Views/Shared/_LayoutEmpleados.cshtml";
+}
+
+<!-- Header Start -->
+<div class="jumbotron jumbotron-fluid mb-5">
+    <div class="container text-center py-5">
+        <h1 class="text-primary mb-4">Económica y Segura</h1>
+        <h1 class="text-white display-3 mb-5">Envíos a Costa Rica </h1>
+        <div class="mx-auto" style="width: 100%; max-width: 600px;">
+            <div class="input-group">
+                <input type="text" class="form-control border-light" style="padding: 30px;" placeholder="Tracking Id">
+                <div class="input-group-append">
+                    <button class="btn btn-primary px-3" data-toggle="modal" data-target="#detailsModal">Track</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Header End -->
+<!-- Panels Section Start-->
+<div class="container-fluid py-4">
+    <div class="row">
+        <!-- Panel 1: Paquetes Totales Start-->
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body text-center">
+                    <h4 class="card-title text-primary">Estado de Paquetes</h4>
+                    <h1 class="text-primary mb-2" data-toggle="counter-up">80</h1>
+                    <a href="@Url.Action("EstadoPaquetes","UsuarioEmpleado")" class="btn btn-outline-dark btn-sm mt-2">Ver Todos los Datos</a>
+                    <ul class="list-inline row mt-4">
+                        <li class="col-6">
+                            <h5 class="text-dark">40</h5>
+                            <p class="mb-0 text-muted">Entregados</p>
+                        </li>
+                        <li class="col-6">
+                            <h5 class="text-dark">40</h5>
+                            <p class="mb-0 text-muted">Pendientes</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Panel 1: Paquetes Totales End-->
+        <!-- Panel 2: Órdenes en Proceso Start-->
+        <div class="col-md-6 mb-4">
+            <div class="card border-0 shadow-lg">
+                <div class="card-body text-center">
+                    <h4 class="card-title text-primary">Órdenes en Proceso</h4>
+                    <h1 class="text-primary mb-2" data-toggle="counter-up">80</h1>
+                    <a href="@Url.Action("OrdenesProceso","UsuarioEmpleado")" class="btn btn-outline-dark btn-sm mt-2">Ver Todos los Datos</a>
+                    <ul class="list-inline row mt-4">
+                        <li class="col-6">
+                            <h5 class="text-dark">40</h5>
+                            <p class="mb-0 text-muted">En Ruta</p>
+                        </li>
+                        <li class="col-6">
+                            <h5 class="text-dark">40</h5>
+                            <p class="mb-0 text-muted">Procesados</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+         <!-- Panel 2: Órdenes en Proceso End-->
+    </div>
+</div>
+<!-- Panels Section End-->
+<!-- Lista de Paquetes Start-->
+<div class="container-fluid py-4">
+    <h4 class="mb-4 text-primary">Lista de Paquetes</h4>
+    <table class="table table-hover table-striped shadow-sm">
+        <thead class="thead-dark">
+            <tr>
+                <th>Tracking ID</th>
+                <th>Nombre</th>
+                <th>Estado</th>
+                <th>Fecha Entrega</th>
+                <th>Tipo de Entrega</th>
+                <th>Precio</th>
+                <th>Detalles</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>123456</td>
+                <td>Paquete 1</td>
+                <td><strong style="color: #C4161C;">En Ruta</strong></td>
+                <td>04/12/2024</td>
+                <td>Entrega a Domicilio</td>
+                <td>$15.00</td>
+                <td>
+                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModalDelete"><i class="fas fa-ellipsis-h"></i></button>
+                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModalUpdate"><i class="fas fa-ellipsis-h"></i></button>
+
+                    <button class="btn btn-link"> <a href="@Url.Action("Historial","Paquete")"><i class="fas fa-ellipsis-h"></i></a> </button>
+
+                </td>
+            </tr>
+            <tr>
+                <td>123457</td>
+                <td>Paquete 2</td>
+                <td><strong style="color: #1F1F2E;">Procesado</strong></td>
+                <td>05/12/2024</td>
+                <td>Retiro en Sucursal</td>
+                <td>$10.00</td>
+                <td>
+                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModalDelete"><i class="fas fa-ellipsis-h"></i></button>
+                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModalUpdate"><i class="fas fa-ellipsis-h"></i></button>
+
+                    <button  class="btn btn-link"> <a href="@Url.Action("Historial","Paquete")"><i class="fas fa-ellipsis-h"></i></a> </button>
+
+                </td>
+            </tr>
+            <tr>
+                <td>123458</td>
+                <td>Paquete 3</td>
+                <td><strong style="color: #757575;">Pendiente</strong></td>
+                <td>03/12/2024</td>
+                <td>Entrega a Domicilio</td>
+                <td>$20.00</td>
+                <td>
+                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModalDelete"><i class="fas fa-ellipsis-h"></i></button>
+                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModalUpdate"><i class="fas fa-ellipsis-h"></i></button>
+
+                    <button class="btn btn-link"> <a href="@Url.Action("Historial","Paquete")"><i class="fas fa-ellipsis-h"></i></a> </button>
+
+                </td>
+            </tr>
+            <tr>
+                <td>123459</td>
+                <td>Paquete 4</td>
+                <td><strong style="color: #9E1218;">Entregado</strong></td>
+                <td>10/12/2024</td>
+                <td>Entrega a Domicilio</td>
+                <td>$30.00</td>
+                <td>                 
+                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModalDelete"><i class="fas fa-ellipsis-h"></i></button>
+                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModalUpdate"><i class="fas fa-ellipsis-h"></i></button>
+
+                    <button class="btn btn-link"> <a href="@Url.Action("Historial","Paquete")"><i class="fas fa-ellipsis-h"></i></a> </button>
+
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!-- Lista de Paquetes End-->
+
+<!-- Modal delete paquete Start-->
+<div class="modal fade" id="detailsModalDelete" tabindex="-1" role="dialog" aria-labelledby="detailsModalDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalDeleteLabel">Detalles del Paquete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Tracking ID:</strong> 123456</p>
+                <p><strong>Nombre del Paquete:</strong> Paquete 1</p>
+                <p><strong>Detalles:</strong>
+                <ul>
+                    <li>Alto: 30cm</li>
+                    <li>Largo: 50cm</li>
+                    <li>Ancho: 20cm</li>
+                </ul>
+                </p>
+                <p><strong>Estado:</strong> En Ruta</p>
+                <p><strong>Pago:</strong> Cancelado</p>
+                <p><strong>Fecha Aproximada de Entrega:</strong> 04/12/2024</p>
+                <p><strong>Tipo de Entrega:</strong> Entrega a Domicilio</p>
+                <p><strong>Precio:</strong> $15.00</p>
+                <hr />
+                <h5 class="mt-3">Seguro que desea borrar este paquete?</h5>       
+                <div class="btn-group" role="group" aria-label="Métodos de entrega">
+                    <button id="borrarPaqueteButton" type="button" data-dismiss="modal" class="btn btn-danger">Borrar paquete</button>
+                </div>           
+
+                <button class="btn btn-link">  </button>
+                <div id="methodDescription" class="mt-3"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal delete paquete End-->
+
+<!-- Modal update paquete Start-->
+<div class="modal fade" id="detailsModalUpdate" tabindex="-1" role="dialog" aria-labelledby="detailsModalUpdateLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailsModalUpdateLabel">Detalles del Paquete</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <p><strong>Actualiza los datos del paquete</p>
+
+                <div class="input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Tracking ID</span>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="123456">
+                </div>
+
+                <div class="input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Nombre del Paquete:</span>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="Paquete 1">
+                </div>
+
+
+                <p>
+                    <strong>Detalles:</strong>
+                    <ul>
+
+                        <li>
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Alto:</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="30cm">
+                            </div>
+
+                        </li>
+                        <li>
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Largo:</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="50cm">
+                            </div>
+                        </li>
+                        <li>
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Ancho:</span>
+                                </div>
+                                <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="20cm">
+                            </div>
+                        </li>
+                    </ul>
+                </p>
+                <div class="input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Estado:</span>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="En Ruta">
+                </div>
+                <div class="input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Pago:</span>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="Cancelado">
+                </div>
+                <div class="input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Fecha Aproximada de Entrega:</span>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="04/12/2024">
+                </div>
+                <div class="input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Tipo de Entrega:</span>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="Entrega a Domicilio">
+                </div>
+                <div class="input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroup-sizing-sm">Precio:</span>
+                    </div>
+                    <input type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="$15.00">
+                </div>
+                <hr />
+                <h5 class="mt-3">Seguro que desea actualizar este paquete con esos datos?</h5>
+                <div class="btn-group" role="group" aria-label="Métodos de entrega">
+                    <button id="actualizarPaqueteButton" type="button" data-dismiss="modal" class="btn btn-warning">Actualizar datos del paquete</button>
+                </div>
+                <div id="methodDescription" class="mt-3"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal update paquete End-->
+
+
+
+<script>
+    // Variables
+    document.getElementById("borrarPaqueteButton").addEventListener("click", function () { alert("Paquete eliminado"); });
+
+    document.getElementById("actualizarPaqueteButton").addEventListener("click", function () { alert("Paquete actualizado"); });
+
+</script>
+
+
+
