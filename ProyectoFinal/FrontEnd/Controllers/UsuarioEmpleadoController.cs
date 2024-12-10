@@ -44,6 +44,11 @@ namespace FrontEnd.Controllers
             return View();
         }
 
+        public IActionResult AdministracionCliente()
+        {
+            return View();
+        }
+
         public IActionResult ConfiguracionAdmin()
         {
             return View();
@@ -58,7 +63,10 @@ namespace FrontEnd.Controllers
         {
             return View();
         }
-
+        public IActionResult ListaSucursal()
+        {
+            return View();
+        }
 
 
     }

@@ -71,9 +71,21 @@
                     <!-- <a href="@Url.Action("Index", "Home")" class="nav-item nav-link active"> Regresar a menu principal</a>    menu clientes 
                     <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="NotificacionesAdmin">Notificaciones</a>-->
 
-                    <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="Administracion">Administracion</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Administracion</a>
+                        <div class="dropdown-menu rounded-0 m-0">
+                            <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="Administracion">Administracion Empleado</a>
+                            <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="AdministracionCliente">Administracion Cliente</a>
+                        </div>
+                    </div>
 
-                    <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="RegistroSucursal">Administrar Sucursal</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Sucursales</a>
+                        <div class="dropdown-menu rounded-0 m-0">
+                            <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="RegistroSucursal">Administrar Sucursal</a>
+                            <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="ListaSucursal">Lista Sucursal</a>
+                        </div>
+                    </div>
 
                     <a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="RegistroEmpleado">Registrarse</a>
 
