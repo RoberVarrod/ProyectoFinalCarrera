@@ -33,9 +33,5 @@ namespace FrontEnd.Controllers
         {
             return View();
         }
-        public IActionResult Administracion()
-        {
-            return View();
-        }
     }
 }

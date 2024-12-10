@@ -38,12 +38,7 @@ namespace FrontEnd.Controllers
             return View();
         }
 
-        public IActionResult ActualizarPago()
-        {
-            return View();
-
-
-        }
+  
 
 
 

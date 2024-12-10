@@ -16,13 +16,13 @@
                 <div class="bg-primary py-5 px-4 px-sm-5">
                     <form class="py-5" asp-controller="Acceso" asp-action="InicioSesion" method="post">
                         <div class="form-group">
-                            <input type="email" class="form-control border-0 p-4" placeholder="Correo electrónico" name="Email" required />
+                            <input id="emailImput" type="email" class="form-control border-0 p-4" placeholder="Correo electrónico" name="Email" required />
                         </div>
                         <div class="form-group">
                             <input type="password" class="form-control border-0 p-4" placeholder="Contraseña" name="Password" required />
                         </div>
                         <div>
-                            <button class="btn btn-dark btn-block border-0 py-3" type="submit">Iniciar Sesión</button>
+                            <button id="btnIniciar" class="btn btn-dark btn-block border-0 py-3 type="submit" >Iniciar Sesión</button>
                         </div>
                         <div class="text-center mt-3">
                             <p class="text-white">¿No tienes una cuenta? <a href="/Acceso/Registro" class="text-dark font-weight-bold">Regístrate aquí</a></p>
@@ -31,9 +31,30 @@
                             <a href="#" class="text-white">¿Olvidaste tu contraseña?</a>
                         </div>
                     </form>
+                    <button id="btnIniciarSesion">Iniciar Sesión </button>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- Login End -->
+<!-- Login End type="submit"-->
+<script>
+
+ 
+    document.getElementById("btnIniciarSesion").addEventListener("click", function () {
+
+        const email = document.getElementById("emailImput").value;
+
+        if (email == "empleado@gmail.com") {
+            window.location.href = "../Home/IndexEmpleado"
+        } else if (email == "cliente@gmail.com") {
+            window.location.href = "../UsuarioCliente/Configuracion"
+        } else if (email == "admin@gmail.com") {
+            window.location.href = "../UsuarioEmpleado/Administracion"
+        } else if (email == "transportista@gmail.com") {
+
+        };
+    
+    });
+
+</script>
