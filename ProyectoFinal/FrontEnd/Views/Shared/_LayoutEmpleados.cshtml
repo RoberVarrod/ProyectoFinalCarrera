@@ -68,29 +68,25 @@
             <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav m-auto py-0">
                     
-                    <a href="@Url.Action("Index","Home")" class="nav-item nav-link active"> Regresar a menu principal</a>   <!-- menu clientes -->
+                    <!--<a href="@Url.Action("Index", "Home")" class="nav-item nav-link active"> Regresar a menu principal</a>   menu clientes -->
                     <a class="nav-item nav-link" asp-area="" asp-controller="Paquete" asp-action="RegistrarPaquete">Registrar paquete</a>
-                    <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="ActualizarPago">Actualizar Pagos</a>
-                    <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="Pagos">Registro de Pagos</a>
-                    <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="Notificaciones">Notificaciones</a>
-                    <!--  <a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="InicioSesionEmpleado">Iniciar sesión</a> -->
+                    <!--<a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="Notificaciones">Notificaciones</a>
+                      <a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="InicioSesionEmpleado">Iniciar sesión</a> -->
                     <!--  <a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="RegistroEmpleado">Registrarse</a> -->
                     <!-- <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="Administracion">Administracion</a>  -->
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pagos</a>
+                        <div class="dropdown-menu rounded-0 m-0">
+                            <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="ActualizarPago">Actualizar Pagos</a>
+                            <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="Pagos">Lista de Pagos</a>
+                        </div>
+                    </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Tracking</a>
                         <div class="dropdown-menu rounded-0 m-0">
                             <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="Paquetes">Gestion de paquetes</a>
                             <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="EstadoPaquetes">Estado de Paquetes</a>
                             <a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="OrdenesProceso">Ordenes en Proceso</a>
-                        </div>
-                    </div>
-
-
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Inicio/Registro</a>
-                        <div class="dropdown-menu rounded-0 m-0">
-                            <a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="InicioSesionEmpleado">Iniciar sesión</a>
-                            <a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="RegistroEmpleado">Registrarse</a>
                         </div>
                     </div>
 

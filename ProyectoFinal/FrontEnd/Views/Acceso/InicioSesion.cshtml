@@ -22,7 +22,7 @@
                             <input type="password" class="form-control border-0 p-4" placeholder="Contraseña" name="Password" required />
                         </div>
                         <div>
-                            <button id="btnIniciar" class="btn btn-dark btn-block border-0 py-3 type="submit" >Iniciar Sesión</button>
+                            <button id="btnIniciar" class="btn btn-dark btn-block border-0 py-3" type="submit" >Iniciar Sesión</button>
                         </div>
                         <div class="text-center mt-3">
                             <p class="text-white">¿No tienes una cuenta? <a href="/Acceso/Registro" class="text-dark font-weight-bold">Regístrate aquí</a></p>
@@ -31,7 +31,7 @@
                             <a href="#" class="text-white">¿Olvidaste tu contraseña?</a>
                         </div>
                     </form>
-                    <button id="btnIniciarSesion">Iniciar Sesión </button>
+                    <!--  <button id="btnIniciarSesion">Iniciar Sesión </button>-->
                 </div>
             </div>
         </div>
@@ -41,12 +41,12 @@
 <script>
 
  
-    document.getElementById("btnIniciarSesion").addEventListener("click", function () {
+    document.getElementById("btnIniciar").addEventListener("click", function () {
 
         const email = document.getElementById("emailImput").value;
 
         if (email == "empleado@gmail.com") {
-            window.location.href = "../Home/IndexEmpleado"
+            window.location.href = "../UsuarioEmpleado/Paquetes"
         } else if (email == "cliente@gmail.com") {
             window.location.href = "../UsuarioCliente/Configuracion"
         } else if (email == "admin@gmail.com") {

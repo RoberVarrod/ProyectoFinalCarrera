@@ -11,38 +11,35 @@
     </div>
 </div>
 <!-- Header End -->
-<!-- Lista de Pagos Start  -->
+<!-- Lista de Pagos Start -->
 <div class="container-fluid py-4">
     <h4 class="mb-4 text-primary">Lista de Pagos</h4>
     <table class="table table-hover table-striped shadow-sm">
         <thead class="thead-dark">
             <tr>
-                <th>Nombre</th>
+                <th>Tracking ID</th>
                 <th>Fecha de Pago</th>
                 <th>Estado</th>
                 <th>Monto</th>
                 <th>Cliente</th>
                 <th>Detalles</th>
-
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>Pago 1</td>
-                <td>04/12/2024</td>
-                <td><p id="pago1" style="color: #1F1F2E;">Pendiente</p></td>
+                <td>123456</td>
+                <td></td>
+                <td><strong id="pago1" style="color: #1F1F2E;">Pendiente</strong></td>
                 <td>$50.00</td>
                 <td>Daniel Hernandez</td>
                 <td>
                     <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal"><i class="fas fa-ellipsis-h"></i></button>
-
-                    
                 </td>
             </tr>
         </tbody>
     </table>
 </div>
-<!-- Lista de Pagos End  -->
+<!-- Lista de Pagos End -->
 <!-- Modal Start -->
 <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -54,26 +51,44 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p><strong>Pago ID:</strong> 789456</p>
                 <p><strong>Tracking ID:</strong> 12345678</p>
-                <p><strong>Nombre del Pago:</strong> Pago 1</p>
-                <p><strong>Método:</strong> Sinpe</p>
-                <p><strong>Fecha de Pago:</strong> 04/12/2024</p>
                 <p><strong>Estado:</strong> Pendiente</p>
                 <p><strong>Monto:</strong> $50.00</p>
                 <p><strong>Cliente:</strong> Daniel Hernandez</p>
                 <hr />
 
                 <h5 class="mt-3">Importante</h5>
-                <p>Desea registrar el pago de este paquete?</p>
+                <p>¿Desea registrar el pago de este paquete?</p>
 
-                <button id="btnPagado" type="button" class="btn btn-success">Pagado</button>          
+                <button id="btnPagado" type="button" class="btn btn-outline-primary">Pago Cancelado</button>
+                <button id="btnPendiente" type="button" class="btn btn-outline-dark">Pendiente</button>
 
-                <button id="btnPendiente" type="button" class="btn btn-secondary">Pendiente</button>
+               <div id="formPagoCancelado" class="mt-3" style="display:none;">
+                    <h6>Detalles del Pago Cancelado</h6>
+                    <form action="#" method="POST">
+                        <div class="form-group">
+                            <label for="PagoID">Pago ID:</label>
+                            <input type="text" id="PagoID" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="NombrePago">Nombre del Pago:</label>
+                            <input type="text" id="NombrePago" class="form-control" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="MetodoPago">Método:</label>
+                            <select id="MetodoPago" class="form-control" required>
+                                <option value="Sinpe">Sinpe</option>
+                                <option value="Tarjeta">Tarjeta</option>
+                                <option value="Efectivo">Efectivo</option>
+                            </select>
+                        </div>
 
+                        <button type="submit" class="btn btn-primary" id="registrarPagoCancelado">Registrar Pago Cancelado</button>
+                    </form>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button id="btnPagado" type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
@@ -81,20 +96,26 @@
 <!-- Modal End -->
 
 <script>
-
-    var pagado = "Pagado";
-
+    var pagado = "Cancelado";
     var pendiente = "Pendiente";
 
+    document.getElementById("btnPagado").addEventListener("click", function () {
+        document.getElementById("formPagoCancelado").style.display = "block";
+    });
 
-    document.getElementById("btnPagado").addEventListener("click", function () { document.getElementById("pago1").style = "color: #39b200" });
-    document.getElementById("btnPagado").addEventListener("click", function () { document.getElementById("pago1").innerHTML = pagado });
-    document.getElementById("btnPagado").addEventListener("click", function () { alert("Paquete pagado"); });
+    document.getElementById("registrarPagoCancelado").addEventListener("click", function (event) {
+        event.preventDefault();
 
-    document.getElementById("btnPendiente").addEventListener("click", function () { document.getElementById("pago1").style = "color: #464646"});
-    document.getElementById("btnPendiente").addEventListener("click", function () { document.getElementById("pago1").innerHTML = pendiente });
-    document.getElementById("btnPendiente").addEventListener("click", function () { alert("Paquete pendiente de pago"); });
+        document.getElementById("pago1").style = "color: #9E1218";
+        document.getElementById("pago1").innerHTML = pagado;
+        alert("Pago Cancelado");
 
+        document.getElementById("formPagoCancelado").style.display = "none";
+    });
 
-
+    document.getElementById("btnPendiente").addEventListener("click", function () {
+        document.getElementById("pago1").style = "color: #464646";
+        document.getElementById("pago1").innerHTML = pendiente;
+        alert("Pago Pendiente");
+    });
 </script>

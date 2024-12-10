@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Registro de Sucursales";
+    Layout = "~/Views/Shared/_LayoutAdministrador.cshtml";
+}
+
+<!-- Registro Start -->
+<div class="container-fluid bg-secondary my-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 py-5 py-lg-0">
+                <h6 class="text-primary text-uppercase font-weight-bold">Nueva sucursal</h6>
+                <h1 class="mb-4">Registrar una nueva sucursal</h1>
+                <p class="mb-4">Completa los datos para agregar una nueva sucursal al sistema, incluyendo su ubicación, oficinas y el personal asociado.</p>
+            </div>
+            <div class="col-lg-6">
+                <div class="bg-primary py-5 px-4 px-sm-5">
+                    <form class="py-5" method="post" action="/Sucursales/Registrar" id="formRegistrarSucursal">
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 p-4" placeholder="Nombre de la sucursal" name="NombreSucursal" required />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 p-4" placeholder="Dirección de la sucursal" name="Direccion" required />
+                        </div>
+                        <!-- Sección de oficinas Start -->
+                        <h5 class="text-white">Oficinas</h5>
+                        <div id="oficinasContainer">
+                            <div class="form-group d-flex">
+                                <input type="text" class="form-control border-0 p-4" placeholder="Nombre de la oficina" name="Oficinas[]" required />
+                                <button type="button" class="btn btn-dark ml-2" onclick="agregarOficina()">+</button>
+                            </div>
+                        </div>
+                        <!-- Sección de oficinas End -->
+                        <!-- Sección de personal Start -->
+                        <h5 class="text-white mt-4">Personal</h5>
+                        <div id="personalContainer">
+                            <div class="form-group d-flex">
+                                <input type="text" class="form-control border-0 p-4" placeholder="Nombre del personal" name="Personal[]" required />
+                                <button type="button" class="btn btn-dark ml-2" onclick="agregarPersonal()">+</button>
+                            </div>
+                        </div>
+                        <!-- Sección de personal End -->
+                        <div>
+                            <button class="btn btn-dark btn-block border-0 py-3" type="submit">Registrar sucursal</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Registro End -->
+
+<script>
+    function agregarOficina() {
+        const oficinasContainer = document.getElementById("oficinasContainer");
+        const nuevaOficina = document.createElement("div");
+        nuevaOficina.className = "form-group d-flex mt-2";
+        nuevaOficina.innerHTML = `
+                <input type="text" class="form-control border-0 p-4" placeholder="Nombre de la oficina" name="Oficinas[]" required />
+                <button type="button" class="btn btn-danger ml-2" onclick="removerElemento(this)">-</button>
+            `;
+        oficinasContainer.appendChild(nuevaOficina);
+    }
+
+    function agregarPersonal() {
+        const personalContainer = document.getElementById("personalContainer");
+        const nuevoPersonal = document.createElement("div");
+        nuevoPersonal.className = "form-group d-flex mt-2";
+        nuevoPersonal.innerHTML = `
+                <input type="text" class="form-control border-0 p-4" placeholder="Nombre del personal" name="Personal[]" required />
+                <button type="button" class="btn btn-danger ml-2" onclick="removerElemento(this)">-</button>
+            `;
+        personalContainer.appendChild(nuevoPersonal);
+    }
+    function removerElemento(boton) {
+        boton.parentElement.remove();
+    }
+</script>
