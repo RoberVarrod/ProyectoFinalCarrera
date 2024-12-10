@@ -45,6 +45,7 @@
                 </td>
                 <td>
                     <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal"><i class="fas fa-ellipsis-h"></i></button>
+                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal"><i class="fa fa-trash" aria-hidden="true"></i></i></button>
                 </td>
             <tr>
                 <td>2</td>
@@ -63,6 +64,7 @@
                 </td>
                 <td>
                     <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal"><i class="fas fa-ellipsis-h"></i></button>
+                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal"><i class="fa fa-trash" aria-hidden="true"></i></i></button>
                 </td>
             </tr>
             <tr>
@@ -82,6 +84,7 @@
                 </td>
                 <td>
                     <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal"><i class="fas fa-ellipsis-h"></i></button>
+                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal"><i class="fa fa-trash" aria-hidden="true"></i></i></button>
                 </td>
             </tr>
         </tbody>
@@ -101,25 +104,29 @@
             <!-- Contenido del modal -->
             <div class="bg-primary py-5 px-4 px-sm-5">
                 <div class="form-group">
-                    <input type="text" class="form-control border-0 p-4" placeholder="Nombre" name="Nombre" required="required" />
+                    <input type="text" class="form-control border-0 p-4" placeholder="Nombre" name="Nombre"  />
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control border-0 p-4" placeholder="Apellidos" name="PrimerApellido" required="required" />
+                    <input type="text" class="form-control border-0 p-4" placeholder="Apellidos" name="PrimerApellido"  />
                 </div>
                 <div class="form-group">
                     <input type="text" class="form-control border-0 p-4" placeholder="Cédula" name="Cedula"
-                        pattern="\d{10}" title="La cédula debe tener 10 dígitos." required="required" />
+                        pattern="\d{10}" title="La cédula debe tener 10 dígitos."  />
                 </div>
                 <div class="form-group">
-                    <input type="email" class="form-control border-0 p-4" placeholder="Correo Electrónico" name="Email" required="required" />
+                    <input type="email" class="form-control border-0 p-4" placeholder="Correo Electrónico" name="Email"  />
                 </div>
                 <div class="form-group">
                     <input type="text" class="form-control border-0 p-4" placeholder="Teléfono" name="Telefono"
-                        pattern="\d{8}" title="El número de teléfono debe tener 8 dígitos." required="required" />
+                        pattern="\d{8}" title="El número de teléfono debe tener 8 dígitos."  />
                 </div>
                 <div class="form-group">
-                    <input type="text" class="form-control border-0 p-4" placeholder="Sede" name="Telefono"
-                        pattern="\d{8}" required="required" />
+                    <input type="text" class="form-control border-0 p-4" placeholder="Sede" name="Sede"
+                        pattern="\d{8}"  />
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control border-0 p-4" placeholder="Rol" name="Rol"
+                           pattern="\d{8}"  />
                 </div>
             </div>
 
