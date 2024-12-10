@@ -1,0 +1,121 @@
+﻿@{
+    ViewData["Title"] = "Gestión de Transportes";
+    Layout = "~/Views/Shared/_LayoutEmpleados.cshtml";
+}
+
+<!-- Header Start -->
+<div class="jumbotron jumbotron-fluid mb-5">
+    <div class="container text-center py-5">
+        <h1 class="text-primary mb-4">Transportes</h1>
+        <h1 class="text-white display-3 mb-5">Gestión de envíos y rutas</h1>
+    </div>
+</div>
+<!-- Header End -->
+<!-- Gestión de Transportistas y Envíos Start -->
+<div class="container-fluid py-4">
+    <h4 class="mb-4 text-primary">Gestión de Transportistas y Envíos</h4>
+    <table class="table table-hover table-striped shadow-sm">
+        <thead class="thead-dark">
+            <tr>
+                <th>Transportista</th>
+                <th>Ruta</th>
+                <th>Estado del Envío</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Juan Pérez</td>
+                <td>Ruta 32 (San José - Limón)</td>
+                <td><strong style="color: #1F1F2E;">En tránsito</strong></td>
+                <td>
+                    <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editDetailsModal"><i class="fas fa-edit"></i> Editar</button>
+                </td>
+            </tr>
+            <tr>
+                <td>María González</td>
+                <td>Ruta 27 (San José - Caldera)</td>
+                <td><strong style="color: #1F1F2E;">Pendiente</strong></td>
+                <td>
+                    <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editDetailsModal"><i class="fas fa-edit"></i> Editar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<!-- Gestión de Transportistas y Envíos End -->
+<!-- Buscar Mejores Rutas Start -->
+<div class="container-fluid py-4">
+    <h4 class="mb-4 text-primary">Buscar Mejores Rutas</h4>
+    <form>
+        <div class="form-group">
+            <label for="startPoint">Punto de Partida</label>
+            <input type="text" class="form-control" id="startPoint" placeholder="Ejemplo: San José">
+        </div>
+        <div class="form-group">
+            <label for="endPoint">Destino</label>
+            <input type="text" class="form-control" id="endPoint" placeholder="Ejemplo: Liberia">
+        </div>
+        <button type="submit" class="btn btn-primary">Buscar Ruta</button>
+    </form>
+</div>
+<!-- Buscar Mejores Rutas End -->
+<!-- Notificaciones de Envíos Start -->
+<div class="container-fluid py-4">
+    <h4 class="mb-4 text-primary">Enviar Notificaciones al Cliente</h4>
+    <form>
+        <div class="form-group">
+            <label for="clientEmail">Correo del Cliente</label>
+            <input type="email" class="form-control" id="clientEmail" placeholder="Ejemplo: cliente@correo.com">
+        </div>
+        <div class="form-group">
+            <label for="message">Mensaje</label>
+            <textarea class="form-control" id="message" rows="3" placeholder="Escribe el estado del envío o información relevante"></textarea>
+        </div>
+        <button type="submit" class="btn btn-success">Enviar Notificación</button>
+    </form>
+</div>
+<!-- Notificaciones de Envíos End -->
+<!-- Edit Details Modal Start -->
+<div class="modal fade" id="editDetailsModal" tabindex="-1" role="dialog" aria-labelledby="editDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editDetailsModalLabel">Editar Detalles del Transportista/Envío</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="transporterName">Nombre del Transportista</label>
+                        <input type="text" class="form-control" id="transporterName" value="Juan Pérez">
+                    </div>
+                    <div class="form-group">
+                        <label for="route">Ruta</label>
+                        <select class="form-control" id="route">
+                            <option>Ruta 32 (San José - Limón)</option>
+                            <option>Ruta 27 (San José - Caldera)</option>
+                            <option>Ruta 1 (Interamericana Norte)</option>
+                            <option>Ruta 2 (Interamericana Sur)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Estado del Envío</label>
+                        <select class="form-control" id="status">
+                            <option>En tránsito</option>
+                            <option>Pendiente</option>
+                            <option>Entregado</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary">Guardar Cambios</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Edit Details Modal End -->

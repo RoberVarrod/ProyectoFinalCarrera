@@ -9,6 +9,11 @@ namespace FrontEnd.Controllers
             return View();
         }
 
+        public IActionResult Transportes()
+        {
+            return View();
+        }
+
         public IActionResult EstadoPaquetes()
         {
             return View();
