@@ -2,7 +2,7 @@
 
 namespace FrontEnd.Controllers
 {
-    public class UsuarioEmpleadoController : Controller
+    public class UsuarioController : Controller
     {
         public IActionResult Configuracion()
         {
