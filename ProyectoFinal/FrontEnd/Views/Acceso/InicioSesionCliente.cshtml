@@ -1,6 +1,8 @@
-﻿@{
+﻿@model FrontEnd.Models.LoginModeloUsuarioCliente
+
+@{
     ViewData["Title"] = "Inicio de Sesión";
-    Layout = "~/Views/Shared/_LayoutUsuarios.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <!-- Login Start -->
@@ -9,23 +11,23 @@
         <div class="row align-items-center">
             <div class="col-lg-6 py-5 py-lg-0">
                 <h6 class="text-primary text-uppercase font-weight-bold">Bienvenido de nuevo</h6>
-                <h1 class="mb-4">Inicia Sesión en tu Cuenta de empleado</h1>
-                <p class="mb-4">Accede para vizualizar sus paquetes y gestionar tus datos.</p>
+                <h1 class="mb-4">Inicia Sesión en tu Cuenta de Empleado</h1>
+                <p class="mb-4">Accede para visualizar tus paquetes y gestionar tus datos.</p>
             </div>
             <div class="col-lg-6">
                 <div class="bg-primary py-5 px-4 px-sm-5">
-                    <form class="py-5" asp-controller="Acceso" asp-action="InicioSesion" method="post">
+                    <form class="py-5" asp-controller="Acceso" asp-action="InicioSesionCliente" method="post">
                         <div class="form-group">
-                            <input type="email" class="form-control border-0 p-4" placeholder="Correo electrónico" name="Email" required />
+                            <input type="email" class="form-control border-0 p-4" placeholder="Correo electrónico" asp-for="Correo" required />
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control border-0 p-4" placeholder="Contraseña" name="Password" required />
+                            <input type="password" class="form-control border-0 p-4" placeholder="Contraseña" asp-for="Contrasena" required />
                         </div>
                         <div>
                             <button class="btn btn-dark btn-block border-0 py-3" type="submit">Iniciar Sesión</button>
                         </div>
                         <div class="text-center mt-3">
-                            <p class="text-white">¿No tienes una cuenta? <a href="/Acceso/Registro" class="text-dark font-weight-bold">Regístrate aquí</a></p>
+                            <p class="text-white">¿No tienes una cuenta? <a href="/Acceso/RegistroCliente" class="text-dark font-weight-bold">Regístrate aquí</a></p>
                         </div>
                         <div class="form-group d-flex justify-content-center">
                             <a href="#" class="text-white">¿Olvidaste tu contraseña?</a>

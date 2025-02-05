@@ -177,8 +177,42 @@ namespace FrontEnd.Controllers
         }
 
 
+        [AllowAnonymous]
+        [HttpGet]
         public IActionResult InicioSesionCliente()
         {
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult InicioSesionCliente(LoginModeloUsuarioCliente modelo)
+        {
+            if (ModelState.IsValid)
+            {
+                // Buscar el cliente en la base de datos
+                var cliente = _context.Clientes
+                    .FirstOrDefault(u => u.Correo == modelo.Correo && u.Contrasena == modelo.Contrasena);
+
+                if (cliente != null)
+                {
+
+                    HttpContext.Session.SetString("ClienteId", cliente.IdCliente.ToString()); // Guardar el ID del cliente
+                    HttpContext.Session.SetString("ClienteNombre", cliente.Nombre);
+                    HttpContext.Session.SetString("ClienteRol", cliente.IdRol.ToString()); // Guardar el rol del cliente
+
+                    TempData["Mensaje"] = $"Bienvenido {cliente.Nombre}";
+
+                    // Aqui hay que crear un objeto de tipo Usuario model completo y pasar ese objeto al redirect to aaction para la vista configuracion. --->Ariel
+
+
+
+                    return RedirectToAction("Configuracion", "Usuario");
+                }
+
+                // Si no coincide usuario o contraseña
+                ModelState.AddModelError("", "Usuario o contraseña incorrectos.");
+            }
             return View();
         }
 
