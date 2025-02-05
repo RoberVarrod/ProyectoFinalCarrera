@@ -68,7 +68,7 @@
             <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
                 <div class="navbar-nav m-auto py-0">
                     
-                    <!--<a href="@Url.Action("Index", "Home")" class="nav-item nav-link active"> Regresar a menu principal</a>   menu clientes -->
+                   
                     <a class="nav-item nav-link" asp-area="" asp-controller="Paquete" asp-action="RegistrarPaquete">Registrar paquete</a>
                     <!--<a class="nav-item nav-link" asp-area="" asp-controller="UsuarioEmpleado" asp-action="Notificaciones">Notificaciones</a>
                       <a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="InicioSesionEmpleado">Iniciar sesión</a> -->
@@ -111,7 +111,7 @@
 
                     <a class="nav-item nav-link" asp-area="" asp-controller="Usuario" asp-action="Configuracion">Configuracion</a>
                 </div>
-                <a href="@Url.Action("Index","Home")" class="btn btn-primary py-2 px-4 d-none d-lg-block">Cerrar Sesión</a>
+                <a href="@Url.Action("Logout","Acceso")" class="btn btn-primary py-2 px-4 d-none d-lg-block">Cerrar Sesión</a>
             </div>
         </nav>
     </div>

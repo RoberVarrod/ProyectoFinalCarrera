@@ -2,45 +2,42 @@
     ViewData["Title"] = "Registro de Usuario";
     Layout = "~/Views/Shared/_LayoutUsuarios.cshtml";
 }
-
-<!-- Registro Start                           Hay que agregar y cambiar cosas pues el registro de empleados es diferente...-->
+@model FrontEnd.Models.RegistroModeloUsuario
+<!-- Registro Start                           Cambiaado...-->
 <div class="container-fluid bg-secondary my-5">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 py-5 py-lg-0">
                 <h6 class="text-primary text-uppercase font-weight-bold">Crea tu cuenta</h6>
-                <h1 class="mb-4">Registro de empleados</h1>
+                <h1 class="mb-4">Registro de usuarios</h1>
                 <p class="mb-4">Completa los campos para obtener acceso al sistema administrativo.</p>
             </div>
             <div class="col-lg-6">
                 <div class="bg-primary py-5 px-4 px-sm-5">
-                    <form class="py-5" method="post" action="/Acceso/Registro" id="registrationForm">
+                    <form class="py-5" asp-controller="Acceso" asp-action="RegistroUsuario" method="post" id="registrationForm">
                         <div class="form-group">
-                            <input type="text" class="form-control border-0 p-4" placeholder="Nombre" name="Nombre" required="required" />
+                            <input asp-for="Nombre" type="text" class="form-control border-0 p-4" placeholder="Nombre" name="Nombre" required="required" />
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control border-0 p-4" placeholder="Primer Apellido" name="PrimerApellido" required="required" />
+                            <input asp-for="PrimerApellido" type="text" class="form-control border-0 p-4" placeholder="Primer Apellido" name="PrimerApellido" required="required" />
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control border-0 p-4" placeholder="Segundo Apellido" name="SegundoApellido" />
+                            <input asp-for="SegundoApellido" type="text" class="form-control border-0 p-4" placeholder="Segundo Apellido" name="SegundoApellido" />
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control border-0 p-4" placeholder="Cédula (Ejemplo: 1011110111)" name="Cedula"
-                                   pattern="\d{10}" title="La cédula debe tener 10 dígitos." required="required" />
-                        </div>
-                        <div class="form-group">
-                            <input type="email" class="form-control border-0 p-4" placeholder="Correo Electrónico" name="Email" required="required" />
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control border-0 p-4" placeholder="Oficina atención al cliente" name="Oficina" required="required" />
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control border-0 p-4" placeholder="Teléfono (Ejemplo: 88888888)" name="Telefono"
+                            <input asp-for="TelefonoPrincipal" type="text" class="form-control border-0 p-4" placeholder="Teléfono (Ejemplo: 88888888)" name="TelefonoPrincipal"
                                    pattern="\d{8}" title="El número de teléfono debe tener 8 dígitos." required="required" />
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control border-0 p-4" id="password" placeholder="Contraseña"
-                                   name="Password" required="required" />
+                            <input asp-for="Correo" type="email" class="form-control border-0 p-4" placeholder="Correo Electrónico" name="Correo" required="required" />
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="Cedula" type="text" class="form-control border-0 p-4" placeholder="Cédula (Ejemplo: 1011110111)" name="Cedula"
+                                   pattern="\d{10}" title="La cédula debe tener 10 dígitos." required="required" />
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="Contrasena" type="password" class="form-control border-0 p-4" id="password" placeholder="Contraseña"
+                                   name="Contrasena" required="required" />
                             <div class="bg-light p-3 mt-2" id="passwordHelp" style="display: none; border-radius: 5px;">
                                 <p class="mb-1">La contraseña debe cumplir con:</p>
                                 <ul class="mb-0">
@@ -59,6 +56,13 @@
                                 <strong>Las contraseñas no coinciden.</strong>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <input asp-for="Direccion" type="text" class="form-control border-0 p-4" placeholder="Dirección" name="Direccion" required="required" />
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="Oficina" type="text" class="form-control border-0 p-4" placeholder="Oficina atención al cliente" name="Oficina" required="required" />
+                        </div>
+                        
                         <div>
                             <button class="btn btn-dark btn-block border-0 py-3" type="submit">Registrarse</button>
                         </div>
@@ -66,6 +70,7 @@
                             <p class="text-white">¿Ya tienes una cuenta? <a href="/Acceso/InicioSesion" class="text-dark font-weight-bold">Inicia Sesión</a></p>
                         </div>
                     </form>
+                    
                 </div>
             </div>
         </div>

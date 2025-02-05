@@ -1,7 +1,11 @@
 ﻿@{
     ViewData["Title"] = "Inicio de Sesión";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+
 }
+@model FrontEnd.Models.LoginModeloUsuario
+
 
 <!-- Login Start -->
 <div class="container-fluid bg-secondary my-5">
@@ -14,15 +18,15 @@
             </div>
             <div class="col-lg-6">
                 <div class="bg-primary py-5 px-4 px-sm-5">
-                    <form class="py-5" asp-controller="Acceso" asp-action="InicioSesion" method="post">
+                    <form class="py-5" asp-controller="Acceso" asp-action="InicioSesionUsuario" method="post">
                         <div class="form-group">
-                            <input id="emailImput" type="email" class="form-control border-0 p-4" placeholder="Correo electrónico" name="Email" required />
+                            <input asp-for="Correo" id="emailImput" type="email" class="form-control border-0 p-4" placeholder="Correo electrónico" name="Correo" required />
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control border-0 p-4" placeholder="Contraseña" name="Password" required />
+                            <input asp-for="Contrasena" type="password" class="form-control border-0 p-4" placeholder="Contraseña" name="Contrasena" required />
                         </div>
                         <div>
-                            <!--     <button id="btnIniciar" class="btn btn-dark btn-block border-0 py-3" type="submit" >Iniciar Sesión</button> >-->
+                           <button id="btnIniciar" class="btn btn-dark btn-block border-0 py-3" type="submit" >Iniciar Sesión</button>
                         </div>
                         <div class="text-center mt-3">
                             <p class="text-white">¿No tienes una cuenta? <a href="/Acceso/Registro" class="text-dark font-weight-bold">Regístrate aquí</a></p>
@@ -31,7 +35,7 @@
                             <a href="#" class="text-white">¿Olvidaste tu contraseña?</a>
                         </div>
                     </form>
-                    <button id="btnIniciar">Iniciar Sesión </button>
+                    <!--      <button id="btnIniciar">Iniciar Sesión </button>  >-->
                 </div>
             </div>
         </div>
@@ -41,6 +45,7 @@
 <script>
 
  
+   /*
     document.getElementById("btnIniciar").addEventListener("click", function () {
 
         const email = document.getElementById("emailImput").value;
@@ -56,5 +61,5 @@
         };
     
     });
-
+   */
 </script>
