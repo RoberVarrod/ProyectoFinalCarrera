@@ -14,7 +14,8 @@
             </div>
             <div class="col-lg-6">
                 <div class="bg-primary py-5 px-4 px-sm-5">
-                    <form class="py-5" method="post" action="/Acceso/Registro" id="registrationForm">
+                    <form class="py-5" asp-controller="Acceso" asp-action="RegistroCliente" method="post" id="registrationForm">
+                        <h6 class="text-secundary text-uppercase font-weight-bold">Datos</h6>
                         <div class="form-group">
                             <input type="text" class="form-control border-0 p-4" placeholder="Nombre" name="Nombre" required="required" />
                         </div>
@@ -29,15 +30,36 @@
                                    pattern="\d{10}" title="La cédula debe tener 10 dígitos." required="required" />
                         </div>
                         <div class="form-group">
-                            <input type="email" class="form-control border-0 p-4" placeholder="Correo Electrónico" name="Email" required="required" />
+                            <input type="email" class="form-control border-0 p-4" placeholder="Correo Electrónico" name="Correo" required="required" />
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control border-0 p-4" placeholder="Teléfono (Ejemplo: 88888888)" name="Telefono"
+                            <input type="text" class="form-control border-0 p-4" placeholder="Teléfono (Ejemplo: 88888888)" name="TelefonoPrincipal"
                                    pattern="\d{8}" title="El número de teléfono debe tener 8 dígitos." required="required" />
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control border-0 p-4" id="password" placeholder="Contraseña"
-                                   name="Password" required="required" />
+                            <input type="text" class="form-control border-0 p-4" placeholder="Teléfono Secundario (Ejemplo: 88888888)" name="TelefonoSecundario"
+                                   pattern="\d{8}" title="El número de teléfono debe tener 8 dígitos." required="required" />
+                        </div>
+                        <h6 class="text-secundary text-uppercase font-weight-bold">Dirección</h6>
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 p-4" placeholder="Provincia" name="Provincia" required="required" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 p-4" placeholder="Cantón" name="Canton" required="required" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 p-4" placeholder="Distrito" name="Distrito" required="required" />
+                        </div>
+                        <div class="form-group">
+                            <input type="number" class="form-control border-0 p-4" placeholder="Código postal" name="CodigoPostal" required="required" />
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control border-0 p-4" placeholder="Dirección exacta" name="Direccion" required="required" />
+                        </div>
+                        <h6 class="text-secundary text-uppercase font-weight-bold">Contraseña</h6>
+                        <div class="form-group">
+                            <input type="password" class="form-control border-0 p-4" id="Contrasena" placeholder="Contraseña"
+                                   name="Contrasena" required="required" />
                             <div class="bg-light p-3 mt-2" id="passwordHelp" style="display: none; border-radius: 5px;">
                                 <p class="mb-1">La contraseña debe cumplir con:</p>
                                 <ul class="mb-0">
@@ -50,8 +72,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <input type="password" class="form-control border-0 p-4" id="confirm-password" placeholder="Confirmar Contraseña"
-                                   name="ConfirmPassword" required="required" />
+                            <input type="password" class="form-control border-0 p-4" id="confirm-Contrasena" placeholder="Confirmar Contraseña"
+                                   name="ConfirmContrasena" required="required" />
                             <div id="passwordMismatch" class="alert alert-danger mt-2" style="display: none;">
                                 <strong>Las contraseñas no coinciden.</strong>
                             </div>
@@ -72,7 +94,7 @@
 
 <script>
     // Validación de la nueva contraseña
-    document.getElementById("password").addEventListener("input", function () {
+    document.getElementById("Contrasena").addEventListener("input", function () {
         const password = this.value;
         const length = document.getElementById("length");
         const uppercase = document.getElementById("uppercase");
@@ -101,8 +123,8 @@
     });
 
     // Validación de coincidencia de contraseñas
-    const passwordInput = document.getElementById('password');
-    const confirmPasswordInput = document.getElementById('confirm-password');
+    const passwordInput = document.getElementById('Contrasena');
+    const confirmPasswordInput = document.getElementById('confirm-Contrasena');
     const passwordMismatch = document.getElementById('passwordMismatch');
 
     function validarContraseña() {

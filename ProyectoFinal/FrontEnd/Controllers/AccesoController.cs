@@ -119,12 +119,63 @@ namespace FrontEnd.Controllers
             return View();
         }
 
-        
+        [AllowAnonymous]
+        [HttpGet]
         public IActionResult RegistroCliente()
         {
             return View();
         }
-        
+
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult RegistroCliente(RegistroModeloCliente modelo)
+        {
+            if (ModelState.IsValid)
+            {
+                // Validar que el cliente no exista previamente
+                if (_context.Clientes.Any(c => c.Cedula == modelo.Cedula))
+                {
+                    ModelState.AddModelError("", "El nombre de usuario ya existe.");
+                    return View(modelo);
+                }
+
+                // Crear un nuevo cliente con la información proporcionada
+                var nuevoCliente = new Cliente
+                {
+
+                    Nombre = modelo.Nombre,
+                    PrimerApellido = modelo.PrimerApellido,
+                    SegundoApellido = modelo.SegundoApellido,
+                    TelefonoPrincipal = modelo.TelefonoPrincipal,
+                    TelefonoSecundario = modelo.TelefonoSecundario,
+                    Correo = modelo.Correo,
+                    Cedula = modelo.Cedula,
+                    Contrasena = modelo.Contrasena,
+                    IdRol = modelo.IdRol,
+                    Provincia = modelo.Provincia,
+                    Canton = modelo.Canton,
+                    Distrito = modelo.Distrito,
+                    CodigoPostal = modelo.CodigoPostal,
+                    Direccion = modelo.Direccion
+
+
+                };
+
+                // Guardar el cliete en la base de datos
+                _context.Clientes.Add(nuevoCliente);
+                _context.SaveChanges();
+
+                TempData["Mensaje"] = "Cliente registrado correctamente. Ahora puedes iniciar sesión.";
+                return RedirectToAction("RegistroCliente");
+            }
+            else
+            {
+                return RedirectToAction("RegistroCliente");
+            }
+
+            return View();
+        }
+
 
         public IActionResult InicioSesionCliente()
         {
