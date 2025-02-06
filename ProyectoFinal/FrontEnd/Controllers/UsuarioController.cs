@@ -1,6 +1,7 @@
 ﻿using FrontEnd.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FrontEnd.Controllers
 {
@@ -14,9 +15,38 @@ namespace FrontEnd.Controllers
             _context = context;
         }
 
+        [HttpGet]
         public IActionResult Configuracion()
         {
-            return View();
+            var usuarioId = HttpContext.Session.GetString("UsuarioId");
+
+            if (!string.IsNullOrEmpty(usuarioId))
+            {
+                var usuario = _context.Usuarios.FirstOrDefault(c => c.IdUsuario == int.Parse(usuarioId));
+                return View(usuario);
+            }
+
+            return RedirectToAction("InicioSesionUsuario", "Acceso");
+        }
+
+        [HttpPost]
+        public IActionResult EditarInformacion(Usuario usuario)
+        {
+            var usuarioExistente = _context.Usuarios.FirstOrDefault(c => c.IdUsuario == usuario.IdUsuario);
+            if (usuarioExistente != null)
+            {
+                usuarioExistente.Nombre = usuario.Nombre;
+                usuarioExistente.PrimerApellido = usuario.PrimerApellido;
+                usuarioExistente.SegundoApellido = usuario.SegundoApellido;
+                usuarioExistente.Cedula = usuario.Cedula;
+                usuarioExistente.Correo = usuario.Correo;
+                usuarioExistente.TelefonoPrincipal = usuario.TelefonoPrincipal;
+                usuarioExistente.Direccion = usuario.Direccion;
+
+                _context.SaveChanges();
+                return RedirectToAction("Configuracion");
+            }
+            return NotFound();
         }
 
         public IActionResult Transportes()
@@ -54,10 +84,46 @@ namespace FrontEnd.Controllers
             return View();
         }
 
-        public IActionResult Administracion()
+        public async Task<IActionResult> Administracion()
         {
-            return View();
+            var usuarios = await _context.Usuarios.ToListAsync();
+            return View(usuarios);
         }
+
+        // GET: Usuarios/Delete/5
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var usuario = await _context.Usuarios
+                .FirstOrDefaultAsync(m => m.IdUsuario == id);
+            if (usuario == null)
+            {
+                return NotFound();
+            }
+
+            return View(usuario);
+        }
+
+        // POST: Usuarios/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var usuario = await _context.Usuarios.FindAsync(id);
+            if (usuario != null)
+            {
+                _context.Usuarios.Remove(usuario);
+                await _context.SaveChangesAsync();
+                TempData["MensajeExito"] = "El usuario se eliminó correctamente."; // Mensaje de éxito
+            }
+            return RedirectToAction(nameof(Administracion));
+        }
+
+
 
         public IActionResult AdministracionCliente()
         {
@@ -82,35 +148,37 @@ namespace FrontEnd.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet]
-
-        public IActionResult RegistroSucursal(Sucursal modelo) 
+        [HttpPost]
+        public IActionResult RegistroSucursal(Sucursal modelo)
         {
             if (ModelState.IsValid)
             {
-              if (_context.Sucursals.Any(u => u.Nombre == modelo.Nombre)) 
+                // Validar que la sucursal no exista previamente
+                if (_context.Sucursals.Any(s => s.Nombre == modelo.Nombre))
                 {
-                    ModelState.AddModelError("", "Ya se selecciono una surcursal.");
+                    ModelState.AddModelError("", "Ya se seleccionó una sucursal con este nombre.");
                     return View(modelo);
                 }
+
+                // Crear nueva sucursal con la información proporcionada
+                var nuevaSucursal = new Sucursal
+                {
+                    Nombre = modelo.Nombre,
+                    Horario = modelo.Horario,
+                    Telefono = modelo.Telefono,
+                    Direccion = modelo.Direccion
+                };
+
+                // Guardar en la base de datos
+                _context.Sucursals.Add(nuevaSucursal);
+                _context.SaveChanges();
+
+                TempData["MensajeRegistroCorrecto"] = "Sucursal registrada correctamente.";
+                return RedirectToAction("RegistroSucursal");
             }
 
-            var nuevaSucursal = new Sucursal
-            {
-                Nombre = modelo.Nombre,
-                Horario = modelo.Horario,
-                Telefono = modelo.Telefono,
-                Direccion = modelo.Direccion
-            };
-
-            _context.Sucursals.Add(nuevaSucursal);
-            _context.SaveChanges();
-            return View();
+            return RedirectToAction("RegistroSucursal");
         }
-        
-
-
-
 
         public IActionResult ListaSucursal()
         {

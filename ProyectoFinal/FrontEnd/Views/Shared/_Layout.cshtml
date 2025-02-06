@@ -81,10 +81,10 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Tracking</a>
                         <div class="dropdown-menu rounded-0 m-0">
-                            <a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="InicioSesionUsuario">Iniciar sesión Usuario</a>
-                            <a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="RegistroUsuario">Registrarse Usuarios</a>
-                            <a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="InicioSesionCliente">Iniciar sesión Cliente</a>
-                            <a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="RegistroCliente">Registrarse Cliente</a>
+                            <!--<a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="InicioSesionUsuario">Iniciar sesión Usuario</a>-->
+                            <!--<a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="RegistroUsuario">Registrarse Usuarios</a>-->
+                            <a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="InicioSesionCliente">Iniciar sesión</a>
+                            <a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="RegistroCliente">Registrarse</a>
                         </div>
                     </div>
                     <!--<a href="vistassincontroller/contact.html" class="nav-item nav-link">Contáctenos</a>-->
@@ -125,10 +125,7 @@
                         <h3 class="text-primary mb-4">Links rápidos</h3>
                         <div class="d-flex flex-column justify-content-start">
                             <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Inicio</a>
-                            <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Nosotros</a>
-                            <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Servicios</a>
-                            <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Tarifas</a>
-                            <a class="text-white" href="#"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
+                            <a class="text-white mb-2" asp-area="" asp-controller="Acceso" asp-action="InicioSesionUsuario"><i class="fa fa-angle-right mr-2"></i>Empleado</a>
                         </div>
                     </div>
                 </div>

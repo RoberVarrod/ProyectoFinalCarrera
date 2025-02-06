@@ -64,7 +64,7 @@ namespace FrontEnd.Controllers
                 _context.Usuarios.Add(nuevoUsuario);
                 _context.SaveChanges();
 
-                TempData["Mensaje"] = "Usuario registrado correctamente. Ahora puedes iniciar sesión.";
+                TempData["MensajeRegistroCorrecto"] = "Usuario registrado correctamente, ahora puedes iniciar sesión.";
                 return RedirectToAction("RegistroUsuario");
             }
             else
@@ -75,7 +75,7 @@ namespace FrontEnd.Controllers
 
 
 
-            return View();
+            return View(modelo);
         }
 
 
@@ -113,7 +113,8 @@ namespace FrontEnd.Controllers
                 }
 
                 // Si no coincide usuario o contraseña
-                ModelState.AddModelError("", "Usuario o contraseña incorrectos.");
+                TempData["MensajeInicioFallido"] = "Usuario o contraseña incorrectos.";
+                return RedirectToAction("InicioSesionUsuario");
             }
 
             return View();
@@ -165,7 +166,7 @@ namespace FrontEnd.Controllers
                 _context.Clientes.Add(nuevoCliente);
                 _context.SaveChanges();
 
-                TempData["Mensaje"] = "Cliente registrado correctamente. Ahora puedes iniciar sesión.";
+                TempData["MensajeRegistroCorrecto"] = "Cliente registrado correctamente, ahora puedes iniciar sesión.";
                 return RedirectToAction("RegistroCliente");
             }
             else
@@ -173,7 +174,7 @@ namespace FrontEnd.Controllers
                 return RedirectToAction("RegistroCliente");
             }
 
-            return View();
+            return View(modelo);
         }
 
 
@@ -211,7 +212,8 @@ namespace FrontEnd.Controllers
                 }
 
                 // Si no coincide usuario o contraseña
-                ModelState.AddModelError("", "Usuario o contraseña incorrectos.");
+                TempData["MensajeInicioFallido"] = "Usuario o contraseña incorrectos.";
+                return RedirectToAction("InicioSesionUsuario");
             }
             return View();
         }

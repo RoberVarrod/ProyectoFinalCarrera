@@ -19,6 +19,12 @@
             <div class="col-lg-6">
                 <div class="bg-primary py-5 px-4 px-sm-5">
                     <form class="py-5" asp-controller="Acceso" asp-action="InicioSesionUsuario" method="post">
+                        @if (TempData["MensajeInicioFallido"] != null)
+                        {
+                            <div class="alert alert-primary" role="alert">
+                                @TempData["MensajeInicioFallido"]
+                            </div>
+                        }
                         <div class="form-group">
                             <input asp-for="Correo" id="emailImput" type="email" class="form-control border-0 p-4" placeholder="Correo electrónico" name="Correo" required />
                         </div>
@@ -29,7 +35,7 @@
                            <button id="btnIniciar" class="btn btn-dark btn-block border-0 py-3" type="submit" >Iniciar Sesión</button>
                         </div>
                         <div class="text-center mt-3">
-                            <p class="text-white">¿No tienes una cuenta? <a href="/Acceso/Registro" class="text-dark font-weight-bold">Regístrate aquí</a></p>
+                            <p class="text-white">¿No tienes una cuenta? <a class="text-dark font-weight-bold">Contacta al administrador</a></p>
                         </div>
                         <div class="form-group d-flex justify-content-center">
                             <a href="#" class="text-white">¿Olvidaste tu contraseña?</a>

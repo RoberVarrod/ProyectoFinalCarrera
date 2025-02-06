@@ -15,6 +15,13 @@
             <div class="col-lg-6">
                 <div class="bg-primary py-5 px-4 px-sm-5">
                     <form class="py-5" asp-controller="Acceso" asp-action="RegistroUsuario" method="post" id="registrationForm">
+                        @if (TempData["MensajeRegistroCorrecto"] != null)
+                        {
+                            <div class="alert alert-success" role="alert">
+                                @TempData["MensajeRegistroCorrecto"]
+                            </div>
+                        }
+                        <h5 class="text-white text-uppercase font-weight-bold mt-4">Datos</h5>
                         <div class="form-group">
                             <input asp-for="Nombre" type="text" class="form-control border-0 p-4" placeholder="Nombre" name="Nombre" required="required" />
                         </div>
@@ -36,6 +43,13 @@
                                    pattern="\d{10}" title="La cédula debe tener 10 dígitos." required="required" />
                         </div>
                         <div class="form-group">
+                            <input asp-for="Direccion" type="text" class="form-control border-0 p-4" placeholder="Dirección" name="Direccion" required="required" />
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="Oficina" type="text" class="form-control border-0 p-4" placeholder="Oficina atención al cliente" name="Oficina" required="required" />
+                        </div>
+                        <h5 class="text-white text-uppercase font-weight-bold mt-4">Contraseña</h5>
+                        <div class="form-group">
                             <input asp-for="Contrasena" type="password" class="form-control border-0 p-4" id="password" placeholder="Contraseña"
                                    name="Contrasena" required="required" />
                             <div class="bg-light p-3 mt-2" id="passwordHelp" style="display: none; border-radius: 5px;">
@@ -56,19 +70,13 @@
                                 <strong>Las contraseñas no coinciden.</strong>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <input asp-for="Direccion" type="text" class="form-control border-0 p-4" placeholder="Dirección" name="Direccion" required="required" />
-                        </div>
-                        <div class="form-group">
-                            <input asp-for="Oficina" type="text" class="form-control border-0 p-4" placeholder="Oficina atención al cliente" name="Oficina" required="required" />
-                        </div>
                         
                         <div>
                             <button class="btn btn-dark btn-block border-0 py-3" type="submit">Registrarse</button>
                         </div>
-                        <div class="text-center mt-3">
+                        <!--<div class="text-center mt-3">
                             <p class="text-white">¿Ya tienes una cuenta? <a href="/Acceso/InicioSesion" class="text-dark font-weight-bold">Inicia Sesión</a></p>
-                        </div>
+                        </div>-->
                     </form>
                     
                 </div>

@@ -11,12 +11,18 @@
         <div class="row align-items-center">
             <div class="col-lg-6 py-5 py-lg-0">
                 <h6 class="text-primary text-uppercase font-weight-bold">Bienvenido de nuevo</h6>
-                <h1 class="mb-4">Inicia Sesión en tu Cuenta de Empleado</h1>
+                <h1 class="mb-4">Inicia Sesión en tu Cuenta de Cliente</h1>
                 <p class="mb-4">Accede para visualizar tus paquetes y gestionar tus datos.</p>
             </div>
             <div class="col-lg-6">
                 <div class="bg-primary py-5 px-4 px-sm-5">
                     <form class="py-5" asp-controller="Acceso" asp-action="InicioSesionCliente" method="post">
+                        @if (TempData["MensajeInicioFallido"] != null)
+                        {
+                            <div class="alert alert-primary" role="alert">
+                                @TempData["MensajeInicioFallido"]
+                            </div>
+                        }
                         <div class="form-group">
                             <input type="email" class="form-control border-0 p-4" placeholder="Correo electrónico" asp-for="Correo" required />
                         </div>

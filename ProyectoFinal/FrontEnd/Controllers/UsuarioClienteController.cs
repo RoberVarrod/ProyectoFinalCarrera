@@ -1,13 +1,58 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FrontEnd.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FrontEnd.Controllers
 {
     public class UsuarioClienteController : Controller
     {
+        private readonly ProyectoPaqueteriaContext _context;
+
+        public UsuarioClienteController(ProyectoPaqueteriaContext context)
+        {
+            _context = context;
+        }
+
+        [HttpGet]
         public IActionResult Configuracion()
         {
-            return View();
+            var clienteId = HttpContext.Session.GetString("ClienteId");
+
+            if (!string.IsNullOrEmpty(clienteId))
+            {
+                var cliente = _context.Clientes.FirstOrDefault(c => c.IdCliente == int.Parse(clienteId));
+                return View(cliente);
+            }
+
+            return RedirectToAction("InicioSesionCliente", "Acceso");
         }
+
+        [HttpPost]
+        public IActionResult EditarInformacion(Cliente cliente)
+        {
+            var clienteExistente = _context.Clientes.FirstOrDefault(c => c.IdCliente == cliente.IdCliente);
+            if (clienteExistente != null)
+            {
+                clienteExistente.Nombre = cliente.Nombre;
+                clienteExistente.PrimerApellido = cliente.PrimerApellido;
+                clienteExistente.SegundoApellido = cliente.SegundoApellido;
+                clienteExistente.Cedula = cliente.Cedula;
+                clienteExistente.Correo = cliente.Correo;
+                clienteExistente.TelefonoPrincipal = cliente.TelefonoPrincipal;
+                clienteExistente.TelefonoSecundario = cliente.TelefonoSecundario;
+                clienteExistente.Provincia = cliente.Provincia;
+                clienteExistente.Canton = cliente.Canton;
+                clienteExistente.Distrito = cliente.Distrito;
+                clienteExistente.CodigoPostal = cliente.CodigoPostal;
+                clienteExistente.Direccion = cliente.Direccion;
+
+                _context.SaveChanges();
+                return RedirectToAction("Configuracion");
+            }
+            return NotFound();
+        }
+
+
 
         public IActionResult Transportes()
         {

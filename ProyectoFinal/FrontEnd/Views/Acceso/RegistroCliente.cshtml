@@ -15,7 +15,13 @@
             <div class="col-lg-6">
                 <div class="bg-primary py-5 px-4 px-sm-5">
                     <form class="py-5" asp-controller="Acceso" asp-action="RegistroCliente" method="post" id="registrationForm">
-                        <h6 class="text-secundary text-uppercase font-weight-bold">Datos</h6>
+                        @if (TempData["MensajeRegistroCorrecto"] != null)
+                        {
+                            <div class="alert alert-success" role="alert">
+                                @TempData["MensajeRegistroCorrecto"]
+                            </div>
+                        }
+                        <h5 class="text-white text-uppercase font-weight-bold mt-4">Datos</h5>
                         <div class="form-group">
                             <input type="text" class="form-control border-0 p-4" placeholder="Nombre" name="Nombre" required="required" />
                         </div>
@@ -40,7 +46,7 @@
                             <input type="text" class="form-control border-0 p-4" placeholder="Teléfono Secundario (Ejemplo: 88888888)" name="TelefonoSecundario"
                                    pattern="\d{8}" title="El número de teléfono debe tener 8 dígitos." required="required" />
                         </div>
-                        <h6 class="text-secundary text-uppercase font-weight-bold">Dirección</h6>
+                        <h5 class="text-white text-uppercase font-weight-bold mt-4">Dirección</h5>
                         <div class="form-group">
                             <input type="text" class="form-control border-0 p-4" placeholder="Provincia" name="Provincia" required="required" />
                         </div>
@@ -56,7 +62,7 @@
                         <div class="form-group">
                             <input type="text" class="form-control border-0 p-4" placeholder="Dirección exacta" name="Direccion" required="required" />
                         </div>
-                        <h6 class="text-secundary text-uppercase font-weight-bold">Contraseña</h6>
+                        <h5 class="text-white text-uppercase font-weight-bold mt-4">Contraseña</h5>
                         <div class="form-group">
                             <input type="password" class="form-control border-0 p-4" id="Contrasena" placeholder="Contraseña"
                                    name="Contrasena" required="required" />
