@@ -1,4 +1,5 @@
 ﻿using FrontEnd.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -51,6 +52,42 @@ namespace FrontEnd.Controllers
             }
             return NotFound();
         }
+
+
+
+        [HttpPost]
+        public JsonResult BuscarClientePorCedulaAjax(string cedula) //Para llamar con AJAX
+        {
+            var cliente = _context.Clientes
+                   .FirstOrDefault(u => u.Cedula == cedula);
+
+            if (cliente != null)
+            {
+                Cliente clienteModelo = new Cliente();
+
+                clienteModelo.IdCliente = cliente.IdCliente;
+                clienteModelo.Nombre = cliente.Nombre;
+                clienteModelo.TelefonoPrincipal = cliente.TelefonoPrincipal;
+                clienteModelo.Correo = cliente.Correo;
+                clienteModelo.Cedula = cliente.Cedula;
+                clienteModelo.Provincia = cliente.Provincia;
+                clienteModelo.Canton = cliente.Canton;
+                clienteModelo.Distrito = cliente.Distrito;
+                clienteModelo.CodigoPostal = cliente.CodigoPostal;
+                clienteModelo.Direccion = cliente.Direccion;
+
+                return Json(clienteModelo);
+            }
+            else
+            {
+                Cliente clienteModelo = new Cliente(); // iria como null
+                return Json(clienteModelo);
+            }      
+
+        }
+
+
+       
 
 
 

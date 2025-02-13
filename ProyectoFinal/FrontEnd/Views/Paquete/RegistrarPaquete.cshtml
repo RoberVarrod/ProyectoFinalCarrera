@@ -16,40 +16,63 @@
             </div>
             <div class="col-lg-6">
                 <div class="bg-primary py-5 px-4 px-sm-5">
-                    <form class="py-5" method="post" action="/Paquete/RegistrarPaquete" id="registrationForm">
+
+                    
+                    <div class="form-group">
+                        <input id="CedulaBuscar" type="text" class="form-control border-0 p-4" placeholder="Cédula cliente (Ejemplo: 111111111)" name="CedulaBuscar"
+                               pattern="\d{9}" title="La cédula debe tener 9 dígitos." required="required" />
+                    </div>
+                    <div>
+                        <button id="buscarCliente" class="btn btn-dark btn-block border-0 py-3">Buscar Cliente</button>
+                    </div>
+
+                    <form class="py-5" method="post" action="/Paquete/RegistrarPaquete" id="registrationForm">                    
                         <div class="form-group">
-                            <input type="text" class="form-control border-0 p-4" placeholder="Tracking ID" name="NumeroRegistro" required="required" />
+                            <input id="IdCliente" type="text" class="form-control border-0 p-4" name="IdCliente" required="required" hidden />
+                        </div>
+                        <!--       <div class="form-group">
+                            <input type="text" class="form-control border-0 p-4" name="IdUsuario" required="required" hidden />
+                        </div>   esto se podria sacar de las variables de sesion, hacer que una guarde el id del usuario que registra, el id el usuario que esta loggeado -->                       
+                        <div class="form-group">
+                            <input id="NumeroRegistro" type="text" class="form-control border-0 p-4" placeholder="Tracking ID" name="NumeroRegistro" required="required" />
+                        </div>
+                        <div class="form-group">
+                            <input id="Precio" type="text" class="form-control border-0 p-4" placeholder="Precio en dolares " name="Precio" />
+                        </div>
+                        <div class="form-group">
+                            <input id="PaqueteLargo" type="text" class="form-control border-0 p-4" placeholder="Largo en cm" name="PaqueteLargo" />
+                        </div>
+                        <div class="form-group">
+                            <input id="PaqueteAncho" type="text" class="form-control border-0 p-4" placeholder="Ancho en cm" name="PaqueteAncho" />
+                        </div>
+                        <div class="form-group">
+                            <input id="PaqueteAlto" type="text" class="form-control border-0 p-4" placeholder="Alto en cm" name="PaqueteAlto" />
+                        </div>                                        
+                        <div class="form-group">
+                            <input id="Descripcion" type="text" class="form-control border-0 p-4" placeholder="Descripción" name="Descripcion" />
+                        </div>   
+                        <div class="form-group">
+                            <input id="Direccion" type="text" class="form-control border-0 p-4" placeholder="Dirección paquete" name="Direccion" required="required" />
+                        </div>
+                        <hr />
+                        <h6 class="text-primary text-uppercase font-weight-bold" style="color:black !important">Datos del cliente</h6>
+                        <div class="form-group">
+                            <input id="nombreCliente" type="text" class="form-control border-0 p-4" placeholder="Nombre cliente" name="nombreCliente" disabled />
+                        </div>
+                        <div class="form-group">
+                            <input id="Cedula" type="text" class="form-control border-0 p-4" placeholder="Cédula cliente" name="Cedula"
+                                   required="required" disabled />
+                        </div>
+                        <div class="form-group">
+                            <input id="Email" type="email" class="form-control border-0 p-4" placeholder="Correo Electrónico cliente" name="Email" required="required" disabled />
+                        </div>
+                        <div class="form-group">
+                            <input id="Telefono1" type="text" class="form-control border-0 p-4" placeholder="Telefono principal del cliente" name="Telefono1" disabled />                             
+                        </div>
+                        <div class="form-group">
+                            <input id="proCanDistCodeP" type="text" class="form-control border-0 p-4" placeholder="Provincia, Cantón , Distrito, Código postal" name="proCanDistCodeP" disabled />
                         </div>
 
-                        <div class="form-group">
-                            <input type="text" class="form-control border-0 p-4" placeholder="Alto en cm" name="PaqueteAlto" required="required" />
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control border-0 p-4" placeholder="Largo en cm" name="PaqueteLargo" />
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control border-0 p-4" placeholder="Ancho en cm" name="PaqueteAncho" />
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control border-0 p-4" placeholder="Descripción" name="Descripcion" />
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control border-0 p-4" placeholder="Precio en dolares " name="Precio" />
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control border-0 p-4" placeholder="Cédula cliente (Ejemplo: 111111111)" name="Cedula"
-                                   pattern="\d{10}" title="La cédula debe tener 10 dígitos." required="required" />
-                        </div>
-                        <div class="form-group">
-                            <input type="email" class="form-control border-0 p-4" placeholder="Correo Electrónico cliente" name="Email" required="required" />
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control border-0 p-4" placeholder="Teléfono cliente (Ejemplo: 88888888)" name="Telefono"
-                                   pattern="\d{8}" title="El número de teléfono debe tener 8 dígitos." required="required" />
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control border-0 p-4" placeholder="Dirección paquete" name="Direccion" required="required" />
-                        </div>
                         <div>
                             <button id="registrarPaquete"class="btn btn-dark btn-block border-0 py-3" type="submit">Registrar paquete</button>
                         </div>
@@ -60,8 +83,40 @@
     </div>
 </div>
 <!-- Registro End -->
-
-<script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script type="text/javascript">
     // Validación de la nueva contraseña
-    document.getElementById("registrarPaquete").addEventListener("click", function () { alert("Paquete registrado"); });
+    //document.getElementById("registrarPaquete").addEventListener("click", function () { alert("Paquete registrado"); });
+
+
+    //Ajax para buscar el cliente de la cedula
+    $(document).ready(function () {
+        $("#buscarCliente").click(function () {
+            var cedula = $("#CedulaBuscar").val();
+            var data = { Cedula: cedula }
+            var url = "@Url.Action("BuscarClientePorCedulaAjax", "UsuarioCliente")"
+
+            $.post(url, data).done(function (usuarioModelo) {
+
+                if (usuarioModelo.idCliente != 0) {
+                    alert("Datos del usuario " + usuarioModelo.cedula + " encontrados");
+                console.log(usuarioModelo);
+                console.log(usuarioModelo.direccion);
+                $("#IdCliente").val(usuarioModelo.idCliente)
+                $("#nombreCliente").val(usuarioModelo.nombre)
+                $("#Cedula").val(usuarioModelo.cedula)
+                $("#Email").val(usuarioModelo.correo)
+                $("#Telefono1").val(usuarioModelo.telefonoPrincipal)
+                $("#Direccion").val(usuarioModelo.direccion)
+                $("#proCanDistCodeP").val(usuarioModelo.provincia + " - " + usuarioModelo.canton + " - " + usuarioModelo.distrito + " - " + usuarioModelo.codigoPostal)
+            }else {
+                alert("No se encuentra un usuario con la cédula " + cedula);
+
+
+            }
+
+
+            })
+        })
+    })
 </script>
