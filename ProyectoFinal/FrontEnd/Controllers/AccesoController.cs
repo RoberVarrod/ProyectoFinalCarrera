@@ -208,12 +208,12 @@ namespace FrontEnd.Controllers
 
 
 
-                    return RedirectToAction("Configuracion", "Usuario");
+                    return RedirectToAction("Configuracion", "UsuarioCliente");
                 }
 
                 // Si no coincide usuario o contraseña
                 TempData["MensajeInicioFallido"] = "Usuario o contraseña incorrectos.";
-                return RedirectToAction("InicioSesionUsuario");
+                return RedirectToAction("InicioSesionCliente");
             }
             return View();
         }

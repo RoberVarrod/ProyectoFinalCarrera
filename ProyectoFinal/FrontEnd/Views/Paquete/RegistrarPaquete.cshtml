@@ -19,8 +19,8 @@
 
                     
                     <div class="form-group">
-                        <input id="CedulaBuscar" type="text" class="form-control border-0 p-4" placeholder="Cédula cliente (Ejemplo: 111111111)" name="CedulaBuscar"
-                               pattern="\d{9}" title="La cédula debe tener 9 dígitos." required="required" />
+                        <input id="CedulaBuscar" type="text" class="form-control border-0 p-4" placeholder="Cédula cliente (Ejemplo: 0111111111)" name="CedulaBuscar"
+                               pattern="\d{10}" title="La cédula debe tener 10 dígitos." required="required" />
                     </div>
                     <div>
                         <button id="buscarCliente" class="btn btn-dark btn-block border-0 py-3">Buscar Cliente</button>
@@ -100,8 +100,8 @@
 
                 if (usuarioModelo.idCliente != 0) {
                     alert("Datos del usuario " + usuarioModelo.cedula + " encontrados");
-                console.log(usuarioModelo);
-                console.log(usuarioModelo.direccion);
+                //console.log(usuarioModelo);
+                //console.log(usuarioModelo.direccion);
                 $("#IdCliente").val(usuarioModelo.idCliente)
                 $("#nombreCliente").val(usuarioModelo.nombre)
                 $("#Cedula").val(usuarioModelo.cedula)
