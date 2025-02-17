@@ -278,10 +278,11 @@ public partial class ProyectoPaqueteriaContext : DbContext
                 .HasForeignKey(d => d.IdCliente)
                 .HasConstraintName("FK_id_cliente_Paquete");
 
-            entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.Paquetes)
+           entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.Paquetes)
                 .HasForeignKey(d => d.IdUsuario)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_id_usuario_Paquete");
+          
         });
 
         modelBuilder.Entity<Role>(entity =>

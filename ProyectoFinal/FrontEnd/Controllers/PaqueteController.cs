@@ -24,40 +24,44 @@ namespace FrontEnd.Controllers
             return View();
         }
 
+
         [AllowAnonymous]
         [HttpPost]
         public IActionResult RegistrarPaquete(Paquete modelo)
         {
+
+            //modelo.IdUsuarioNavigation = modelo.IdUsuario;
+
             if (ModelState.IsValid)
             {
                 // Validar que el paquete no exista previamente
                 if (_context.Paquetes.Any(p => p.NumeroRegistro == modelo.NumeroRegistro))
                 {
                     ModelState.AddModelError("", "El Número de Registro ya existe.");
-                    return View(modelo);
+                    return View();
                 }
 
                 // Crear un nuevo paquete con la información proporcionada
                 var nuevoPaquete = new Paquete
                 {
-                    NumeroRegistro = modelo.NumeroRegistro,
-                    Nombre = modelo.Nombre,
-                    Precio = modelo.Precio,
-                    PaqueteLargo = modelo.PaqueteLargo,
-                    PaqueteAncho = modelo.PaqueteAncho,
-                    PaqueteAlto = modelo.PaqueteAlto,
-                    TipoPaquete = modelo.TipoPaquete,
-                    TipoEntrega = modelo.TipoEntrega,
-                    Descripcion = modelo.Descripcion,
-                    EstadoPago = modelo.EstadoPago,
-                    EstadoRuta = modelo.EstadoRuta,
+                    NumeroRegistro = modelo.NumeroRegistro,//
+                    Nombre = null,
+                    Precio = modelo.Precio,//
+                    PaqueteLargo = modelo.PaqueteLargo,//
+                    PaqueteAncho = modelo.PaqueteAncho,//
+                    PaqueteAlto = modelo.PaqueteAlto,//
+                    TipoPaquete = null,
+                    TipoEntrega = null,
+                    Descripcion = modelo.Descripcion,//
+                    EstadoPago = "Pendiente",
+                    EstadoRuta = null,
                     FechaRegistro = DateTime.Now,
-                    FechaEntrega = modelo.FechaEntrega,
-                    FechaEntregaEstimada = modelo.FechaEntregaEstimada,
-                    DireccionEntrega = modelo.DireccionEntrega,
-                    RetiroSucursal = modelo.RetiroSucursal,
+                    FechaEntrega = null,
+                    FechaEntregaEstimada = DateTime.Now.AddDays(2), // se agregan dos dias estimados
+                    DireccionEntrega = modelo.DireccionEntrega,//
+                    RetiroSucursal = null,
                     IdUsuario = modelo.IdUsuario,
-                    IdCliente = modelo.IdCliente
+                    IdCliente = modelo.IdCliente 
                 };
 
                 // Guardar el paquete en la base de datos
@@ -69,7 +73,7 @@ namespace FrontEnd.Controllers
             }
             else
             {
-                return View(modelo);
+                return View();
             }
         }
 
