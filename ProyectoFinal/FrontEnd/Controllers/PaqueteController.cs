@@ -60,16 +60,18 @@ namespace FrontEnd.Controllers
                     FechaEntregaEstimada = DateTime.Now.AddDays(2), // se agregan dos dias estimados
                     DireccionEntrega = modelo.DireccionEntrega,//
                     RetiroSucursal = null,
+                    // estos ids se podrian agregaar aqui menos el de id cliente.
                     IdUsuario = modelo.IdUsuario,
-                    IdCliente = modelo.IdCliente 
+                    IdCliente = modelo.IdCliente,
+                    IdSucursal = modelo.IdSucursal
                 };
 
                 // Guardar el paquete en la base de datos
                 _context.Paquetes.Add(nuevoPaquete);
                 _context.SaveChanges();
 
-                TempData["Mensaje"] = "Paquete registrado correctamente.";
-                return RedirectToAction("RegistroPaquete");
+                TempData["MensajePaqueteRegistrado"] = "Paquete registrado correctamente.";
+                return View();
             }
             else
             {

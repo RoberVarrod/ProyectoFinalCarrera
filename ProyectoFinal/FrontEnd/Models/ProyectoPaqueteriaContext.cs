@@ -31,10 +31,11 @@ public partial class ProyectoPaqueteriaContext : DbContext
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
 
-  /*  protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+/*
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         => optionsBuilder.UseSqlServer("Server=DESKTOP-82180HC\\SQLEXPRESS;Database=ProyectoPaqueteria;Integrated Security=True;Trusted_Connection=True; TrustServerCertificate=True;");
-  */
+*/
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Cliente>(entity =>
@@ -242,6 +243,7 @@ public partial class ProyectoPaqueteriaContext : DbContext
                 .HasColumnType("datetime")
                 .HasColumnName("fecha_registro");
             entity.Property(e => e.IdCliente).HasColumnName("id_cliente");
+            entity.Property(e => e.IdSucursal).HasColumnName("id_sucursal");
             entity.Property(e => e.IdUsuario).HasColumnName("id_usuario");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(50)
@@ -278,11 +280,13 @@ public partial class ProyectoPaqueteriaContext : DbContext
                 .HasForeignKey(d => d.IdCliente)
                 .HasConstraintName("FK_id_cliente_Paquete");
 
-           entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.Paquetes)
+            entity.HasOne(d => d.IdSucursalNavigation).WithMany(p => p.Paquetes)
+                .HasForeignKey(d => d.IdSucursal)
+                .HasConstraintName("FK_id_sucursal_Paquete");
+
+            entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.Paquetes)
                 .HasForeignKey(d => d.IdUsuario)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_id_usuario_Paquete");
-          
         });
 
         modelBuilder.Entity<Role>(entity =>

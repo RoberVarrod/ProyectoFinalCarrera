@@ -15,5 +15,7 @@ public partial class Sucursal
 
     public string Direccion { get; set; } = null!;
 
+    public virtual ICollection<Paquete> Paquetes { get; set; } = new List<Paquete>();
+
     public virtual ICollection<Usuario> Usuarios { get; set; } = new List<Usuario>();
 }

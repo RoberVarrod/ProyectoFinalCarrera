@@ -39,7 +39,9 @@ public partial class Paquete
 
     public bool? RetiroSucursal { get; set; }
 
-    public int IdUsuario { get; set; }
+    public int? IdSucursal { get; set; }
+
+    public int? IdUsuario { get; set; }
 
     public int? IdCliente { get; set; }
 
@@ -47,7 +49,9 @@ public partial class Paquete
 
     public virtual Cliente? IdClienteNavigation { get; set; }
 
-    public virtual Usuario IdUsuarioNavigation { get; set; } //= null!; // no se para que es .. en internet dice que no es necesario aparentemente tambien se comento en el context..
+    public virtual Sucursal? IdSucursalNavigation { get; set; }
+
+    public virtual Usuario? IdUsuarioNavigation { get; set; }
 
     public virtual ICollection<Pago> Pagos { get; set; } = new List<Pago>();
 }
