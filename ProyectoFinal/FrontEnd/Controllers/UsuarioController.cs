@@ -54,20 +54,11 @@ namespace FrontEnd.Controllers
             return View();
         }
 
-        public IActionResult EstadoPaquetes()
-        {
-            return View();
-        }
 
         public IActionResult Notificaciones()
         {
             return View();
-        }
-
-        public IActionResult OrdenesProceso()
-        {
-            return View();
-        }
+        }      
 
         public IActionResult Pagos()
         {
@@ -79,14 +70,11 @@ namespace FrontEnd.Controllers
             return View();
         }
 
-        public IActionResult Paquetes()
-        {
-            return View();
-        }
 
         public async Task<IActionResult> Administracion()
         {
             var usuarios = await _context.Usuarios.ToListAsync();
+
             return View(usuarios);
         }
 

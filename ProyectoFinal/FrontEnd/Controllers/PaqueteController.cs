@@ -80,11 +80,35 @@ namespace FrontEnd.Controllers
         }
 
 
+        /*
 
+        public async Task<IActionResult> PaqueteSucursalNombre()
+        {
+            var listaPaquetes = await _context.Paquetes.ToListAsync();
+
+            return View(listaPaquetes);
+        }
+
+        */
         public IActionResult Historial()
         {
             return View();
         }
+
+        public IActionResult Paquetes()
+        {
+            return View();
+        }
+
+        public IActionResult EstadoPaquetes() 
+        {
+            return View();
+        }
+        public IActionResult OrdenesProceso() 
+        {
+            return View();
+        }
+
 
     }
 }
