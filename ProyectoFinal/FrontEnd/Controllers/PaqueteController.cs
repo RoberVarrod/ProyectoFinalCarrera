@@ -80,26 +80,150 @@ namespace FrontEnd.Controllers
         }
 
 
-        /*
-
+        /* -----------> lista
+          
         public async Task<IActionResult> PaqueteSucursalNombre()
         {
             var listaPaquetes = await _context.Paquetes.ToListAsync();
 
-            return View(listaPaquetes);
+            List <PaqueteUsuarioSucursal> listaFinalPaquetes;   //// esta es mi lista final Ienumerable para la vista
+
+
+
+            foreach (var item in listaPaquetes) // se recorre la lista de paquetes en la base de datos
+            {
+
+                //se extraen los datos del cliente y la sucursal linkeados al paquete
+
+                // buscar Datos del cliente.
+                var cliente = _context.Clientes
+                   .FirstOrDefault(u => u.IdCliente == item.IdCliente);
+
+                var NombreCliente = cliente.Nombre;
+
+                // buscar Datos de Sucursal
+                var sucursal = _context.Sucursals
+                   .FirstOrDefault(u => u.IdSucursal == item.IdSucursal);
+
+                var NombreSucursal = sucursal.Nombre;
+
+                 PaqueteUsuarioSucursal  paqueteNuevo = new PaqueteUsuarioSucursal();
+                paqueteNuevo.IdPaquete = item.IdPaquete;
+                paqueteNuevo.NumeroRegistro = item.NumeroRegistro;
+                paqueteNuevo.Nombre = item.Nombre;
+                paqueteNuevo.Precio = item.Precio;
+                paqueteNuevo.PaqueteLargo = item.PaqueteLargo;
+                paqueteNuevo.PaqueteAncho = item.PaqueteAncho; 
+                paqueteNuevo.PaqueteAlto = item.PaqueteAlto;    
+                paqueteNuevo.TipoPaquete = item.TipoPaquete;
+                paqueteNuevo.TipoEntrega = item.TipoEntrega;
+                paqueteNuevo.Descripcion = item.Descripcion;    
+                paqueteNuevo.EstadoPago = item.EstadoPago;
+                paqueteNuevo.EstadoRuta = item.EstadoRuta;  
+                paqueteNuevo.FechaRegistro = item.FechaRegistro;
+                paqueteNuevo.FechaEntrega = item.FechaEntrega;
+                paqueteNuevo.FechaEntregaEstimada = item.FechaEntregaEstimada;
+                paqueteNuevo.DireccionEntrega = item.DireccionEntrega;
+                paqueteNuevo.RetiroSucursal = item.RetiroSucursal;
+                //////////////// Nombre del usuario del paquete, aqui se asigna los nuevos valores
+                paqueteNuevo.PaqueteUsuarioNombre = NombreCliente;
+                //////////////// Nombre de la sucursal del paquete, aqui se asigna los nuevos valores
+                paqueteNuevo.PaqueteSucursalNombre = NombreSucursal;
+                //////////////// Ids opcionales, pero pueden ser utilies para otros methodos.
+                paqueteNuevo.IdSucursal = item.IdSucursal;
+                paqueteNuevo.IdUsuario = item.IdUsuario;
+                paqueteNuevo.IdCliente = item.IdCliente;
+
+                listaFinalPaquetes.Add(paqueteNuevo); // --- > retornar lista 
+
+            }
+
+            return View(); // retornar la lista de la clase nueva
+        }
+        */
+
+
+        public async Task<IActionResult> Paquetes()
+        {
+            var listaPaquetes = await _context.Paquetes.ToListAsync();
+
+            List<PaqueteUsuarioSucursal> listaFinalPaquetes = new List<PaqueteUsuarioSucursal>();   //// esta es mi lista final Ienumerable para la vista
+
+            foreach (var item in listaPaquetes) // se recorre la lista de paquetes en la base de datos
+            {
+
+                //se extraen los datos del cliente y la sucursal linkeados al paquete
+
+                // buscar Datos del cliente.
+                var cliente = _context.Clientes
+                   .FirstOrDefault(u => u.IdCliente == item.IdCliente);
+
+                var NombreCliente = cliente.Nombre;
+
+                // buscar Datos de Sucursal
+                var sucursal = _context.Sucursals
+                   .FirstOrDefault(u => u.IdSucursal == item.IdSucursal);
+
+                var NombreSucursal = sucursal.Nombre;
+
+                PaqueteUsuarioSucursal paqueteNuevo = new PaqueteUsuarioSucursal(); // se hace el nuevo objeto 
+
+                paqueteNuevo.IdPaquete = item.IdPaquete;
+                paqueteNuevo.NumeroRegistro = item.NumeroRegistro;
+                paqueteNuevo.Nombre = item.Nombre;
+                paqueteNuevo.Precio = item.Precio;
+                paqueteNuevo.PaqueteLargo = item.PaqueteLargo;
+                paqueteNuevo.PaqueteAncho = item.PaqueteAncho;
+                paqueteNuevo.PaqueteAlto = item.PaqueteAlto;
+                paqueteNuevo.TipoPaquete = item.TipoPaquete;
+                paqueteNuevo.TipoEntrega = item.TipoEntrega;
+                paqueteNuevo.Descripcion = item.Descripcion;
+                paqueteNuevo.EstadoPago = item.EstadoPago;
+                paqueteNuevo.EstadoRuta = item.EstadoRuta;
+                paqueteNuevo.FechaRegistro = item.FechaRegistro;
+                paqueteNuevo.FechaEntrega = item.FechaEntrega;
+                paqueteNuevo.FechaEntregaEstimada = item.FechaEntregaEstimada;
+                paqueteNuevo.DireccionEntrega = item.DireccionEntrega;
+                paqueteNuevo.RetiroSucursal = item.RetiroSucursal;
+                //////////////// Nombre del usuario del paquete, aqui se asigna los nuevos valores
+                paqueteNuevo.PaqueteUsuarioNombre = NombreCliente;
+                //////////////// Nombre de la sucursal del paquete, aqui se asigna los nuevos valores
+                paqueteNuevo.PaqueteSucursalNombre = NombreSucursal;
+                //////////////// Ids opcionales, pero pueden ser utilies para otros methodos.
+                paqueteNuevo.IdSucursal = item.IdSucursal;
+                paqueteNuevo.IdUsuario = item.IdUsuario;
+                paqueteNuevo.IdCliente = item.IdCliente;
+
+               listaFinalPaquetes.Add(paqueteNuevo); // paquete agregado a la lista
+
+            }
+
+            return View(listaFinalPaquetes); // retornar la lista de la clase nueva con la lista de paquetes .. listo
         }
 
-        */
+
+
+
+
+
+
+
+
+
+
+
+
+
         public IActionResult Historial()
         {
             return View();
         }
-
+        /*
         public IActionResult Paquetes()
         {
             return View();
         }
-
+        */
         public IActionResult EstadoPaquetes() 
         {
             return View();
