@@ -205,11 +205,20 @@ namespace FrontEnd.Controllers
 
         // El metodo de actuaalizar y borraar al final tiene que hacer un redirect to action a public async Task<IActionResult> Paquetes()
 
-
-
-
-
-
+        // POST: Usuarios/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> BorrarPaquete(int id)
+        {
+            var paquete = await _context.Paquetes.FindAsync(id);
+            if (paquete != null)
+            {
+                _context.Paquetes.Remove(paquete);
+                await _context.SaveChangesAsync();
+                TempData["MensajeExito"] = "El usuario se eliminó correctamente."; // Mensaje de éxito
+            }
+            return RedirectToAction(nameof(Paquetes));
+        }
 
 
 
