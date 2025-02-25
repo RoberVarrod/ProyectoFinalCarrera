@@ -203,7 +203,7 @@ namespace FrontEnd.Controllers
 
 
 
-
+        // El metodo de actuaalizar y borraar al final tiene que hacer un redirect to action a public async Task<IActionResult> Paquetes()
 
 
 
