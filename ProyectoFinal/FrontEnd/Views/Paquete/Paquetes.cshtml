@@ -122,27 +122,26 @@
                             <!-- Modal delete paquete Start tiene que abrir un form-->
 
                             <div class="modal-body">
-                                <p><strong>Tracking ID:</strong> 123456</p>
-                                <p><strong>Nombre del Paquete:</strong> Paquete 1</p>
+                                <p><strong>Tracking ID:</strong>@paquete.NumeroRegistro</p>
+                                <p><strong>Nombre del Cliente:</strong>@paquete.PaqueteUsuarioNombre</p>
                                 <p>
                                     <strong>Detalles:</strong>
                                     <ul>
-                                        <li>Alto: 30cm</li>
-                                        <li>Largo: 50cm</li>
-                                        <li>Ancho: 20cm</li>
+                                        <li>Alto : @paquete.PaqueteAlto</li>
+                                        <li>Largo: @paquete.PaqueteLargo</li>
+                                        <li>Ancho: @paquete.PaqueteLargo</li>
                                     </ul>
                                 </p>
-                                <p><strong>Estado:</strong> En Ruta</p>
-                                <p><strong>Pago:</strong> Cancelado</p>
-                                <p><strong>Fecha Aproximada de Entrega:</strong> 04/12/2024</p>
-                                <p><strong>Tipo de Entrega:</strong> Entrega a Domicilio</p>
-                                <p><strong>Precio:</strong> $15.00</p>
+                                <p><strong>Estado de pago:</strong> @paquete.EstadoPago</p>
+                                <p><strong>Fecha Aproximada de Entrega:</strong> @paquete.FechaEntregaEstimada</p>
+                                <p><strong>Tipo de Entrega:</strong> @paquete.TipoEntrega</p>
+                                <p><strong>Precio:</strong> @paquete.Precio</p>
                                 <hr />
                                 <h5 class="mt-3">Seguro que desea borrar este paquete?</h5>
+
                                 <div class="btn-group" role="group" aria-label="Métodos de entrega">
                                     <button id="borrarPaqueteButton" type="button" data-dismiss="modal" class="btn btn-danger">Borrar paquete</button>
                                 </div>
-
                                 <button class="btn btn-link">  </button>
                                 <div id="methodDescription" class="mt-3"></div>
                             </div>
