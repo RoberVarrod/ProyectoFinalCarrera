@@ -58,7 +58,7 @@ namespace FrontEnd.Controllers
         public IActionResult Notificaciones()
         {
             return View();
-        }      
+        }
 
         public IActionResult Pagos()
         {
@@ -171,6 +171,46 @@ namespace FrontEnd.Controllers
         public IActionResult ListaSucursal()
         {
             return View();
+        }
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult UsuarioSucursal()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult UsuarioSucursal(Usuario modelo)
+        {
+            if (ModelState.IsValid)
+            {
+                // Validar que el usuario existe
+                var usuario = _context.Usuarios.SingleOrDefault(u => u.Nombre == modelo.Nombre);
+                if (usuario == null)
+                {
+                    ModelState.AddModelError("", "Usuario no encontrado");
+                    return View(modelo);
+                }
+
+                // Cambiar la sucursal del usuario
+                usuario.IdSucursal = modelo.IdSucursal;
+
+                try
+                {
+                    // Guardar los cambios en la base de datos
+                    _context.SaveChanges();
+                    ViewBag.Message = "Sucursal cambiada exitosamente";
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Error al cambiar la sucursal: " + ex.Message);
+                }
+
+                return View(modelo);
+            }
+
+            return View(modelo);
         }
 
 

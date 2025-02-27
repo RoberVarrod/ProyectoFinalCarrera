@@ -38,4 +38,6 @@ public partial class Usuario
     public virtual ICollection<Notificacion> Notificacions { get; set; } = new List<Notificacion>();
 
     public virtual ICollection<Paquete> Paquetes { get; set; } = new List<Paquete>();
+
+
 }

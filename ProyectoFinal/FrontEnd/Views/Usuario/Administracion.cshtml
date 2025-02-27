@@ -67,15 +67,7 @@
                         </div>
                         <!-- Modal de eliminación End -->
                         <!-- Botón para editar -->
-                        <button class="btn btn-link" data-toggle="modal" data-target="#detailsModalUpdate"
-                                data-cedula="@usuario.Cedula"
-                                data-nombre="@usuario.Nombre"
-                                data-primerapellido="@usuario.PrimerApellido"
-                                data-segundoapellido="@usuario.SegundoApellido"
-                                data-correo="@usuario.Correo"
-                                data-telefono="@usuario.TelefonoPrincipal"
-                                data-oficina="@usuario.Oficina"
-                                data-rol="@usuario.IdRol">
+                        <button class="btn btn-link" data-toggle="modal" data-target="#detailsModalUpdate-@usuario.IdUsuario">
                             <i class="fas fa-ellipsis-h"></i>
                         </button>
                     </td>
@@ -85,3 +77,35 @@
     </table>
 </div>
 <!-- Lista de Empleados End -->
+<!-- Modal de actualización de sucursal -->
+@foreach (var usuario in Model)
+{
+    <div class="modal fade" id="detailsModalUpdate-@usuario.IdUsuario" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel-@usuario.IdUsuario" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailsModalLabel-@usuario.IdUsuario">Actualizar Sucursal de @usuario.Nombre</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form asp-action="UsuarioSucursal" asp-controller="Usuario" method="post">
+                        <input type="hidden" name="IdUsuario" value="@usuario.IdUsuario" />
+                        <div class="form-group">
+                            <label for="Nombre">Nombre</label>
+                            <input type="text" class="form-control" id="Nombre" name="Nombre" value="@usuario.Nombre" readonly />
+                        </div>
+                        <div class="form-group">
+                            <label for="SucursalId">Nueva Sucursal</label>
+                            <input type="number" class="form-control" id="SucursalId" name="IdSucursal" required />
+                        </div>
+                        <button type="submit" class="btn btn-primary">Actualizar Sucursal</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<!-- Modal de actualización de sucursal End -->
