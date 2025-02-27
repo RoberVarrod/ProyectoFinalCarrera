@@ -139,11 +139,12 @@
                                 <hr />
                                 <h5 class="mt-3">Seguro que desea borrar este paquete?</h5>
 
-                                <div class="btn-group" role="group" aria-label="Métodos de entrega">
-                                    <button id="borrarPaqueteButton" type="button" data-dismiss="modal" class="btn btn-danger">Borrar paquete</button>
-                                </div>
-                                <button class="btn btn-link">  </button>
-                                <div id="methodDescription" class="mt-3"></div>
+                                <form asp-action="BorrarPaquete" asp-controller="Paquete" method="post">
+                                    <input type="hidden" name="id" value=@paquete.IdPaquete />
+                                    <button type="submit" class="btn btn-danger">Borrar Paquete</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                </form>
+
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -278,10 +279,7 @@
 
 
 <script>
-    // Variables
-    document.getElementById("borrarPaqueteButton").addEventListener("click", function () { alert("Paquete eliminado"); });
 
-    document.getElementById("actualizarPaqueteButton").addEventListener("click", function () { alert("Paquete actualizado"); });
 
 </script>
 

@@ -80,67 +80,7 @@ namespace FrontEnd.Controllers
         }
 
 
-        /* -----------> lista
-          
-        public async Task<IActionResult> PaqueteSucursalNombre()
-        {
-            var listaPaquetes = await _context.Paquetes.ToListAsync();
-
-            List <PaqueteUsuarioSucursal> listaFinalPaquetes;   //// esta es mi lista final Ienumerable para la vista
-
-
-
-            foreach (var item in listaPaquetes) // se recorre la lista de paquetes en la base de datos
-            {
-
-                //se extraen los datos del cliente y la sucursal linkeados al paquete
-
-                // buscar Datos del cliente.
-                var cliente = _context.Clientes
-                   .FirstOrDefault(u => u.IdCliente == item.IdCliente);
-
-                var NombreCliente = cliente.Nombre;
-
-                // buscar Datos de Sucursal
-                var sucursal = _context.Sucursals
-                   .FirstOrDefault(u => u.IdSucursal == item.IdSucursal);
-
-                var NombreSucursal = sucursal.Nombre;
-
-                 PaqueteUsuarioSucursal  paqueteNuevo = new PaqueteUsuarioSucursal();
-                paqueteNuevo.IdPaquete = item.IdPaquete;
-                paqueteNuevo.NumeroRegistro = item.NumeroRegistro;
-                paqueteNuevo.Nombre = item.Nombre;
-                paqueteNuevo.Precio = item.Precio;
-                paqueteNuevo.PaqueteLargo = item.PaqueteLargo;
-                paqueteNuevo.PaqueteAncho = item.PaqueteAncho; 
-                paqueteNuevo.PaqueteAlto = item.PaqueteAlto;    
-                paqueteNuevo.TipoPaquete = item.TipoPaquete;
-                paqueteNuevo.TipoEntrega = item.TipoEntrega;
-                paqueteNuevo.Descripcion = item.Descripcion;    
-                paqueteNuevo.EstadoPago = item.EstadoPago;
-                paqueteNuevo.EstadoRuta = item.EstadoRuta;  
-                paqueteNuevo.FechaRegistro = item.FechaRegistro;
-                paqueteNuevo.FechaEntrega = item.FechaEntrega;
-                paqueteNuevo.FechaEntregaEstimada = item.FechaEntregaEstimada;
-                paqueteNuevo.DireccionEntrega = item.DireccionEntrega;
-                paqueteNuevo.RetiroSucursal = item.RetiroSucursal;
-                //////////////// Nombre del usuario del paquete, aqui se asigna los nuevos valores
-                paqueteNuevo.PaqueteUsuarioNombre = NombreCliente;
-                //////////////// Nombre de la sucursal del paquete, aqui se asigna los nuevos valores
-                paqueteNuevo.PaqueteSucursalNombre = NombreSucursal;
-                //////////////// Ids opcionales, pero pueden ser utilies para otros methodos.
-                paqueteNuevo.IdSucursal = item.IdSucursal;
-                paqueteNuevo.IdUsuario = item.IdUsuario;
-                paqueteNuevo.IdCliente = item.IdCliente;
-
-                listaFinalPaquetes.Add(paqueteNuevo); // --- > retornar lista 
-
-            }
-
-            return View(); // retornar la lista de la clase nueva
-        }
-        */
+    
 
 
         public async Task<IActionResult> Paquetes()
@@ -206,8 +146,8 @@ namespace FrontEnd.Controllers
         // El metodo de actuaalizar y borraar al final tiene que hacer un redirect to action a public async Task<IActionResult> Paquetes()
 
         // POST: Usuarios/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        [HttpPost]
         public async Task<IActionResult> BorrarPaquete(int id)
         {
             var paquete = await _context.Paquetes.FindAsync(id);
@@ -215,7 +155,7 @@ namespace FrontEnd.Controllers
             {
                 _context.Paquetes.Remove(paquete);
                 await _context.SaveChangesAsync();
-                TempData["MensajeExito"] = "El usuario se eliminó correctamente."; // Mensaje de éxito
+                TempData["MensajeExito"] = "El paquete se eliminó correctamente."; // Mensaje de éxito
             }
             return RedirectToAction(nameof(Paquetes));
         }
