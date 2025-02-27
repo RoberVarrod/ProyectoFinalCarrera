@@ -18,12 +18,29 @@ namespace FrontEnd.Controllers
         }
 
 
+        private void VerificarSesion()
+        {
+            var lastActivity = HttpContext.Session.GetString("LastActivity");
+            if (lastActivity != null)
+            {
+                var lastActivityTime = DateTime.Parse(lastActivity);
+                if (lastActivityTime.AddMinutes(5) < DateTime.Now) // 5 minutos de inactividad
+                {
+                    HttpContext.Session.Clear();
+                    TempData["MensajeSesion"] = "Sesión cerrada por inactividad.";
+                }
+            }
+            HttpContext.Session.SetString("LastActivity", DateTime.Now.ToString()); // Actualizar la última actividad
+        }
+
+
 
 
         [AllowAnonymous]
         [HttpGet]
         public IActionResult RegistroUsuario()
         {
+            VerificarSesion();
             return View();
         }
 
@@ -32,6 +49,7 @@ namespace FrontEnd.Controllers
         [HttpPost]
         public IActionResult RegistroUsuario(RegistroModeloUsuario modelo)
         {
+            VerificarSesion();
             if (ModelState.IsValid)
             {
                 // Validar que el usuario no exista previamente
@@ -83,6 +101,7 @@ namespace FrontEnd.Controllers
         [HttpGet]
         public IActionResult InicioSesionUsuario()
         {
+            VerificarSesion();
             return View();
         }
         
@@ -90,6 +109,7 @@ namespace FrontEnd.Controllers
         [HttpPost]
         public IActionResult InicioSesionUsuario(LoginModeloUsuario modelo)
         {
+            VerificarSesion();
             if (ModelState.IsValid)
             {
                 // Buscar el usuario en la base de datos
@@ -124,6 +144,7 @@ namespace FrontEnd.Controllers
         [HttpGet]
         public IActionResult RegistroCliente()
         {
+            VerificarSesion();
             return View();
         }
 
@@ -131,6 +152,7 @@ namespace FrontEnd.Controllers
         [HttpPost]
         public IActionResult RegistroCliente(RegistroModeloCliente modelo)
         {
+            VerificarSesion();
             if (ModelState.IsValid)
             {
                 // Validar que el cliente no exista previamente
@@ -182,6 +204,7 @@ namespace FrontEnd.Controllers
         [HttpGet]
         public IActionResult InicioSesionCliente()
         {
+            VerificarSesion();
             return View();
         }
 
@@ -189,6 +212,7 @@ namespace FrontEnd.Controllers
         [HttpPost]
         public IActionResult InicioSesionCliente(LoginModeloUsuarioCliente modelo)
         {
+            VerificarSesion();
             if (ModelState.IsValid)
             {
                 // Buscar el cliente en la base de datos
@@ -219,14 +243,12 @@ namespace FrontEnd.Controllers
         }
 
 
-        // Cerrar Sesión
+        // Cerrar sesión
         [HttpGet]
         public IActionResult Logout()
         {
             HttpContext.Session.Clear(); // Limpiar la sesión
-           //  HttpContext.Session.Abandon(); /// esto hace falta aqui o la asesion se maantiene 
-           // HttpContext.Current.Session.RemoveAll();
-            TempData["Mensaje"] = "Sesión cerrada correctamente.";
+            TempData["MensajeSession"] = "Sesión cerrada correctamente.";
             return RedirectToAction("Index", "Home");
         }
 

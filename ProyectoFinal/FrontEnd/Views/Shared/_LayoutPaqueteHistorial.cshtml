@@ -166,5 +166,21 @@
     <!-- Template Javascript -->
     <script src="assets/js/main.js"></script>
 
+    <!-- Contraseña -->
+    <script>
+        const sessionTimeout = 5 * 60 * 1000; // 5 minuto de inactividad
+        let inactivityTimer;
+        function resetInactivityTimer() {
+            clearTimeout(inactivityTimer);
+            inactivityTimer = setTimeout(logout, sessionTimeout);
+        }
+        function logout() {
+            window.location.href = '@Url.Action("Logout", "Acceso")';
+        }
+        document.onmousemove = resetInactivityTimer;
+        document.onkeypress = resetInactivityTimer;
+        resetInactivityTimer();
+    </script>
+
 </body>
 </html>

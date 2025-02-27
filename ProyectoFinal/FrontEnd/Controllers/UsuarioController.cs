@@ -49,6 +49,38 @@ namespace FrontEnd.Controllers
             return NotFound();
         }
 
+        [HttpPost]
+        public IActionResult CambiarContrasena(int IdUsuario, string ContrasenaActual, string NuevaContrasena, string ConfirmarContrasena)
+        {
+            var usuario = _context.Usuarios.FirstOrDefault(c => c.IdUsuario == IdUsuario);
+
+            if (usuario == null)
+            {
+                return NotFound("Usuario no encontrado.");
+            }
+
+            // Validar que la contraseña actual sea correcta
+            if (usuario.Contrasena != ContrasenaActual)
+            {
+                TempData["ErrorContrasena"] = "La contraseña actual es incorrecta.";
+                return RedirectToAction("Configuracion");
+            }
+
+            // Validar que las nuevas contraseñas coincidan
+            if (NuevaContrasena != ConfirmarContrasena)
+            {
+                TempData["ErrorContrasena"] = "Las nuevas contraseñas no coinciden.";
+                return RedirectToAction("Configuracion");
+            }
+
+            // Actualizar la contraseña sin encriptar
+            usuario.Contrasena = NuevaContrasena;
+            _context.SaveChanges();
+
+            TempData["ExitoContrasena"] = "Contraseña actualizada correctamente.";
+            return RedirectToAction("Configuracion");
+        }
+
         public IActionResult Transportes()
         {
             return View();
@@ -62,12 +94,164 @@ namespace FrontEnd.Controllers
 
         public IActionResult Pagos()
         {
+            var paquetes = _context.Paquetes
+                .Include(p => p.IdClienteNavigation) // Incluye los datos del cliente
+                .ToList(); // Convierte a lista para evitar referencias nulas
+
+            if (paquetes == null || paquetes.Count == 0)
+            {
+                paquetes = new List<Paquete>(); // Devuelve una lista vacía en lugar de null
+            }
+
+            return View(paquetes);
+        }
+
+
+        [HttpGet]
+        public IActionResult ObtenerPagosPorPaquete(int idPaquete)
+        {
+            var pagos = _context.Pagos
+                .Where(p => p.IdPaquete == idPaquete)
+                .Select(p => new
+                {
+                    p.IdPago,
+                    numeroRegistro = p.IdPaqueteNavigation.NumeroRegistro,
+                    p.Total,
+                    p.Descripcion,
+                    FechaPago = p.FechaPago.HasValue ? p.FechaPago.Value.ToString("dd/MM/yyyy") : "N/A",
+                    p.PagoEstado,
+                    p.PagoMetodo,
+                    ClienteNombre = p.IdClienteNavigation.Nombre + " " + p.IdClienteNavigation.PrimerApellido + " " + p.IdClienteNavigation.SegundoApellido
+                })
+                .ToList();
+
+            return Json(pagos);
+        }
+
+        [HttpGet]
+        public IActionResult ObtenerPagosPorTracking(string trackingId)
+        {
+            var pagos = _context.Pagos
+                .Where(p => p.IdPaqueteNavigation.NumeroRegistro == trackingId)
+                .Select(p => new
+                {
+                    idPago = p.IdPago,
+                    numeroRegistro = p.IdPaqueteNavigation.NumeroRegistro,
+                    descripcion = p.Descripcion,
+                    total = p.Total,
+                    pagoMetodo = p.PagoMetodo,
+                    FechaPago = p.FechaPago.HasValue ? p.FechaPago.Value.ToString("dd/MM/yyyy") : "N/A",
+                    pagoEstado = p.PagoEstado,
+                    clienteNombre = p.IdClienteNavigation.Nombre + " " + p.IdClienteNavigation.PrimerApellido
+                })
+                .ToList();
+
+            return Json(pagos);
+        }
+
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult RegistrarPago()
+        {
             return View();
         }
 
-        public IActionResult ActualizarPago()
+        [HttpPost]
+        public IActionResult BuscarPaquetePorTrackingAjax(string NumeroRegistro)
         {
-            return View();
+            if (string.IsNullOrEmpty(NumeroRegistro))
+            {
+                return Json(new { idPaquete = 0 });
+            }
+
+            var paquete = _context.Paquetes
+                .Include(p => p.IdClienteNavigation)
+                .Where(p => p.NumeroRegistro == NumeroRegistro && p.EstadoPago == "Pendiente")
+                .FirstOrDefault();
+
+            if (paquete == null)
+            {
+                return Json(new { idPaquete = 0 });
+            }
+
+            var cliente = paquete.IdClienteNavigation;
+
+            var resultado = new
+            {
+                idPaquete = paquete.IdPaquete,
+                numeroRegistro = paquete.NumeroRegistro,
+                precio = paquete.Precio,
+                idCliente = paquete.IdCliente,
+                nombreCliente = cliente.Nombre + " " + cliente.PrimerApellido + " " + cliente.SegundoApellido,
+                cedula = cliente.Cedula
+            };
+
+            return Json(resultado);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult RegistrarPago(Pago modelo)
+        {
+            try
+            {
+                // Validar que existan los IDs necesarios
+                if (modelo.IdPaquete <= 0 || modelo.IdCliente <= 0)
+                {
+                    ModelState.AddModelError("", "ID de paquete o cliente no válido.");
+                    return View(modelo);
+                }
+
+                // Verificar que el paquete exista y esté pendiente de pago
+                var paquete = _context.Paquetes.Find(modelo.IdPaquete);
+                if (paquete == null)
+                {
+                    ModelState.AddModelError("", "El paquete no existe.");
+                    return View(modelo);
+                }
+
+                if (paquete.EstadoPago != "Pendiente")
+                {
+                    ModelState.AddModelError("", "El paquete ya ha sido pagado.");
+                    return View(modelo);
+                }
+
+                // Crear un nuevo pago con la información proporcionada
+                var nuevoPago = new Pago
+                {
+                    Total = modelo.Total,
+                    Descripcion = modelo.Descripcion ?? "Pago de paquete " + paquete.NumeroRegistro,
+                    FechaPago = DateTime.Now,
+                    PagoEstado = "Cancelado",
+                    PagoMetodo = modelo.PagoMetodo,
+                    IdPaquete = modelo.IdPaquete,
+                    IdCliente = modelo.IdCliente
+                };
+
+                // Actualizar el estado del pago en el paquete
+                paquete.EstadoPago = "Cancelado";
+                _context.Update(paquete);
+
+                // Guardar el pago en la base de datos
+                _context.Pagos.Add(nuevoPago);
+                _context.SaveChanges();
+
+                TempData["MensajePagoRegistrado"] = "Pago registrado correctamente.";
+                return RedirectToAction("RegistrarPago");
+            }
+            catch (Exception ex)
+            {
+                // Log de errores - Esto ayudará a diagnosticar problemas
+                Console.WriteLine("Error al registrar pago: " + ex.Message);
+                if (ex.InnerException != null)
+                {
+                    Console.WriteLine("Inner Exception: " + ex.InnerException.Message);
+                }
+
+                ModelState.AddModelError("", "Error al registrar el pago. Detalle: " + ex.Message);
+                return View(modelo);
+            }
         }
 
 

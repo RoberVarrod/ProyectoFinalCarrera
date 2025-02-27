@@ -87,8 +87,38 @@ namespace FrontEnd.Controllers
         }
 
 
-       
 
+        [HttpPost]
+        public IActionResult CambiarContrasena(int IdCliente, string ContrasenaActual, string NuevaContrasena, string ConfirmarContrasena)
+        {
+            var cliente = _context.Clientes.FirstOrDefault(c => c.IdCliente == IdCliente);
+
+            if (cliente == null)
+            {
+                return NotFound("Cliente no encontrado.");
+            }
+
+            // Validar que la contraseña actual sea correcta
+            if (cliente.Contrasena != ContrasenaActual)
+            {
+                TempData["ErrorContrasena"] = "La contraseña actual es incorrecta.";
+                return RedirectToAction("Configuracion");
+            }
+
+            // Validar que las nuevas contraseñas coincidan
+            if (NuevaContrasena != ConfirmarContrasena)
+            {
+                TempData["ErrorContrasena"] = "Las nuevas contraseñas no coinciden.";
+                return RedirectToAction("Configuracion");
+            }
+
+            // Actualizar la contraseña sin encriptar
+            cliente.Contrasena = NuevaContrasena;
+            _context.SaveChanges();
+
+            TempData["ExitoContrasena"] = "Contraseña actualizada correctamente.";
+            return RedirectToAction("Configuracion");
+        }
 
 
         public IActionResult Transportes()

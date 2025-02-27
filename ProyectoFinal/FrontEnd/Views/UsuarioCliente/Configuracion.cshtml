@@ -33,7 +33,7 @@
                 <p><strong>Correo Electrónico:</strong> @Model.Correo</p>
                 <p><strong>Teléfono:</strong> @Model.TelefonoPrincipal</p>
                 <p><strong>Dirección:</strong> @Model.Direccion, @Model.Provincia, @Model.Canton, @Model.Distrito, @Model.CodigoPostal</p>
-                
+
                 <div class="d-flex justify-content-between mt-4">
                     <a href="#" data-toggle="collapse" data-target="#editInfoForm" class="btn btn-outline-dark">
                         <span class="fas fa-edit"></span> Editar Información
@@ -106,14 +106,26 @@
                 <!-- Formulario para Editar Información End -->
                 <!-- Formulario para Cambiar Contraseña Start -->
                 <div id="changePasswordForm" class="collapse mt-4">
-                    <form method="post" action="/Usuario/CambiarContraseña">
+                    <form method="post" action="/UsuarioCliente/CambiarContrasena">
+                        @if (TempData["ErrorContrasena"] != null)
+                        {
+                            <div class="alert alert-danger">@TempData["ErrorContrasena"]</div>
+                        }
+
+                        @if (TempData["ExitoContrasena"] != null)
+                        {
+                            <div class="alert alert-success">@TempData["ExitoContrasena"]</div>
+                        }
+
+                        <input type="hidden" name="IdCliente" value="@Model.IdCliente" />
+
                         <div class="form-group">
                             <label>Contraseña Actual</label>
-                            <input type="password" class="form-control" id="passwordActual" name="PasswordActual" required>
+                            <input type="password" class="form-control" name="ContrasenaActual" required>
                         </div>
                         <div class="form-group">
                             <label>Nueva Contraseña</label>
-                            <input type="password" class="form-control" id="nuevaPassword" name="NuevaPassword" required>
+                            <input type="password" class="form-control" id="nuevaPassword" name="NuevaContrasena" required>
                             <div class="bg-light p-3 mt-2" id="passwordHelp" style="display: none; border-radius: 5px;">
                                 <p class="mb-1">La contraseña debe cumplir con:</p>
                                 <ul class="mb-0">
@@ -127,10 +139,8 @@
                         </div>
                         <div class="form-group">
                             <label>Confirmar Nueva Contraseña</label>
-                            <input type="password" class="form-control" id="confirmNuevaPassword" name="ConfirmarPassword" required>
-                            <div id="passwordMismatch" class="alert alert-danger mt-2" style="display: none;">
-                                <strong>Las contraseñas no coinciden.</strong>
-                            </div>
+                            <input type="password" class="form-control" id="confirmNuevaPassword" name="ConfirmarContrasena" required>
+                            <div id="passwordMismatch" class="text-danger" style="display: none;">Las contraseñas no coinciden.</div>
                         </div>
                         <button type="submit" class="btn btn-dark btn-block">Actualizar Contraseña</button>
                     </form>
@@ -167,38 +177,38 @@
 
 <script>
     // Validación de la nueva contraseña
-    document.getElementById("nuevaPassword").addEventListener("input", function () {
-        const password = this.value;
-        const length = document.getElementById("length");
-        const uppercase = document.getElementById("uppercase");
-        const lowercase = document.getElementById("lowercase");
-        const number = document.getElementById("number");
-        const special = document.getElementById("special");
-        const passwordHelp = document.getElementById("passwordHelp");
+        document.getElementById("nuevaPassword").addEventListener("input", function () {
+            const password = this.value;
+            const length = document.getElementById("length");
+            const uppercase = document.getElementById("uppercase");
+            const lowercase = document.getElementById("lowercase");
+            const number = document.getElementById("number");
+            const special = document.getElementById("special");
+            const passwordHelp = document.getElementById("passwordHelp");
 
-        passwordHelp.style.display = "block";
+            passwordHelp.style.display = "block";
 
-        // Validaciones
-        length.classList.toggle("text-success", password.length >= 8);
-        length.classList.toggle("text-danger", password.length < 8);
-        uppercase.classList.toggle("text-success", /[A-Z]/.test(password));
-        uppercase.classList.toggle("text-danger", !/[A-Z]/.test(password));
+            // Validaciones
+            length.classList.toggle("text-success", password.length >= 8);
+            length.classList.toggle("text-danger", password.length < 8);
+            uppercase.classList.toggle("text-success", /[A-Z]/.test(password));
+            uppercase.classList.toggle("text-danger", !/[A-Z]/.test(password));
 
-        lowercase.classList.toggle("text-success", /[a-z]/.test(password));
-        lowercase.classList.toggle("text-danger", !/[a-z]/.test(password));
+            lowercase.classList.toggle("text-success", /[a-z]/.test(password));
+            lowercase.classList.toggle("text-danger", !/[a-z]/.test(password));
 
-        number.classList.toggle("text-success", /\d/.test(password));
-        number.classList.toggle("text-danger", !/\d/.test(password));
+            number.classList.toggle("text-success", /\d/.test(password));
+            number.classList.toggle("text-danger", !/\d/.test(password));
 
-        special.classList.toggle("text-success", /[!#$%^&*(),.?":{}|<>]/.test(password));
-        special.classList.toggle("text-danger", !/[!#$%^&*(),.?":{}|<>]/.test(password));
-    });
+            special.classList.toggle("text-success", /[#$%^&+=!]/.test(password));
+            special.classList.toggle("text-danger", !/[#$%^&+=!]/.test(password));
+        });
 
-    // Validación de coincidencia de contraseñas
-    document.getElementById("confirmNuevaPassword").addEventListener("input", function () {
-        const password = document.getElementById("nuevaPassword").value;
-        const confirmPassword = this.value;
-        const passwordMismatch = document.getElementById("passwordMismatch");
-        passwordMismatch.style.display = (password !== confirmPassword) ? "block" : "none";
-    });
+        // Validación de coincidencia de contraseñas
+        document.getElementById("confirmNuevaPassword").addEventListener("input", function () {
+            const password = document.getElementById("nuevaPassword").value;
+            const confirmPassword = this.value;
+            const passwordMismatch = document.getElementById("passwordMismatch");
+            passwordMismatch.style.display = (password !== confirmPassword) ? "block" : "none";
+        });
 </script>
