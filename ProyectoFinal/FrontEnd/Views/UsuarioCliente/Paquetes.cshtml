@@ -73,7 +73,7 @@
     <table class="table table-hover table-striped shadow-sm">
         <thead class="thead-dark">
             <tr>
-                <th>Tracking ID</th>
+                <!-- ACA VA EL TRACKING HAY QUE ARREGLARLO-->
                 <th>Nombre</th>
                 <th>Estado</th>
                 <th>Fecha Entrega</th>
@@ -83,54 +83,21 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>123456</td>
-                <td>Paquete 1</td>
-                <td><strong style="color: #C4161C;">En Ruta</strong></td>
-                <td>04/12/2024</td>
-                <td>Entrega a Domicilio</td>
-                <td>$15.00</td>
-                <td>
-                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal"><i class="fas fa-ellipsis-h"></i></button>
-                    <button class="btn btn-link"> <a href="@Url.Action("Historial","Paquete")"><i class="fas fa-ellipsis-h"></i></a> </button>
-                </td>
-            </tr>
-            <tr>
-                <td>123457</td>
-                <td>Paquete 2</td>
-                <td><strong style="color: #1F1F2E;">Procesado</strong></td>
-                <td>05/12/2024</td>
-                <td>Retiro en Sucursal</td>
-                <td>$10.00</td>
-                <td>
-                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal"><i class="fas fa-ellipsis-h"></i></button>
-                    <button class="btn btn-link"> <a href="@Url.Action("Historial","Paquete")"><i class="fas fa-ellipsis-h"></i></a> </button>
-                </td>
-            </tr>
-            <tr>
-                <td>123458</td>
-                <td>Paquete 3</td>
-                <td><strong style="color: #757575;">Pendiente</strong></td>
-                <td>03/12/2024</td>
-                <td>Entrega a Domicilio</td>
-                <td>$20.00</td>
-                <td>
-                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal"><i class="fas fa-ellipsis-h"></i></button>
-                    <button class="btn btn-link"> <a href="@Url.Action("Historial","Paquete")"><i class="fas fa-ellipsis-h"></i></a> </button>
-                </td>
-            </tr>
-            <tr>
-                <td>123459</td>
-                <td>Paquete 4</td>
-                <td><strong style="color: #9E1218;">Entregado</strong></td>
-                <td>10/12/2024</td>
-                <td>Entrega a Domicilio</td>
-                <td>$30.00</td>
-                <td>
-                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal"><i class="fas fa-ellipsis-h"></i></button>
-                    <button class="btn btn-link"> <a href="@Url.Action("Historial","Paquete")"><i class="fas fa-ellipsis-h"></i></a> </button>
-                </td>
-            </tr>
+            @foreach (var paquete in Model)
+            {
+                <tr>
+                    <!-- ACA VA EL TRACKING HAY QUE ARREGLARLO-->
+                    <td>@paquete.Nombre</td>
+                    <td>@paquete.EstadoRuta</td>
+                    <td>@paquete.FechaEntrega</td>
+                    <td>@paquete.TipoEntrega</td>
+                    <td>@paquete.Precio</td>
+                    <td>
+                        <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal"><i class="fas fa-ellipsis-h"></i></button>
+                        <a class="btn btn-link" href="@Url.Action("Historial","Paquete")"><i class="fas fa-ellipsis-h"></i></a>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>

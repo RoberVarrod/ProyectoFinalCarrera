@@ -118,7 +118,14 @@ namespace FrontEnd.Controllers
 
         public IActionResult Paquetes()
         {
-            return View();
+            var sessionId = HttpContext.Session.GetString("ClienteId");
+            if (sessionId != null)
+            {
+                var clienteId = int.Parse(sessionId);
+                var paquetes = _context.Paquetes.Where(p => p.IdCliente == clienteId).ToList();
+                return View(paquetes);
+            }
+            return RedirectToAction("InicioSesionCliente", "Acceso");
         }
     }
 }
