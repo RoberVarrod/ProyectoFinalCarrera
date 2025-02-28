@@ -231,6 +231,7 @@ namespace FrontEnd.Controllers
 
                 // Actualizar el estado del pago en el paquete
                 paquete.EstadoPago = "Cancelado";
+                paquete.FechaEntregaEstimada = DateTime.Now.AddDays(2);
                 _context.Update(paquete);
 
                 // Guardar el pago en la base de datos

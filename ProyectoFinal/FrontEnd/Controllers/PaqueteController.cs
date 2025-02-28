@@ -57,7 +57,7 @@ namespace FrontEnd.Controllers
                     EstadoRuta = null,
                     FechaRegistro = DateTime.Now,
                     FechaEntrega = null,
-                    FechaEntregaEstimada = DateTime.Now.AddDays(2), // se agregan dos dias estimados
+                    FechaEntregaEstimada = null, // se agregan dos dias estimados
                     DireccionEntrega = modelo.DireccionEntrega,//
                     RetiroSucursal = null,
                     // estos ids se podrian agregaar aqui menos el de id cliente.
