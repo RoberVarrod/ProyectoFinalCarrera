@@ -19,7 +19,7 @@
             <div class="col-lg-6">
                 <div class="bg-primary py-5 px-4 px-sm-5">
 
-                    
+
                     <div class="form-group">
                         <input id="CedulaBuscar" type="text" class="form-control border-0 p-4" placeholder="Cédula cliente (Ejemplo: 0111111111)" name="CedulaBuscar"
                                pattern="\d{10}" title="La cédula debe tener 10 dígitos." required="required" />
@@ -35,11 +35,11 @@
                                 @TempData["MensajePaqueteRegistrado"]
                             </div>
                         }
-                            <div class="form-group">
-                            <input id="IdCliente" type="text" class="form-control border-0 p-4" name="IdCliente" required="required" hidden />
-                        </div>                       
                         <div class="form-group">
-                            <input id="IdUsuario" type="text" class="form-control border-0 p-4" name="IdUsuario" required="required" hidden  value="@usuarioId"/>
+                            <input id="IdCliente" type="text" class="form-control border-0 p-4" name="IdCliente" required="required" hidden />
+                        </div>
+                        <div class="form-group">
+                            <input id="IdUsuario" type="text" class="form-control border-0 p-4" name="IdUsuario" required="required" hidden value="@usuarioId" />
                         </div>
                         <div class="form-group">
                             <input id="IdSucursal" type="text" class="form-control border-0 p-4" name="IdSucursal" required="required" hidden value="1" />
@@ -58,10 +58,10 @@
                         </div>
                         <div class="form-group">
                             <input id="PaqueteAlto" type="text" class="form-control border-0 p-4" placeholder="Alto en cm" name="PaqueteAlto" />
-                        </div>                                        
+                        </div>
                         <div class="form-group">
                             <input id="Descripcion" type="text" class="form-control border-0 p-4" placeholder="Descripción" name="Descripcion" />
-                        </div>   
+                        </div>
                         <div class="form-group">
                             <input id="DireccionEntrega" type="text" class="form-control border-0 p-4" placeholder="Dirección paquete" name="DireccionEntrega" required="required" />
                         </div>
@@ -78,14 +78,14 @@
                             <input id="Email" type="email" class="form-control border-0 p-4" placeholder="Correo Electrónico cliente" name="Email" required="required" disabled />
                         </div>
                         <div class="form-group">
-                            <input id="Telefono1" type="text" class="form-control border-0 p-4" placeholder="Telefono principal del cliente" name="Telefono1" disabled />                             
+                            <input id="Telefono1" type="text" class="form-control border-0 p-4" placeholder="Telefono principal del cliente" name="Telefono1" disabled />
                         </div>
                         <div class="form-group">
                             <input id="proCanDistCodeP" type="text" class="form-control border-0 p-4" placeholder="Provincia, Cantón , Distrito, Código postal" name="proCanDistCodeP" disabled />
                         </div>
 
                         <div>
-                            <button id="registrarPaquete"class="btn btn-dark btn-block border-0 py-3" type="submit">Registrar paquete</button>
+                            <button id="registrarPaquete" class="btn btn-dark btn-block border-0 py-3" type="submit">Registrar paquete</button>
                         </div>
                     </form>
                 </div>
