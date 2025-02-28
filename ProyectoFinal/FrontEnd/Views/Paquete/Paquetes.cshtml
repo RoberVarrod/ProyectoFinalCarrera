@@ -77,7 +77,6 @@
         <thead class="thead-dark">
             <tr>
                 <th>Tracking ID</th>
-                <th>paquete id</th>
                 <th>Oficina</th>
                 <th>Nombre Cliente</th>
                 <th>Estado de pago</th>
@@ -94,8 +93,7 @@
             @foreach (var paquete in Model)
             {
                 <tr>
-                    <td>@paquete.NumeroRegistro</td>
-                    <td>@paquete.IdPaquete</td>
+                    <td>@paquete.NumeroRegistro</td>               
                     <td>@paquete.PaqueteSucursalNombre</td>
                     <td>@paquete.PaqueteUsuarioNombre</td>
                     <td>@paquete.EstadoPago</td>
@@ -120,8 +118,7 @@
                                     </div>
                                     <div class="modal-body">
 
-                                        <p><strong>Tracking ID:</strong>@paquete.NumeroRegistro</p>
-                                        <p><strong>paquete id</strong>@paquete.IdPaquete</p>
+                                        <p><strong>Tracking ID:</strong>@paquete.NumeroRegistro</p>                                     
                                         <p><strong>Nombre del Cliente:</strong>@paquete.PaqueteUsuarioNombre</p>
                                         <p>
                                             <strong>Detalles:</strong>
@@ -139,7 +136,7 @@
                                         <h5 class="mt-3">Seguro que desea borrar este paquete?</h5>
 
                                         <form asp-action="BorrarPaquete" asp-controller="Paquete" method="post">
-                                            <input name="id" value=@paquete.IdPaquete />
+                                            <input name="id" value=@paquete.IdPaquete hidden/>
                                             <button type="submit" class="btn btn-danger">Borrar Paquete</button>
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                                         </form>
@@ -156,7 +153,7 @@
 
 
                         <!-- Modal update paquete Start-->
-                        <div class="modal fade" id="detailsModalUpdate" tabindex="-1" role="dialog" aria-labelledby="detailsModalUpdateLabel" aria-hidden="true">
+                        <div class="modal fade" id="detailsModalUpdate-@paquete.IdPaquete" tabindex="-1" role="dialog" aria-labelledby="detailsModalUpdate-@paquete.IdPaquete" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
