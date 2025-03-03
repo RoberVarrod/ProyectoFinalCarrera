@@ -61,7 +61,7 @@ namespace FrontEnd.Controllers
 
             string subject = "Nuevo paquete recibido " + paquete.NumeroRegistro;
             string body = "Se le comunica que hay un paquete disponible para su entrega" + "\n" +
-                "Favor ingresar a su cuenta en nuestro sitio web para proceder con la entrega" + "\n" +
+                "Favor ingresar a su cuenta en nuestro sitio web para proceder con la entrega y seleccionar la sucursal donde desea retirar su paquete o la dirección donde a domicilio donde desea recibir el paquete" + "\n" +
                 "\n" +
 
                 "Detalles del paquete:" + "\n" +
