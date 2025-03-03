@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore; // Importar Entity Framework Core
 using FrontEnd.Models;
-using FrontEnd.Services; // Importar tu contexto
+using FrontEnd.Services;
+using FrontEnd.Controllers; // Importar tu contexto
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,10 +31,10 @@ builder.Services.AddControllersWithViews();
 // para que trabaje con la interfaz
 builder.Services.AddTransient<ICorreoService, CorreoService>();
 
+builder.Services.AddTransient<CorreoController, CorreoController>();
 
-
-
-
+// testing
+//builder.Services.AddMvc().AddControllersAsServices();
 
 
 

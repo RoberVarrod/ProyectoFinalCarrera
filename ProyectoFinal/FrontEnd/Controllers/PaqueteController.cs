@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using FrontEnd.Services;
 
 namespace FrontEnd.Controllers
 {
@@ -10,10 +11,13 @@ namespace FrontEnd.Controllers
     {
 
         private readonly ProyectoPaqueteriaContext _context;
+        private readonly CorreoController _correoController;
+ 
 
-        public PaqueteController(ProyectoPaqueteriaContext context)
+        public PaqueteController(ProyectoPaqueteriaContext context , CorreoController correoController)
         {
             _context = context;
+            _correoController = correoController;
         }
 
 
@@ -70,7 +74,11 @@ namespace FrontEnd.Controllers
                 _context.Paquetes.Add(nuevoPaquete);
                 _context.SaveChanges();
 
-                TempData["MensajePaqueteRegistrado"] = "Paquete registrado correctamente.";
+                // se envia correo al cliente
+                Task<ActionResult> taskSendEmail = _correoController.enviarCorreoRegistroPaquete(nuevoPaquete);
+
+
+                TempData["MensajePaqueteRegistrado"] = "Paquete registrado correctamente, Usuario notificado via email";
                 return View();
             }
             else
