@@ -20,6 +20,7 @@
                 <th>Nombre</th>
                 <th>Correo</th>
                 <th>Teléfono</th>
+                <th>Sucursal</th>
                 <th>Oficina</th>
                 <th>Rol</th>
                 <th>Acciones</th>
@@ -33,40 +34,13 @@
                     <td>@usuario.Nombre @usuario.PrimerApellido @usuario.SegundoApellido</td>
                     <td>@usuario.Correo</td>
                     <td>@usuario.TelefonoPrincipal</td>
+                    <td>@usuario.IdSucursal</td>
                     <td>@usuario.Oficina</td>
                     <td>@usuario.IdRol</td>
                     <td>
-                        <!-- Botón para abrir el modal de eliminación -->
                         <button class="btn btn-link text-danger" data-toggle="modal" data-target="#deleteModal-@usuario.IdUsuario">
                             <i class="fas fa-trash-alt"></i>
                         </button>
-                        <!-- Modal de eliminación -->
-                        <div class="modal fade" id="deleteModal-@usuario.IdUsuario" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel-@usuario.IdUsuario" aria-hidden="true">
-                            <div class="modal-dialog modal-md" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="deleteModalLabel-@usuario.IdUsuario">Eliminar Empleado</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p><strong>Cédula:</strong> @usuario.Cedula</p>
-                                        <p><strong>Nombre:</strong> @usuario.Nombre @usuario.PrimerApellido @usuario.SegundoApellido</p>
-                                        <p><strong>Correo:</strong> @usuario.Correo</p>
-                                        <hr />
-                                        <h5 class="text-danger">¿Seguro que desea eliminar este empleado?</h5>
-                                        <form asp-action="Delete" asp-controller="Usuario" method="post">
-                                            <input type="hidden" name="id" value="@usuario.IdUsuario" />
-                                            <button type="submit" class="btn btn-danger">Eliminar usuario</button>
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Modal de eliminación End -->
-                        <!-- Botón para editar -->
                         <button class="btn btn-link" data-toggle="modal" data-target="#detailsModalUpdate-@usuario.IdUsuario">
                             <i class="fas fa-ellipsis-h"></i>
                         </button>
@@ -76,21 +50,21 @@
         </tbody>
     </table>
 </div>
-<!-- Lista de Empleados End -->
-<!-- Modal de actualización de sucursal -->
+
+<!-- Modal de actualización de sucursal, oficina y rol -->
 @foreach (var usuario in Model)
 {
     <div class="modal fade" id="detailsModalUpdate-@usuario.IdUsuario" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel-@usuario.IdUsuario" aria-hidden="true">
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="detailsModalLabel-@usuario.IdUsuario">Actualizar Sucursal de @usuario.Nombre</h5>
+                    <h5 class="modal-title" id="detailsModalLabel-@usuario.IdUsuario">Actualizar Información de @usuario.Nombre</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form asp-action="UsuarioSucursal" asp-controller="Usuario" method="post">
+                    <form id="updateForm-@usuario.IdUsuario" method="post">
                         <input type="hidden" name="IdUsuario" value="@usuario.IdUsuario" />
                         <div class="form-group">
                             <label for="Nombre">Nombre</label>
@@ -98,17 +72,71 @@
                         </div>
                         <div class="form-group">
                             <label for="SucursalId">Nueva Sucursal</label>
-                            <select class="form-control" id="SucursalId" name="IdSucursal" required>
-                                <option value="1">Naranjo</option>
-                                <option value="2">Perez Zeledón</option>
-                            </select>
+                            @if (ViewBag.Sucursales != null)
+                            {
+                                <select class="form-control" id="SucursalId" name="IdSucursal" required>
+                                    @foreach (var sucursal in ViewBag.Sucursales as List<Sucursal>)
+                                    {
+                                        <option value="@sucursal.IdSucursal" selected="@(usuario.IdSucursal == sucursal.IdSucursal)">
+                                            @sucursal.Nombre
+                                        </option>
+                                    }
+                                </select>
+                            }
+                            else
+                            {
+                                <p class="text-danger">No hay sucursales disponibles.</p>
+                            }
                         </div>
-                        <button type="submit" class="btn btn-primary">Actualizar Sucursal</button>
+                        <div class="form-group">
+                            <label for="Oficina">Oficina</label>
+                            <input type="text" class="form-control" id="Oficina" name="Oficina" value="@usuario.Oficina" required />
+                        </div>
+                        <div class="form-group">
+                            <label for="RolId">Rol</label>
+                            @if (ViewBag.Roles != null)
+                            {
+                                <select class="form-control" id="RolId" name="IdRol" required>
+                                    @foreach (var rol in ViewBag.Roles as List<Role>)
+                                    {
+                                        <option value="@rol.IdRol" selected="@(usuario.IdRol == rol.IdRol)">
+                                            @rol.Rol
+                                        </option>
+                                    }
+                                </select>
+                            }
+                            else
+                            {
+                                <p class="text-danger">No hay roles disponibles.</p>
+                            }
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="submitForm(@usuario.IdUsuario)">Actualizar Información</button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function submitForm(IdUsuario) {
+            var form = $('#updateForm-' + IdUsuario);
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("UsuarioSucursal", "Usuario")',
+                data: form.serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        alert(response.message);
+                        location.reload();
+                    } else {
+                        alert('Error: ' + response.message);
+                    }
+                },
+                error: function(response) {
+                    alert('Error al actualizar la información');
+                }
+            });
+        }
+    </script>
 }
-<!-- Modal de actualización de sucursal End -->

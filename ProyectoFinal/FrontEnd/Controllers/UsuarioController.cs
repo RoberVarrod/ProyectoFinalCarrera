@@ -259,9 +259,16 @@ namespace FrontEnd.Controllers
         public async Task<IActionResult> Administracion()
         {
             var usuarios = await _context.Usuarios.ToListAsync();
+            var sucursales = await _context.Sucursals.ToListAsync();
+            var roles = await _context.Roles.ToListAsync(); // Asegura que esta consulta trae datos
+
+            ViewBag.Sucursales = sucursales;
+            ViewBag.Roles = roles; // Asegurar que se pasa la lista de roles
 
             return View(usuarios);
         }
+
+
 
         // GET: Usuarios/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -366,38 +373,29 @@ namespace FrontEnd.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public IActionResult UsuarioSucursal(Usuario modelo)
+        public IActionResult UsuarioSucursal(int IdUsuario, int IdSucursal, string Oficina, int IdRol)
         {
-            if (ModelState.IsValid)
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.IdUsuario == IdUsuario);
+            if (usuario == null)
             {
-                // Validar que el usuario existe
-                var usuario = _context.Usuarios.SingleOrDefault(u => u.Nombre == modelo.Nombre);
-                if (usuario == null)
-                {
-                    ModelState.AddModelError("", "Usuario no encontrado");
-                    return View(modelo);
-                }
-
-                // Cambiar la sucursal del usuario
-                usuario.IdSucursal = modelo.IdSucursal;
-
-                try
-                {
-                    // Guardar los cambios en la base de datos
-                    _context.SaveChanges();
-                    ViewBag.Message = "Sucursal cambiada exitosamente";
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("", "Error al cambiar la sucursal: " + ex.Message);
-                }
-
-                return View(modelo);
+                return Json(new { success = false, message = "Usuario no encontrado." });
             }
 
-            return View(modelo);
+            usuario.IdSucursal = IdSucursal;
+            usuario.Oficina = Oficina;
+            usuario.IdRol = IdRol;
+
+            try
+            {
+                _context.SaveChanges();
+                return Json(new { success = true, message = "Usuario actualizado correctamente." });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error al actualizar el usuario: " + ex.InnerException?.Message ?? ex.Message });
+            }
         }
 
-
     }
+
 }
