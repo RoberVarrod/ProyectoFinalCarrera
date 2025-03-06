@@ -10,9 +10,9 @@
         <h1 class="text-white display-3 mb-5">Envíos a Costa Rica </h1>
         <div class="mx-auto" style="width: 100%; max-width: 600px;">
             <div class="input-group">
-                <input type="text" class="form-control border-light" style="padding: 30px;" placeholder="Tracking Id">
+                <input type="text" id="trackingInputPaquete" class="form-control border-light" style="padding: 30px;" placeholder="Tracking Id">
                 <div class="input-group-append">
-                    <button class="btn btn-primary px-3" data-toggle="modal" data-target="#detailsModal">Track</button>
+                    <button class="btn btn-primary px-3" id="btnTrackPaquete">Buscar</button>
                 </div>
             </div>
         </div>
@@ -63,17 +63,17 @@
                 </div>
             </div>
         </div>
-         <!-- Panel 2: Órdenes en Proceso End-->
+        <!-- Panel 2: Órdenes en Proceso End-->
     </div>
 </div>
 <!-- Panels Section End-->
 <!-- Lista de Paquetes Start-->
 <div class="container-fluid py-4">
     <h4 class="mb-4 text-primary">Lista de Paquetes</h4>
-    <table class="table table-hover table-striped shadow-sm">
+    <table class="table table-hover table-striped shadow-sm" id="tablaPaquetes">
         <thead class="thead-dark">
             <tr>
-                <!-- ACA VA EL TRACKING HAY QUE ARREGLARLO-->
+                <th>Tracking ID</th>
                 <th>Nombre</th>
                 <th>Estado</th>
                 <th>Fecha Entrega</th>
@@ -86,15 +86,14 @@
             @foreach (var paquete in Model)
             {
                 <tr>
-                    <!-- ACA VA EL TRACKING HAY QUE ARREGLARLO-->
+                    <td>@paquete.NumeroRegistro</td>
                     <td>@paquete.Nombre</td>
                     <td>@paquete.EstadoRuta</td>
                     <td>@paquete.FechaEntrega</td>
                     <td>@paquete.TipoEntrega</td>
                     <td>@paquete.Precio</td>
                     <td>
-                        <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal"><i class="fas fa-ellipsis-h"></i></button>
-                        <a class="btn btn-link" href="@Url.Action("Historial","Paquete")"><i class="fas fa-ellipsis-h"></i></a>
+                        <button class="btn btn-link btn-detalles-paquete" data-id="@paquete.IdPaquete" data-toggle="modal" data-target="#detailsModal"><i class="fas fa-ellipsis-h"></i></button>
                     </td>
                 </tr>
             }
@@ -102,7 +101,6 @@
     </table>
 </div>
 <!-- Lista de Paquetes End-->
-
 <!-- Modal Start-->
 <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -114,87 +112,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p><strong>Tracking ID:</strong> 123456</p>
-                <p><strong>Nombre del Paquete:</strong> Paquete 1</p>
-                <p><strong>Detalles:</strong>
-                <ul>
-                    <li>Alto: 30cm</li>
-                    <li>Largo: 50cm</li>
-                    <li>Ancho: 20cm</li>
-                </ul>
-                </p>
-                <p><strong>Estado:</strong> En Ruta</p>
-                <p><strong>Pago:</strong> Cancelado</p>
-                <p><strong>Fecha Aproximada de Entrega:</strong> 04/12/2024</p>
-                <p><strong>Tipo de Entrega:</strong> Entrega a Domicilio</p>
-                <p><strong>Precio:</strong> $15.00</p>
-                <hr />
-
-                <h5 class="mt-3">Selecciona el Método de Entrega</h5>
-                
-                <div class="btn-group" role="group" aria-label="Métodos de entrega">
-                    <button id="domicilioButton" class="btn btn-outline-primary">Entrega a Domicilio</button>
-                    <button id="sucursalButton" class="btn btn-outline-dark">Retiro en Sucursal</button>
-                </div>
-
-                <div id="methodDescription" class="mt-3"></div>
-
-                <div id="domicilioConfirmation" class="mt-3" style="display: none;">
-                    <p><strong>Descripción:</strong> La entrega a domicilio tarda entre 3-4 días habiles. Costo: ₡3500</p>
-                    <button class="btn btn-success" id="confirmDomicilioBtn">Confirmar Entrega a Domicilio</button>
-                </div>
-
-                <div id="sucursalConfirmation" class="mt-3" style="display: none;">
-                    <p><strong>Descripción:</strong> El retiro en sucursal se puede realizar en cualquiera de las sucursales disponibles.</p>
-                    <ul>
-                        <li><strong>Naranjo (CR) </strong>
-                            <br/>
-                            <br/><strong>Horario: </strong>Lunes a Viernes 8:00 a.m. a 5:00 p.m. - Sábado 8:00 a.m. a 12:00 m.d.
-                            <br/><strong>Teléfono: </strong> +506 2455 1600
-                            <br/><strong>Dirección: </strong> Cruce de Naranjo, 500m Oeste de la Soda Jairos contiguo al Bar la Gallera. 
-                            <br/>Alajuela, Naranjo, San Miguel 
-                            <br/>20602 - Costa Rica 
-                            </li>
-                            <br/>
-                        <li><strong>Pérez Zeledón (CR) </strong>
-                            <br/>
-                            <br/><strong>Horario: </strong>Lunes a Viernes 8:00 a.m. a 12:00 m.d. y de 1:00 p.m. 5:00 p.m. - Sábado 8:00 a.m. a 12:00 m.d.
-                            <br/><strong>Teléfono: </strong> +506 2771 9715
-                            <br/><strong>Dirección: </strong> Barrio San Luis, 100m Norte y 100m Oeste de la Gasolinera Gasotica.
-                            </li>
-                            <br/>
-                    </ul>
-                    <button class="btn btn-success" id="confirmSucursalBtn">Confirmar Retiro en Sucursal</button>
-                </div>
-
-                <!-- Formulario de Dirección para Entrega a Domicilio Start-->
-                <div id="domicilioAddressForm" class="mt-3" style="display: none;">
-                    <h5>Confirmar Dirección de Entrega</h5>
-                    <div class="form-group">
-                        <label>Provincia</label>
-                        <input type="text" class="form-control" name="Provincia" value="Provincia" required disabled>
-                    </div>
-                    <div class="form-group">
-                        <label>Cantón</label>
-                        <input type="text" class="form-control" name="Canton" value="Cantón" required disabled>
-                    </div>
-                    <div class="form-group">
-                        <label>Distrito</label>
-                        <input type="text" class="form-control" name="Distrito" value="Distrito" required disabled>
-                    </div>
-                    <div class="form-group">
-                        <label>Código Postal</label>
-                        <input type="text" class="form-control" name="CodigoPostal" value="10101" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label>Dirección</label>
-                        <textarea class="form-control" name="Direccion" required disabled>Calle Ficticia 123</textarea>
-                    </div>
-
-                    <button class="btn btn-warning" id="modifyAddressBtn">Modificar Dirección</button>
-                    <button class="btn btn-success" id="verifyAddressBtn">Verificar Dirección</button>
-                </div>
-                <!-- Formulario de Dirección para Entrega a Domicilio End-->
+                <!-- Aquí se cargarán los detalles dinámicamente -->
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -203,68 +121,164 @@
     </div>
 </div>
 <!-- Modal End-->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
-    // Variables
-    const domicilioButton = document.getElementById("domicilioButton");
-    const sucursalButton = document.getElementById("sucursalButton");
-    const domicilioConfirmation = document.getElementById("domicilioConfirmation");
-    const sucursalConfirmation = document.getElementById("sucursalConfirmation");
-    const domicilioAddressForm = document.getElementById("domicilioAddressForm");
-    const modifyAddressBtn = document.getElementById("modifyAddressBtn");
-    const verifyAddressBtn = document.getElementById("verifyAddressBtn");
+    $(document).ready(function () {
+        // Evento para el botón "Buscar"
+        $("#btnTrackPaquete").click(function () {
+            var numeroRegistro = $("#trackingInputPaquete").val().trim();
 
-    // Función para mostrar la descripción de Entrega a Domicilio
-    domicilioButton.addEventListener("click", function () {
-        // Resetea los botones cuando se selecciona el método de Entrega a Domicilio
-        domicilioConfirmation.style.display = "block";
-        sucursalConfirmation.style.display = "none";
-        domicilioAddressForm.style.display = "none";
-        modifyAddressBtn.style.display = "inline-block";
-        verifyAddressBtn.style.display = "inline-block";
+            if (numeroRegistro === "") {
+                alert("Ingrese un Número de Registro válido.");
+                return;
+            }
 
-    });
+            $.ajax({
+                url: "/UsuarioCliente/ObtenerPaquetesPorTracking",
+                type: "GET",
+                data: { trackingId: numeroRegistro },
+                success: function (data) {
+                    var tbody = $("#tablaPaquetes tbody");
+                    tbody.empty();
 
-    // Función para mostrar la descripción de Retiro en Sucursal
-    sucursalButton.addEventListener("click", function () {
-        sucursalConfirmation.style.display = "block";
-        domicilioConfirmation.style.display = "none";
-        domicilioAddressForm.style.display = "none";
-        modifyAddressBtn.style.display = "none";
-        verifyAddressBtn.style.display = "none";
-    });
+                    if (data.length > 0) {
+                        data.forEach(function (paquete) {
+                            tbody.append(`
+                                <tr>
+                                    <td>${paquete.numeroRegistro}</td>
+                                    <td>${paquete.nombre}</td>
+                                    <td>${paquete.estadoRuta}</td>
+                                    <td>${paquete.fechaEntrega}</td>
+                                    <td>${paquete.tipoEntrega}</td>
+                                    <td>${paquete.precio}</td>
+                                    <td>
+                                        <button class="btn btn-link btn-detalles-paquete" data-id="${paquete.idPago}" data-toggle="modal" data-target="#detailsModal">
+                                            <i class="fas fa-ellipsis-h"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            `);
+                        });
+                    } else {
+                        tbody.append("<tr><td colspan='7'>No hay paquetes registrados con este Número de Registro.</td></tr>");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alert("Error al buscar los detalles del paquete: " + error);
+                }
+            });
+        });
 
-    // Confirmación de Entrega a Domicilio
-    document.getElementById("confirmDomicilioBtn").addEventListener("click", function () {
-        domicilioConfirmation.style.display = "none";
-        domicilioAddressForm.style.display = "block";
-        modifyAddressBtn.style.display = "inline-block";
-        verifyAddressBtn.style.display = "inline-block";
+        // Evento para mostrar detalles del paquete
+        $(document).on("click", ".btn-detalles-paquete", function () {
+            var idPaquete = $(this).data("id");
 
-        // Bloquea los campos nuevamente
-        const inputs = domicilioAddressForm.querySelectorAll('input, textarea');
-        inputs.forEach(input => input.disabled = true);
-    });
+            $.ajax({
+                url: "/UsuarioCliente/ObtenerDetallesPaquete",
+                type: "GET",
+                data: { idPaquete: idPaquete },
+                success: function (data) {
+                    var modalBody = $("#detailsModal .modal-body");
+                    modalBody.empty();
 
-    // Confirmación de Retiro en Sucursal
-    document.getElementById("confirmSucursalBtn").addEventListener("click", function () {
-        domicilioAddressForm.style.display = "none";
-        $('#detailsModal').modal('hide');
-    });
+                    if (data) {
+                        modalBody.append(`
+                            <p><strong>Número de Registro:</strong> ${data.numeroRegistro}</p>
+                            <p><strong>Descripción:</strong> ${data.descripcion}</p>
+                            <p><strong>Estado:</strong> ${data.estadoRuta}</p>
+                            <p><strong>Fecha de Entrega:</strong> ${data.fechaEntrega}</p>
+                            <p><strong>Método de Pago:</strong> ${data.metodoPago}</p>
+                            <p><strong>Precio:</strong> $${data.precio}</p>
+                            <hr />
 
-    // Habilitar campos de dirección para modificación
-    modifyAddressBtn.addEventListener("click", function () {
-        const inputs = domicilioAddressForm.querySelectorAll('input, textarea');
-        inputs.forEach(input => input.disabled = false);
-        modifyAddressBtn.style.display = "none";
-        verifyAddressBtn.style.display = "inline-block"; 
-    });
+                            <h5 class="mt-3">Selecciona el Método de Entrega</h5>
+                            <div class="btn-group" role="group">
+                                <button id="domicilioButton" class="btn btn-outline-primary">Entrega a Domicilio</button>
+                                <button id="sucursalButton" class="btn btn-outline-dark">Retiro en Sucursal</button>
+                            </div>
+                            <div id="methodDescription" class="mt-3"></div>
 
-    // Verificar dirección y cerrar modal
-    verifyAddressBtn.addEventListener("click", function () {
-        domicilioAddressForm.style.display = "none"; 
-        $('#detailsModal').modal('hide');
+                            <div id="domicilioConfirmation" class="mt-3" style="display: none;">
+                                <p><strong>Descripción:</strong> La entrega a domicilio tarda entre 3-4 días hábiles. Costo: ₡3500</p>
+                                <button class="btn btn-success" id="confirmDomicilioBtn">Confirmar Entrega a Domicilio</button>
+                            </div>
+
+                            <div id="sucursalConfirmation" class="mt-3" style="display: none;">
+                                <p><strong>Descripción:</strong> El retiro en sucursal se puede realizar en cualquiera de las sucursales disponibles.</p>
+                                <button class="btn btn-success" id="confirmSucursalBtn">Confirmar Retiro en Sucursal</button>
+                            </div>
+
+                            <div id="domicilioAddressForm" class="mt-3" style="display: none;">
+                                <h5>Confirmar Dirección de Entrega</h5>
+                                <div class="form-group">
+                                    <label>Provincia</label>
+                                    <input type="text" class="form-control" name="Provincia" value="Provincia" required disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>Cantón</label>
+                                    <input type="text" class="form-control" name="Canton" value="Cantón" required disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>Distrito</label>
+                                    <input type="text" class="form-control" name="Distrito" value="Distrito" required disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label>Dirección</label>
+                                    <textarea class="form-control" name="Direccion" required disabled>Calle Ficticia 123</textarea>
+                                </div>
+                                <button class="btn btn-warning" id="modifyAddressBtn">Modificar Dirección</button>
+                                <button class="btn btn-success" id="verifyAddressBtn">Verificar Dirección</button>
+                            </div>
+                        `);
+                    } else {
+                        modalBody.append("<p>Paquete no encontrado.</p>");
+                    }
+
+                    // Activar eventos dentro del modal dinámico
+                    attachEventListeners();
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alert("Error al cargar los detalles del paquete: " + error);
+                }
+            });
+        });
+
+        function attachEventListeners() {
+            $("#domicilioButton").click(function () {
+                $("#domicilioConfirmation").show();
+                $("#sucursalConfirmation").hide();
+                $("#domicilioAddressForm").hide();
+            });
+
+            $("#sucursalButton").click(function () {
+                $("#sucursalConfirmation").show();
+                $("#domicilioConfirmation").hide();
+                $("#domicilioAddressForm").hide();
+            });
+
+            $("#confirmDomicilioBtn").click(function () {
+                $("#domicilioConfirmation").hide();
+                $("#domicilioAddressForm").show();
+            });
+
+            $("#confirmSucursalBtn").click(function () {
+                $("#detailsModal").modal("hide");
+            });
+
+            $("#modifyAddressBtn").click(function () {
+                $("#domicilioAddressForm input, #domicilioAddressForm textarea").prop("disabled", false);
+                $("#modifyAddressBtn").hide();
+                $("#verifyAddressBtn").show();
+            });
+
+            $("#verifyAddressBtn").click(function () {
+                $("#domicilioAddressForm").hide();
+                $("#detailsModal").modal("hide");
+            });
+        }
     });
 </script>
-
-
-

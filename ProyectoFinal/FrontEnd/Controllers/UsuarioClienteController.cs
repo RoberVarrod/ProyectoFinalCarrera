@@ -157,5 +157,56 @@ namespace FrontEnd.Controllers
             }
             return RedirectToAction("InicioSesionCliente", "Acceso");
         }
+    
+    [HttpGet]
+        public IActionResult ObtenerPaquetesPorTracking(string trackingId)
+        {
+            if (string.IsNullOrEmpty(trackingId))
+            {
+                return BadRequest("El Número de Registro no puede estar vacío.");
+            }
+
+            var paquetes = _context.Paquetes
+                .Where(p => p.NumeroRegistro == trackingId)
+                .Select(p => new
+                {
+                    p.NumeroRegistro,
+                    p.Nombre,
+                    p.EstadoRuta,
+                    p.FechaEntrega,
+                    p.TipoEntrega,
+                    p.Precio,
+                    p.IdPaquete
+                })
+                .ToList();
+
+            return Json(paquetes);
+        }
+
+        // Método para obtener detalles de un paquete específico
+        [HttpGet]
+        public IActionResult ObtenerDetallesPaquete(int idPaquete)
+        {
+            var paquete = _context.Paquetes
+                .Where(p => p.IdPaquete == idPaquete)
+                .Select(p => new
+                {
+                    p.NumeroRegistro,
+                    p.Nombre,
+                    p.EstadoRuta,
+                    p.FechaEntrega,
+                    p.TipoEntrega,
+                    p.Precio,
+                    // Asegúrate de incluir todas las propiedades necesarias
+                })
+                .FirstOrDefault();
+
+            if (paquete == null)
+            {
+                return NotFound("Paquete no encontrado.");
+            }
+
+            return Json(paquete);
+        }
     }
 }
