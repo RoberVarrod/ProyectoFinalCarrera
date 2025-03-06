@@ -119,8 +119,6 @@
                     $("#nombreCliente").val("");
                     $("#Cedula").val("");
 
-                    // Deshabilitar el botón de registro
-                    $("#registrarPago").prop("disabled", true);
                 }
             }).fail(function(error) {
                 console.error("Error en la petición:", error);
@@ -128,8 +126,6 @@
             });
         });
 
-        // Deshabilitar el botón de registro inicialmente
-        $("#registrarPago").prop("disabled", true);
 
         // Validar formulario antes de enviar
         $("#pagoForm").submit(function(e) {
