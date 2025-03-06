@@ -280,5 +280,25 @@
                 $("#detailsModal").modal("hide");
             });
         }
+        $(document).on("click", "#confirmDomicilioBtn, #confirmSucursalBtn", function () {
+        var tipoEntrega = $(this).attr("id") === "confirmDomicilioBtn" ? "Domicilio" : "Sucursal";
+        var idPaquete = $(".btn-detalles-paquete").data("id");
+
+        $.ajax({
+    url: "/UsuarioCliente/ActualizarTipoEntrega",
+    type: "POST",
+    data: { idPaquete: idPaquete, tipoEntrega: tipoEntrega },
+    success: function (response) {
+        alert(response.message);
+        if (response.success) {
+            $("#detailsModal").modal("hide");
+            location.reload(); // Recarga la página para ver la actualización
+        } else {
+            alert("Error: " + response.message);
+        }
+    },
+    error: function () {
+        alert("Error al actualizar el tipo de entrega.");
+            }
     });
 </script>
