@@ -94,6 +94,29 @@
                     <td>@paquete.Precio</td>
                     <td>
                         <button class="btn btn-link btn-detalles-paquete" data-id="@paquete.IdPaquete" data-toggle="modal" data-target="#detailsModal"><i class="fas fa-ellipsis-h"></i></button>
+
+                        <!-- Modal Start-->
+                        <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="detailsModalLabel">Detalles del Paquete</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <!-- Aquí se cargarán los detalles dinámicamente -->
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal End-->
+                        <!-- Historial del paquete -->
+                        <button class="btn btn-link"> <a href="@Url.Action("Historial","UsuarioCliente")"><i class="fas fa-history"></i></a> </button>
                     </td>
                 </tr>
             }
@@ -101,26 +124,6 @@
     </table>
 </div>
 <!-- Lista de Paquetes End-->
-<!-- Modal Start-->
-<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="detailsModalLabel">Detalles del Paquete</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- Aquí se cargarán los detalles dinámicamente -->
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal End-->
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -280,25 +283,5 @@
                 $("#detailsModal").modal("hide");
             });
         }
-        $(document).on("click", "#confirmDomicilioBtn, #confirmSucursalBtn", function () {
-        var tipoEntrega = $(this).attr("id") === "confirmDomicilioBtn" ? "Domicilio" : "Sucursal";
-        var idPaquete = $(".btn-detalles-paquete").data("id");
-
-        $.ajax({
-    url: "/UsuarioCliente/ActualizarTipoEntrega",
-    type: "POST",
-    data: { idPaquete: idPaquete, tipoEntrega: tipoEntrega },
-    success: function (response) {
-        alert(response.message);
-        if (response.success) {
-            $("#detailsModal").modal("hide");
-            location.reload(); // Recarga la página para ver la actualización
-        } else {
-            alert("Error: " + response.message);
-        }
-    },
-    error: function () {
-        alert("Error al actualizar el tipo de entrega.");
-            }
     });
 </script>

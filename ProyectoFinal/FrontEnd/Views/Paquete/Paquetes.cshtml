@@ -39,7 +39,7 @@
                         </li>
                         <li class="col-6">
                             <h5 class="text-dark">40</h5>
-                            <p class="mb-0 text-muted">En Ruta</p>
+                            <p class="mb-0 text-muted">En Sucursal</p>
                         </li>
                     </ul>
                 </div>
@@ -55,8 +55,8 @@
                     <a href="@Url.Action("OrdenesProceso","Paquete")" class="btn btn-outline-dark btn-sm mt-2">Ver Todos los Datos</a>
                     <ul class="list-inline row mt-4">
                         <li class="col-6">
-                            <h5 class="text-dark"></h5>
-                            <p class="mb-0 text-muted"></p>
+                            <h5 class="text-dark">40</h5>
+                            <p class="mb-0 text-muted">En Ruta</p>
                         </li>
                         <li class="col-6">
                             <h5 class="text-dark">40</h5>
@@ -113,6 +113,11 @@
                         {
                             <strong style="color: #1F1F2E;">@paquete.EstadoRuta</strong>
                         }
+                        else if (paquete.EstadoRuta == "En Sucursal")
+                        {
+                            <strong style="color: #C4161C;">@paquete.EstadoRuta</strong>
+                        }
+
                     </td>
                     <td>
                         <!-- Botón para abrir el modal de eliminación -->
@@ -241,7 +246,7 @@
                                             </div>
 
                                             <hr />
-                                            <button type="submit" class="btn btn-warning">Actualizar Paquete</button>
+                                            <button type="submit" class="btn btn-primary">Actualizar Paquete</button>
                                         </form>
                                     </div>
                                 </div>

@@ -5,7 +5,7 @@ namespace FrontEnd.Services
 {
     public interface ICorreoService
     {
-        Task EnviarCorreo(string emailReceiver, string subject, string body);
+        Task EnviarCorreo(string emailReceiver, string subject, string body); 
     }
 
     public class CorreoService : ICorreoService

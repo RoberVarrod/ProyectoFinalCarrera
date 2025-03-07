@@ -40,7 +40,7 @@
                         </li>
                         <li class="col-6">
                             <h5 class="text-dark">40</h5>
-                            <p class="mb-0 text-muted">Procesados</p>
+                            <p class="mb-0 text-muted">Pendiente</p>
                         </li>
                     </ul>
                 </div>
@@ -70,7 +70,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var paquete in Model.Where(p => p.EstadoRuta == "Pendiente"))
+            @foreach (var paquete in Model.Where(p => p.EstadoRuta == "En Ruta" || p.EstadoRuta == "Pendiente"))
             {
                 <tr>
                     <td>@paquete.NumeroRegistro</td>
@@ -92,6 +92,10 @@
                         else if (paquete.EstadoRuta == "Entregado")
                         {
                             <strong style="color: #1F1F2E;">@paquete.EstadoRuta</strong>
+                        }
+                        else if (paquete.EstadoRuta == "En Sucursal")
+                        {
+                            <strong style="color: #C4161C;">@paquete.EstadoRuta</strong>
                         }
                     </td>
                     <td>
@@ -221,7 +225,7 @@
                                             </div>
 
                                             <hr />
-                                            <button type="submit" class="btn btn-warning">Actualizar Paquete</button>
+                                            <button type="submit" class="btn btn-primary">Actualizar Paquete</button>
                                         </form>
                                     </div>
                                 </div>

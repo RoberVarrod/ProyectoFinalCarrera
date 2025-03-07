@@ -208,36 +208,10 @@ namespace FrontEnd.Controllers
 
             return Json(paquete);
         }
-        [HttpPost]
-        public IActionResult ActualizarTipoEntrega(int idPaquete, string tipoEntrega)
+
+        public IActionResult Historial()
         {
-            if (idPaquete <= 0 || string.IsNullOrEmpty(tipoEntrega))
-            {
-                return Json(new { success = false, message = "Datos inválidos" });
-            }
-
-            // Busca el paquete en la base de datos
-            var paquete = _context.Paquetes.FirstOrDefault(p => p.IdPaquete == idPaquete);
-
-            if (paquete == null)
-            {
-                return Json(new { success = false, message = "Paquete no encontrado" });
-            }
-
-            // Actualiza el tipo de entrega
-            paquete.TipoEntrega = tipoEntrega;
-
-            try
-            {
-                _context.SaveChanges(); // Guarda los cambios en la base de datos
-                return Json(new { success = true, message = "Método de entrega actualizado correctamente" });
-            }
-            catch (Exception ex)
-            {
-                // Manejo de errores si ocurre algún problema al guardar los cambios
-                return Json(new { success = false, message = "Error al actualizar el tipo de entrega: " + ex.Message });
-            }
+            return View();
         }
     }
-
 }
