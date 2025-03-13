@@ -305,10 +305,41 @@ namespace FrontEnd.Controllers
 
 
 
+        // GET: Lista de Clientes
         public IActionResult AdministracionCliente()
         {
-            return View();
+            var clientes = _context.Clientes.ToList();
+
+            if (clientes == null || clientes.Count == 0)
+            {
+                clientes = new List<Cliente>(); // Evita valores nulos
+            }
+
+            return View(clientes);
         }
+
+        // GET: Detalles del Cliente
+        public IActionResult DetallesCliente(int id)
+        {
+            var cliente = _context.Clientes.FirstOrDefault(c => c.IdCliente == id);
+            if (cliente == null) return NotFound();
+
+            return View(cliente);
+        }
+
+        // POST: Eliminar cliente
+        [HttpPost]
+        public IActionResult EliminarCliente(int id)
+        {
+            var cliente = _context.Clientes.Find(id);
+            if (cliente == null) return NotFound();
+
+            _context.Clientes.Remove(cliente);
+            _context.SaveChanges();
+
+            return RedirectToAction("AdministracionCliente");
+        }
+
 
         public IActionResult ConfiguracionAdmin()
         {
@@ -362,8 +393,49 @@ namespace FrontEnd.Controllers
 
         public IActionResult ListaSucursal()
         {
-            return View();
+            var sucursales = _context.Sucursals.ToList();
+
+            if (sucursales == null || sucursales.Count == 0)
+            {
+                sucursales = new List<Sucursal>(); // Evita valores nulos
+            }
+
+            return View(sucursales);
         }
+
+        // POST: Editar sucursal
+        [HttpPost]
+        public IActionResult EditarSucursal(Sucursal sucursal)
+        {
+            if (ModelState.IsValid)
+            {
+                var sucursalExistente = _context.Sucursals.Find(sucursal.IdSucursal);
+                if (sucursalExistente == null) return NotFound();
+
+                sucursalExistente.Nombre = sucursal.Nombre;
+                sucursalExistente.Direccion = sucursal.Direccion;
+                sucursalExistente.Horario = sucursal.Horario;
+                sucursalExistente.Telefono = sucursal.Telefono;
+
+                _context.SaveChanges();
+                return RedirectToAction("ListaSucursal");
+            }
+            return View(sucursal);
+        }
+
+        // POST: Eliminar sucursal
+        [HttpPost]
+        public IActionResult EliminarSucursal(int id)
+        {
+            var sucursal = _context.Sucursals.Find(id);
+            if (sucursal == null) return NotFound();
+
+            _context.Sucursals.Remove(sucursal);
+            _context.SaveChanges();
+
+            return RedirectToAction("ListaSucursal");
+        }
+
         [AllowAnonymous]
         [HttpGet]
         public IActionResult UsuarioSucursal()

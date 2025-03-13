@@ -4,6 +4,22 @@
     Layout = "~/Views/Shared/_LayoutUsuarios.cshtml";
 }
 
+<!-- Header Start -->
+<div class="jumbotron jumbotron-fluid mb-5">
+    <div class="container text-center py-5">
+        <h1 class="text-primary mb-4">Administración</h1>
+        <h1 class="text-white display-3 mb-5">Administración de empleados</h1>
+        <div class="mx-auto" style="width: 100%; max-width: 600px;">
+            <div class="input-group">
+                <input type="text" id="trackingInput" class="form-control border-light" style="padding: 30px;" placeholder="Cédula empleado">
+                <div class="input-group-append">
+                    <button class="btn btn-primary px-3" id="btnBuscar">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Header End -->
 <!-- Lista de Empleados Start -->
 <div class="container-fluid py-4">
     @if (TempData["MensajeExito"] != null)
@@ -42,6 +58,9 @@
                             <i class="fas fa-trash-alt"></i>
                         </button>
                         <button class="btn btn-link" data-toggle="modal" data-target="#detailsModalUpdate-@usuario.IdUsuario">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal-@usuario.IdUsuario">
                             <i class="fas fa-ellipsis-h"></i>
                         </button>
                     </td>
@@ -50,6 +69,38 @@
         </tbody>
     </table>
 </div>
+
+<!-- Modal de eliminación -->
+<!-- Modal de eliminación -->
+@foreach (var usuario in Model)
+{
+    <div class="modal fade" id="deleteModal-@usuario.IdUsuario" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel-@usuario.IdUsuario" aria-hidden="true">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel-@usuario.IdUsuario">Eliminar Empleado</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Cédula:</strong> @usuario.Cedula</p>
+                    <p><strong>Nombre:</strong> @usuario.Nombre @usuario.PrimerApellido @usuario.SegundoApellido</p>
+                    <p><strong>Correo:</strong> @usuario.Correo</p>
+                    <hr />
+                    <h5 class="text-danger">¿Seguro que desea eliminar este empleado?</h5>
+                    <form asp-action="Delete" asp-controller="Usuario" method="post">
+                        <input type="hidden" name="id" value="@usuario.IdUsuario" />
+                        <button type="submit" class="btn btn-danger">Eliminar usuario</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- Modal de eliminación End -->
 
 <!-- Modal de actualización de sucursal, oficina y rol -->
 @foreach (var usuario in Model)
@@ -117,6 +168,35 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de detalles Start -->
+    <div class="modal fade" id="detailsModal-@usuario.IdUsuario" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel-@usuario.IdUsuario" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalles de la Empleado</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Nombre completo:</strong> @usuario.Nombre @usuario.PrimerApellido @usuario.SegundoApellido</p>
+                    <p><strong>Cédula:</strong> @usuario.Cedula</p>
+                    <p><strong>Correo Electrónico:</strong> @usuario.Correo</p>
+                    <p><strong>Teléfono:</strong> @usuario.TelefonoPrincipal</p>
+                    <p><strong>Dirección:</strong> @usuario.Direccion</p>
+                    <p><strong>Sucursal:</strong> @usuario.IdSucursal</p>
+                    <p><strong>Oficina:</strong> @usuario.Oficina</p>
+                    <p><strong>Rol:</strong> @usuario.IdRol</p>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal de detalles End -->
 
     <script>
         function submitForm(IdUsuario) {

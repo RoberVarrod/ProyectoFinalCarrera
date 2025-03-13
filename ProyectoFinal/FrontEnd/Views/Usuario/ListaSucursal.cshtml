@@ -11,83 +11,126 @@
             <tr>
                 <th>Nombre</th>
                 <th>Dirección</th>
-                <th>Detalles</th>
+                <th>Horario</th>
+                <th>Teléfono</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Naranjo (CR)</td>
-                <td>Cruce de Naranjo, 500m Oeste de la Soda Jairos contiguo al Bar la Gallera, Alajuela, Naranjo, San Miguel, 20602 - Costa Rica</td>
-                <td>
-                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal2"><i class="fas fa-ellipsis-h"></i></button>
-                </td>
-            </tr>
-            <tr>
-                <td>Pérez Zeledón (CR)</td>
-                <td>Barrio San Luis, 100m Norte y 100m Oeste de la Gasolinera Gasotica</td>
-                <td>
-                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal2"><i class="fas fa-ellipsis-h"></i></button>
-                </td>
-            </tr>
+            @foreach (var sucursal in Model)
+            {
+                <tr>
+                    <td>@sucursal.Nombre</td>
+                    <td>@sucursal.Direccion</td>
+                    <td>@sucursal.Horario</td>
+                    <td>@sucursal.Telefono</td>
+                    <td>
+                        <!-- Botón para abrir el modal de eliminación -->
+                        <button class="btn btn-link text-danger" data-toggle="modal" data-target="#deleteModal-@sucursal.IdSucursal">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+
+                        <!-- Modal de eliminación -->
+                        <div class="modal fade" id="deleteModal-@sucursal.IdSucursal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog modal-md" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Eliminar Sucursal</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p><strong>Nombre:</strong> @sucursal.Nombre</p>
+                                        <p><strong>Dirección:</strong> @sucursal.Direccion</p>
+                                        <p><strong>Horario:</strong> @sucursal.Horario</p>
+                                        <p><strong>Teléfono:</strong> @sucursal.Telefono</p>
+                                        <hr />
+                                        <h5 class="text-danger">¿Seguro que desea eliminar esta sucursal?</h5>
+                                        <form asp-action="EliminarSucursal" asp-controller="Usuario" method="post">
+                                            <input name="id" value=@sucursal.IdSucursal hidden />
+                                            <button type="submit" class="btn btn-danger">Eliminar Sucursal</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal de eliminación End -->
+                        <!-- Botón para editar -->
+                        <button class="btn btn-link" data-toggle="modal" data-target="#editModal-@sucursal.IdSucursal">
+                            <i class="fas fa-edit"></i>
+                        </button>
+
+                        <!-- Modal de edición Start -->
+                        <div class="modal fade" id="editModal-@sucursal.IdSucursal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Editar Sucursal</h5>
+                                        <button type="button" class="close" data-dismiss="modal">
+                                            <span>&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form asp-action="EditarSucursal" asp-controller="Usuario" method="post">
+                                            <input type="hidden" name="IdSucursal" value="@sucursal.IdSucursal" />
+                                            <div class="form-group">
+                                                <label>Nombre:</label>
+                                                <input type="text" class="form-control" name="Nombre" value="@sucursal.Nombre" required />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Dirección:</label>
+                                                <input type="text" class="form-control" name="Direccion" value="@sucursal.Direccion" required />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Horario:</label>
+                                                <input type="text" class="form-control" name="Horario" value="@sucursal.Horario" required />
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Teléfono:</label>
+                                                <input type="text" class="form-control" name="Telefono" value="@sucursal.Telefono" required />
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Actualizar</button>
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal de edición End -->
+                        <!-- Botón para ver detalles -->
+                        <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal-@sucursal.IdSucursal">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+
+                        <!-- Modal de detalles Start -->
+                        <div class="modal fade" id="detailsModal-@sucursal.IdSucursal" tabindex="-1" role="dialog">
+                            <div class="modal-dialog modal-lg" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Detalles de la Sucursal</h5>
+                                        <button type="button" class="close" data-dismiss="modal">
+                                            <span>&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p><strong>Nombre:</strong> @sucursal.Nombre</p>
+                                        <p><strong>Dirección:</strong> @sucursal.Direccion</p>
+                                        <p><strong>Horario:</strong> @sucursal.Horario</p>
+                                        <p><strong>Teléfono:</strong> @sucursal.Telefono</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal de detalles End -->
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>
 <!-- Lista de Sucursales End -->
-<!-- Modal para ver detalles de la Sucursal Naranjo Start -->
-<div class="modal fade" id="detailsModal1" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel1" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="detailsModalLabel1">Detalles de la Sucursal Naranjo</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p><strong>Nombre:</strong> Naranjo (CR)</p>
-                <p><strong>Horario:</strong> Lunes a Viernes 8:00 a.m. a 5:00 p.m. - Sábado 8:00 a.m. a 12:00 m.d.</p>
-                <p><strong>Teléfono:</strong> +506 2455 1600</p>
-                <p><strong>Dirección:</strong> Cruce de Naranjo, 500m Oeste de la Soda Jairos contiguo al Bar la Gallera, Alajuela, Naranjo, San Miguel, 20602 - Costa Rica</p>
-                <p><strong>Oficinas:</strong> Administración, Atención al Cliente, Bodega, Transporte</p>
-                <p><strong>Empleados:</strong></p>
-                <ul>
-                    <li>Juan Pérez</li>
-                    <li>Ana Gómez</li>
-                </ul>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal para ver detalles de la Sucursal Naranjo End -->
-<!-- Modal para ver detalles de la Sucursal Pérez Zeledón Start -->
-<div class="modal fade" id="detailsModal2" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel2" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="detailsModalLabel2">Detalles de la Sucursal Pérez Zeledón</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p><strong>Nombre:</strong> Pérez Zeledón (CR)</p>
-                <p><strong>Horario:</strong> Lunes a Viernes 8:00 a.m. a 12:00 m.d. y de 1:00 p.m. a 5:00 p.m. - Sábado 8:00 a.m. a 12:00 m.d.</p>
-                <p><strong>Teléfono:</strong> +506 2771 9715</p>
-                <p><strong>Dirección:</strong> Barrio San Luis, 100m Norte y 100m Oeste de la Gasolinera Gasotica</p>
-                <p><strong>Oficinas:</strong> Administración, Atención al Cliente, Bodega, Transporte</p>
-                <p><strong>Empleados:</strong></p>
-                <ul>
-                    <li>Carlos López</li>
-                    <li>María Díaz</li>
-                </ul>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal para ver detalles de la Sucursal Pérez Zeledón End -->

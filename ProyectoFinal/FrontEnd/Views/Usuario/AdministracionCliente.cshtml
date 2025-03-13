@@ -1,107 +1,131 @@
-﻿@{
+﻿@model IEnumerable<FrontEnd.Models.Cliente>
+@{
     ViewData["Title"] = "Gestión de Clientes";
     Layout = "~/Views/Shared/_LayoutUsuarios.cshtml";
 }
 
-<!-- Gestión de Clientes Start -->
+<!-- Header Start -->
+<div class="jumbotron jumbotron-fluid mb-5">
+    <div class="container text-center py-5">
+        <h1 class="text-primary mb-4">Administración</h1>
+        <h1 class="text-white display-3 mb-5">Administración de clientes</h1>
+        <div class="mx-auto" style="width: 100%; max-width: 600px;">
+            <div class="input-group">
+                <input type="text" id="trackingInput" class="form-control border-light" style="padding: 30px;" placeholder="Cédula cliente">
+                <div class="input-group-append">
+                    <button class="btn btn-primary px-3" id="btnBuscar">Buscar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Header End -->
+<!-- Lista de Clientes Start -->
 <div class="container-fluid py-4">
+    @if (TempData["MensajeExito"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["MensajeExito"]
+        </div>
+    }
     <h4 class="mb-4 text-primary">Lista de Clientes</h4>
-
-    <!-- Tabla de Clientes Start-->
     <table class="table table-hover table-striped shadow-sm">
         <thead class="thead-dark">
             <tr>
                 <th>Cédula</th>
                 <th>Nombre</th>
                 <th>Correo</th>
-                <th>Teléfono</th>
-                <th>Dirección</th>
+                <th>Teléfono Principal</th>
+                <th>Teléfono Secundario</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>123456789</td>
-                <td>Juan Pérez</td>
-                <td>juanperez@gmail.com</td>
-                <td>123-4567</td>
-                <td>Calle Ficticia 123</td>
-                <td>
-                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModalViewClient">
-                        <i class="fas fa-ellipsis-h"></i>
-                    </button>
-                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModalDeleteClient">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                </td>
-            </tr>
+            @foreach (var cliente in Model)
+            {
+                <tr>
+                    <td>@cliente.Cedula</td>
+                    <td>@cliente.Nombre @cliente.PrimerApellido @cliente.SegundoApellido</td>
+                    <td>@cliente.Correo</td>
+                    <td>@cliente.TelefonoPrincipal</td>
+                    <td>@cliente.TelefonoSecundario</td>
+                    <td>
+                        <button class="btn btn-link text-danger" data-toggle="modal" data-target="#deleteModal-@cliente.IdCliente">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                        <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal-@cliente.IdCliente">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
-    <!-- Tabla de Clientes End-->
 </div>
 
-<!-- Modal para ver detalles del cliente Start -->
-<div class="modal fade" id="detailsModalViewClient" tabindex="-1" role="dialog" aria-labelledby="detailsModalViewClientLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="detailsModalViewClientLabel">Detalles del Cliente</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p><strong>Cédula:</strong> 123456789</p>
-                <p><strong>Nombre:</strong> Juan Pérez</p>
-                <p><strong>Primer Apellido:</strong> Mora</p>
-                <p><strong>Segundo Apellido:</strong> López</p>
-                <p><strong>Correo Electrónico:</strong> juanperez@gmail.com</p>
-                <p><strong>Teléfono Principal:</strong> 123-4567</p>
-                <p><strong>Teléfono Secundario:</strong> 88888888</p>
-                <p><strong>Provincia:</strong> Provincia</p>
-                <p><strong>Cantón:</strong> Cantón</p>
-                <p><strong>Distrito:</strong> Distrito</p>
-                <p><strong>Código Postal:</strong> 10101</p>
-                <p><strong>Dirección:</strong> Calle Ficticia 123</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal para ver detalles del cliente End -->
-<!-- Modal para eliminar cliente Start -->
-<div class="modal fade" id="detailsModalDeleteClient" tabindex="-1" role="dialog" aria-labelledby="detailsModalDeleteClientLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="detailsModalDeleteClientLabel">Detalles del Cliente</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p><strong>Cédula:</strong> 123456789</p>
-                <p><strong>Nombre:</strong> Juan Pérez</p>
-                <p><strong>Primer Apellido:</strong> Mora</p>
-                <p><strong>Segundo Apellido:</strong> López</p>
-                <p><strong>Correo Electrónico:</strong> juanperez@gmail.com</p>
-                <p><strong>Teléfono Principal:</strong> 123-4567</p>
-                <p><strong>Teléfono Secundario:</strong> 88888888</p>
-                <p><strong>Provincia:</strong> Provincia</p>
-                <p><strong>Cantón:</strong> Cantón</p>
-                <p><strong>Distrito:</strong> Distrito</p>
-                <p><strong>Código Postal:</strong> 10101</p>
-                <p><strong>Dirección:</strong> Calle Ficticia 123</p>
-                <hr />
-                <h5 class="mt-3">¿Seguro que desea eliminar a este cliente?</h5>
-                <button id="borrarClienteButton" type="button" data-dismiss="modal" class="btn btn-danger">Eliminar Cliente</button>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+<!-- Modal de detalles Start -->
+@foreach (var cliente in Model)
+{
+    <div class="modal fade" id="detailsModal-@cliente.IdCliente" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel-@cliente.IdCliente" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalles del Cliente</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Cédula:</strong> @cliente.Cedula</p>
+                        <p><strong>Nombre:</strong> @cliente.Nombre</p>
+                        <p><strong>Primer Apellido:</strong> @cliente.PrimerApellido</p>
+                        <p><strong>Segundo Apellido:</strong> @cliente.SegundoApellido</p>
+                        <p><strong>Correo Electrónico:</strong> @cliente.Correo</p>
+                        <p><strong>Teléfono Principal:</strong> @cliente.TelefonoPrincipal</p>
+                        <p><strong>Teléfono Secundario:</strong> @cliente.TelefonoSecundario</p>
+                        <p><strong>Provincia:</strong> @cliente.Provincia</p>
+                        <p><strong>Cantón:</strong> @cliente.Canton</p>
+                        <p><strong>Distrito:</strong> @cliente.Distrito</p>
+                        <p><strong>Código Postal:</strong> @cliente.CodigoPostal</p>
+                        <p><strong>Dirección:</strong> @cliente.Direccion</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Modal para eliminar cliente End -->
+}
+<!-- Modal de detalles End -->
+<!-- Modal de eliminación Start -->
+
+    @foreach (var cliente in Model)
+    {
+        <div class="modal fade" id="deleteModal-@cliente.IdCliente" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel-@cliente.IdCliente" aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel-@cliente.IdCliente">Eliminar Cliente</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Cédula:</strong> @cliente.Cedula</p>
+                        <p><strong>Nombre:</strong> @cliente.Nombre @cliente.PrimerApellido @cliente.SegundoApellido</p>
+                        <p><strong>Télefono Principal:</strong> @cliente.TelefonoPrincipal</p>
+                        <p><strong>Correo:</strong> @cliente.Correo</p>
+                        <hr />
+                        <h5 class="text-danger">¿Seguro que desea eliminar este cliente?</h5>
+                    <form asp-action="EliminarCliente" asp-controller="Usuario" method="post">
+                            <input type="hidden" name="id" value="@cliente.IdCliente" />
+                            <button type="submit" class="btn btn-danger">Eliminar cliente</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+<!-- Modal de eliminación End -->

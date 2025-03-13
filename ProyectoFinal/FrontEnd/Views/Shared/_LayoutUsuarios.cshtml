@@ -85,18 +85,18 @@
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Tracking</a>
                         <div class="dropdown-menu rounded-0 m-0">
-                            <a class="nav-item nav-link" asp-area="" asp-controller="Paquete" asp-action="Paquetes">Gestion de paquetes</a>
+                            <a class="nav-item nav-link" asp-area="" asp-controller="Paquete" asp-action="Paquetes">Gestión de Paquetes</a>
                             <a class="nav-item nav-link" asp-area="" asp-controller="Paquete" asp-action="EstadoPaquetes">Estado de Paquetes</a>
-                            <a class="nav-item nav-link" asp-area="" asp-controller="Paquete" asp-action="OrdenesProceso">Ordenes en Proceso</a>
-                            <a class="nav-item nav-link" asp-area="" asp-controller="Usuario" asp-action="Transportes">Gestion de Transportes</a>
+                            <a class="nav-item nav-link" asp-area="" asp-controller="Paquete" asp-action="OrdenesProceso">Órdenes en Proceso</a>
+                            <a class="nav-item nav-link" asp-area="" asp-controller="Usuario" asp-action="Transportes">Gestión de Transportes</a>
                         </div>
                     </div>
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Administracion</a>
                         <div class="dropdown-menu rounded-0 m-0">
-                            <a class="nav-item nav-link" asp-area="" asp-controller="Usuario" asp-action="Administracion">Administracion Empleado</a>
                             <a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="RegistroUsuario">Registrar Empleado</a>
-                            <a class="nav-item nav-link" asp-area="" asp-controller="Usuario" asp-action="AdministracionCliente">Administracion Cliente</a> 
+                            <a class="nav-item nav-link" asp-area="" asp-controller="Usuario" asp-action="Administracion">Administración Empleado</a>
+                            <a class="nav-item nav-link" asp-area="" asp-controller="Usuario" asp-action="AdministracionCliente">Administración Cliente</a> 
                         </div>
                     </div>
 
@@ -108,11 +108,10 @@
                             
                         </div>
                     </div>
+                    <!--  <a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="RegistroUsuario">Registrarse</a> -->
 
-                    <a class="nav-item nav-link" asp-area="" asp-controller="Acceso" asp-action="RegistroUsuario">Registrarse</a>
 
-
-                    <a class="nav-item nav-link" asp-area="" asp-controller="Usuario" asp-action="Configuracion">Configuracion</a>
+                    <a class="nav-item nav-link" asp-area="" asp-controller="Usuario" asp-action="Configuracion">Configuración</a>
                 </div>
                 <a href="@Url.Action("Logout","Acceso")" class="btn btn-primary py-2 px-4 d-none d-lg-block">Cerrar Sesión</a>
             </div>
