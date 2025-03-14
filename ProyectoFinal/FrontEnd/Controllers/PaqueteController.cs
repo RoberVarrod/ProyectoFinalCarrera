@@ -187,7 +187,18 @@ namespace FrontEnd.Controllers
                 paqueteExistente.FechaEntregaEstimada = paquete.FechaEntregaEstimada;
 
                 _context.SaveChanges();
+
+                //Se envia correo al usuario con el cambio de los datos del paquete
+
+
+
+
+
                 return RedirectToAction("Paquetes");
+
+
+
+
             }
             return NotFound();
         }

@@ -125,7 +125,7 @@ namespace FrontEnd.Controllers
         // Cuando se registra paquete
         // POST api/<CorreoController>
         [HttpPost]
-        public async Task<ActionResult> enviarCorreoActualizarPaquete(Paquete paqueteActual, Paquete paqueteActualizado)
+        public async Task<ActionResult> enviarCorreoActualizarPaquete(Paquete paqueteActual)//, Paquete paqueteActualizado)
         {
 
             // buscar Datos del cliente.
@@ -151,9 +151,11 @@ namespace FrontEnd.Controllers
                 "Favor ingresar a su cuenta en nuestro sitio web para ver mas detalles, a continuación los datos nuevos de su paquete" + "\n" +
                 "\n" +
 
-                "Detalles del paquete:" + "\n" +
+                "Detalles nuevos del paquete:" + "\n" +
                 "Número de registro: " + paqueteActual.Precio + "\n" +
                 "Descripción: " + paqueteActual.Descripcion + "\n" +
+                "Dimensiones:"+ "\n" +
+                "Alto:" + "\n" +
                 "Estado de pago: " + paqueteActual.EstadoPago + "\n" +
                 "Dirección de entrega: " + paqueteActual.DireccionEntrega + "\n" +
                 "Ubicación: " + sucursal.Nombre;
