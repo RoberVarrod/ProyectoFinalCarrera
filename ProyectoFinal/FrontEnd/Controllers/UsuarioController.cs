@@ -9,10 +9,12 @@ namespace FrontEnd.Controllers
     {
 
         private readonly ProyectoPaqueteriaContext _context;
+        private readonly CorreoController _correoController;
 
-        public UsuarioController(ProyectoPaqueteriaContext context)
+        public UsuarioController(ProyectoPaqueteriaContext context, CorreoController correoController)
         {
             _context = context;
+            _correoController = correoController;
         }
 
         [HttpGet]
@@ -231,12 +233,22 @@ namespace FrontEnd.Controllers
 
                 // Actualizar el estado del pago en el paquete
                 paquete.EstadoPago = "Cancelado";
-                paquete.FechaEntregaEstimada = DateTime.Now.AddDays(2);
+                //paquete.FechaEntregaEstimada = DateTime.Now.AddDays(2);  -- > a este punto ya esta el paquete entregado
                 _context.Update(paquete);
 
                 // Guardar el pago en la base de datos
                 _context.Pagos.Add(nuevoPago);
                 _context.SaveChanges();
+
+                // se envia el correo aqui para confirmar al usuario.
+                Task<ActionResult> taskSendEmail = _correoController.enviarCorreoPagoPaquete(nuevoPago);
+
+
+
+                // aqui creo que se deberia de hacer el que el paquete se encuentre entregado, se supone que a este punto ya se entrego por eso el cliente pago. y el correo de confirmar se deberia enviar aqui.
+
+
+
 
                 TempData["MensajePagoRegistrado"] = "Pago registrado correctamente.";
                 return RedirectToAction("RegistrarPago");
