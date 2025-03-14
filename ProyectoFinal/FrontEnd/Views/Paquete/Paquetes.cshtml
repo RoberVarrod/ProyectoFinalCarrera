@@ -225,8 +225,14 @@
                                                     <input type="text" class="form-control" name="EstadoRuta" value="@paquete.EstadoRuta" readonly />
                                                 }
                                                 else
-                                                {
-                                                    <input type="text" class="form-control" name="EstadoRuta" value="@paquete.EstadoRuta" />
+                                                {                                                  
+                                                    <select name="EstadoRuta" class="form-control">
+                                                        <option value="@paquete.EstadoRuta">@paquete.EstadoRuta</option>
+                                                        <option value="En rucursal">En sucursal</option>
+                                                        <option value="En ruta">En ruta</option>
+                                                        <option value="Pendiente">Pendiente</option>
+                                                        <option value="Entregado">Entregado</option>
+                                                    </select>
                                                 }
                                             </div>
 
