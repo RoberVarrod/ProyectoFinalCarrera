@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using FrontEnd.Services;
 using FrontEnd.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -124,30 +125,37 @@ namespace FrontEnd.Controllers
         // Cuando se registra paquete
         // POST api/<CorreoController>
         [HttpPost]
-        public async Task<ActionResult> enviarCorreoActualizarPaquete(Paquete paquete)
+        public async Task<ActionResult> enviarCorreoActualizarPaquete(Paquete paqueteActual, Paquete paqueteActualizado)
         {
 
             // buscar Datos del cliente.
             var cliente = _context.Clientes
-               .FirstOrDefault(u => u.IdCliente == paquete.IdCliente);
+               .FirstOrDefault(u => u.IdCliente == paqueteActual.IdCliente);
 
             // buscar Datos de Sucursal
             var sucursal = _context.Sucursals
-               .FirstOrDefault(u => u.IdSucursal == paquete.IdSucursal);
+               .FirstOrDefault(u => u.IdSucursal == paqueteActual.IdSucursal);
+
+
+            // buscar Datos de SucursaldelpaqueteActualizado
+            var sucursalnueva = _context.Sucursals
+               .FirstOrDefault(u => u.IdSucursal == paqueteActual.IdSucursal);
+
+
 
 
             string emailReceiver = cliente.Correo;
 
-            string subject = "Nuevo paquete recibido " + paquete.NumeroRegistro;
-            string body = "Se le comunica que hay un paquete disponible para su entrega" + "\n" +
-                "Favor ingresar a su cuenta en nuestro sitio web para proceder con la entrega y seleccionar la sucursal donde desea retirar su paquete o la dirección donde a domicilio donde desea recibir el paquete" + "\n" +
+            string subject = "Actualización de datos del paquete: " + paqueteActual.NumeroRegistro;
+            string body = "Se le comunica que hubo una actualización en los datos de su paquete" + "\n" +
+                "Favor ingresar a su cuenta en nuestro sitio web para ver mas detalles, a continuación los datos nuevos de su paquete" + "\n" +
                 "\n" +
 
                 "Detalles del paquete:" + "\n" +
-                "Precio: " + paquete.Precio + "\n" +
-                "Descripción: " + paquete.Descripcion + "\n" +
-                "Estado de pago: " + paquete.EstadoPago + "\n" +
-                "Dirección de entrega: " + paquete.DireccionEntrega + "\n" +
+                "Número de registro: " + paqueteActual.Precio + "\n" +
+                "Descripción: " + paqueteActual.Descripcion + "\n" +
+                "Estado de pago: " + paqueteActual.EstadoPago + "\n" +
+                "Dirección de entrega: " + paqueteActual.DireccionEntrega + "\n" +
                 "Ubicación: " + sucursal.Nombre;
 
 
