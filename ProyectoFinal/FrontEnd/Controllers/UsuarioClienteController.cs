@@ -8,10 +8,12 @@ namespace FrontEnd.Controllers
     public class UsuarioClienteController : Controller
     {
         private readonly ProyectoPaqueteriaContext _context;
+        private readonly CorreoController _correoController;
 
-        public UsuarioClienteController(ProyectoPaqueteriaContext context)
+        public UsuarioClienteController(ProyectoPaqueteriaContext context, CorreoController correoController)
         {
             _context = context;
+            _correoController = correoController;
         }
 
         [HttpGet]
@@ -117,6 +119,10 @@ namespace FrontEnd.Controllers
             _context.SaveChanges();
 
             TempData["ExitoContrasena"] = "Contraseña actualizada correctamente.";
+            // Se notifica al cliente el cambio de contraseña
+
+            Task<ActionResult> taskSendEmail = _correoController.enviarCorreoCambioContrasenaCompletadoCliente(cliente);
+
             return RedirectToAction("Configuracion");
         }
 

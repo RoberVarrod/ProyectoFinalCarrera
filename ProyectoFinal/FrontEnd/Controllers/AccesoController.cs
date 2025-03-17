@@ -1,4 +1,5 @@
 using FrontEnd.Models;
+using FrontEnd.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,10 +12,12 @@ namespace FrontEnd.Controllers
     {
 
         private readonly ProyectoPaqueteriaContext _context;
+        private readonly CorreoController _correoController;
 
-        public AccesoController(ProyectoPaqueteriaContext context)
+        public AccesoController(ProyectoPaqueteriaContext context , CorreoController correoController)
         {
             _context = context;
+            _correoController = correoController;
         }
 
 
@@ -228,9 +231,8 @@ namespace FrontEnd.Controllers
 
                     TempData["Mensaje"] = $"Bienvenido {cliente.Nombre}";
 
-                    // Aqui hay que crear un objeto de tipo Usuario model completo y pasar ese objeto al redirect to aaction para la vista configuracion. --->Ariel
-
-
+                    // se envia correo indicando que se inicio sesion y la fecha  de inicio al usuario por seguridad
+                    Task<ActionResult> taskSendEmail = _correoController.enviarCorreoInicioSesionCliente(cliente);
 
                     return RedirectToAction("Configuracion", "UsuarioCliente");
                 }

@@ -122,10 +122,10 @@ namespace FrontEnd.Controllers
         }
 
 
-        // Cuando se registra paquete
+        // cuando el paquete se actualiza en ruta
         // POST api/<CorreoController>
         [HttpPost]
-        public async Task<ActionResult> enviarCorreoActualizarPaquete(Paquete paqueteActual)//, Paquete paqueteActualizado)
+        public async Task<ActionResult> enviarCorreoActualizarEstadoPaqueteEnRuta(Paquete paqueteActual)
         {
 
             // buscar Datos del cliente.
@@ -137,29 +137,93 @@ namespace FrontEnd.Controllers
                .FirstOrDefault(u => u.IdSucursal == paqueteActual.IdSucursal);
 
 
-            // buscar Datos de SucursaldelpaqueteActualizado
-            var sucursalnueva = _context.Sucursals
+            string emailReceiver = cliente.Correo;
+
+            string subject = "Actualización de datos del estado del paquete: " + paqueteActual.NumeroRegistro + " Paquete en ruta";
+            string body = "Se le comunica que hubo una actualización en los datos de su paquete" + "\n" +
+                "Favor ingresar a su cuenta en nuestro sitio web para ver mas detalles o el historial de cambios, a continuación los datos nuevos de su paquete" + "\n" +
+                "\n" +
+
+                "Número de registro: " + paqueteActual.NumeroRegistro + "\n" +
+                "Estado actual del paquete: " + "En ruta a destino acordado" + "\n" +
+                "Descripción: " + paqueteActual.Descripcion + "\n" +
+                "Estado de pago: " + paqueteActual.EstadoPago + "\n" +
+                "Dirección de entrega: " + paqueteActual.DireccionEntrega + "\n" +
+                "Ubicación actual: " + sucursal.Nombre + "\n";
+                //+"Fecha de entrega estimada: " + paqueteActual.FechaEntregaEstimada  -- se supone que cuando el usuario elige la entrega ahi se debe de estimar los 2 dias habiles para la entrega.
+
+
+            await _correoService.EnviarCorreo(emailReceiver, subject, body);
+            return Ok();
+
+
+        }
+
+        // cuando el paquete se actualiza en Sucursal
+        // POST api/<CorreoController>
+        [HttpPost]
+        public async Task<ActionResult> enviarCorreoActualizarEstadoPaqueteEnSucursal(Paquete paqueteActual)
+        {
+
+            // buscar Datos del cliente.
+            var cliente = _context.Clientes
+               .FirstOrDefault(u => u.IdCliente == paqueteActual.IdCliente);
+
+            // buscar Datos de Sucursal
+            var sucursal = _context.Sucursals
                .FirstOrDefault(u => u.IdSucursal == paqueteActual.IdSucursal);
-
-
 
 
             string emailReceiver = cliente.Correo;
 
-            string subject = "Actualización de datos del paquete: " + paqueteActual.NumeroRegistro;
+            string subject = "Actualización de datos del estado del paquete: " + paqueteActual.NumeroRegistro + " Paquete en Sucursal";
             string body = "Se le comunica que hubo una actualización en los datos de su paquete" + "\n" +
-                "Favor ingresar a su cuenta en nuestro sitio web para ver mas detalles, a continuación los datos nuevos de su paquete" + "\n" +
+                "Favor ingresar a su cuenta en nuestro sitio web para ver mas detalles o el historial de cambios, a continuación los datos nuevos de su paquete" + "\n" +
                 "\n" +
 
-                "Detalles nuevos del paquete:" + "\n" +
-                "Número de registro: " + paqueteActual.Precio + "\n" +
+  
+                "Número de registro: " + paqueteActual.NumeroRegistro + "\n" +
+                "Estado actual del paquete: " + "En sucursal: " + sucursal.Nombre + "\n" +
                 "Descripción: " + paqueteActual.Descripcion + "\n" +
-                "Dimensiones:"+ "\n" +
-                "Alto:" + "\n" +
                 "Estado de pago: " + paqueteActual.EstadoPago + "\n" +
-                "Dirección de entrega: " + paqueteActual.DireccionEntrega + "\n" +
+                "Dirección de entrega: " +"Sucursal acordada" + "\n" +
                 "Ubicación: " + sucursal.Nombre;
 
+
+            await _correoService.EnviarCorreo(emailReceiver, subject, body);
+            return Ok();
+
+
+        }
+
+        // cuando el paquete se actualiza a Entregado
+        // POST api/<CorreoController>
+        [HttpPost]
+        public async Task<ActionResult> enviarCorreoActualizarEstadoPaqueteEntregado(Paquete paqueteActual)
+        {
+
+            // buscar Datos del cliente.
+            var cliente = _context.Clientes
+               .FirstOrDefault(u => u.IdCliente == paqueteActual.IdCliente);
+
+            // buscar Datos de Sucursal
+            //var sucursal = _context.Sucursals
+            //   .FirstOrDefault(u => u.IdSucursal == paqueteActual.IdSucursal);
+
+
+            string emailReceiver = cliente.Correo;
+
+            string subject = "Actualización de datos del estado del paquete: " + paqueteActual.NumeroRegistro + " Paquete Entregado";
+            string body = "Se le comunica que hubo una actualización en los datos de su paquete" + "\n" +
+                "Favor ingresar a su cuenta en nuestro sitio web para ver mas detalles o el historial de cambios, a continuación los datos nuevos de su paquete" + "\n" +
+                "\n" +
+
+
+                "Número de registro: " + paqueteActual.NumeroRegistro + "\n" +
+                "Estado actual del paquete: " + "Paquete entregado" + "\n" +
+                "Descripción: " + paqueteActual.Descripcion + "\n" +
+                "Estado de pago: " + paqueteActual.EstadoPago + "\n" +
+                "Fecha de entrega: " + paqueteActual.FechaEntrega + "\n";
 
 
 
@@ -170,9 +234,40 @@ namespace FrontEnd.Controllers
         }
 
 
+        //enviarCorreoInicioSesionCliente
+        // cuando el cliente inicia sesion
+        // POST api/<CorreoController>
+        [HttpPost]
+        public async Task<ActionResult> enviarCorreoInicioSesionCliente(Cliente cliente)
+        {
+            string emailReceiver = cliente.Correo;
+
+            string subject = "Se ha reportado un inicio de sesión en su cuenta";
+            string body = "Cliente: " + cliente.Nombre + ", se le comunica que hubo un inicio de sesión en su cuenta, fecha: " + DateTime.Now + "\n" +
+                "Si usted no inicio sesión, favor hacer cambio de su contraseña actual en nuestra pagina web";
+
+            await _correoService.EnviarCorreo(emailReceiver, subject, body);
+            return Ok();
+
+        }
 
 
+        //enviarCorreoInicioSesionCliente
+        // cuando el cliente inicia sesion
+        // POST api/<CorreoController>
+        [HttpPost]
+        public async Task<ActionResult> enviarCorreoCambioContrasenaCompletadoCliente(Cliente cliente)
+        {
+            string emailReceiver = cliente.Correo;
 
+            string subject = "Su contraseña se ha cambiado con éxito";
+            string body = "Cliente: " + cliente.Nombre + ", se le comunica que su contraseña fue cambiada con éxito, fecha: " + DateTime.Now + "\n" +
+                "Ahora puede iniciar sesión con la nueva contraseña";
+
+            await _correoService.EnviarCorreo(emailReceiver, subject, body);
+            return Ok();
+
+        }
 
 
 

@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using FrontEnd.Services;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.CodeAnalysis.Options;
+using Newtonsoft.Json.Linq;
 
 namespace FrontEnd.Controllers
 {
@@ -171,6 +173,14 @@ namespace FrontEnd.Controllers
         public IActionResult ActualizarPaquete(Paquete paquete)
         {
             var paqueteExistente = _context.Paquetes.FirstOrDefault(p => p.IdPaquete == paquete.IdPaquete);
+
+            var huboCambioDeEstadoRuta = false;
+            //Se hace un IF que define si el estado del paquete cambio, esto para solo notificar al cliente por correo en caso de cambiar el estado, si el estado es el mismo, no se notifica pues no es necesario.
+            if (paquete.EstadoRuta != paqueteExistente.EstadoRuta)
+            {
+                huboCambioDeEstadoRuta = true;
+            }
+
             if (paqueteExistente != null)
             {
                 // Actualización de datos
@@ -188,18 +198,38 @@ namespace FrontEnd.Controllers
 
                 _context.SaveChanges();
 
-                //Se envia correo al usuario con el cambio de los datos del paquete
+                //Se hace un IF que define si el estado del paquete cambio, esto para solo notificar al cliente por correo en caso de cambiar el estado, si el estado es el mismo, no se notifica pues no es necesario.
+                if (huboCambioDeEstadoRuta) {
 
+                    // se create un nuevo objeto paquete con los datos nuevos para enviar al metodo
+                    Paquete paqueteActualizadoParaCorreo = new Paquete();
+                    paqueteActualizadoParaCorreo = paqueteExistente;
+                    //Se envia correo al usuario con el cambio de los datos del paquete
 
+                    // se envia correo al cliente en ruta si el estado cambio a En ruta
+                    if (paqueteActualizadoParaCorreo.EstadoRuta == "En ruta")
+                    {
+                        Task<ActionResult> taskSendEmail = _correoController.enviarCorreoActualizarEstadoPaqueteEnRuta(paqueteActualizadoParaCorreo);
+                    }
+                    // se envia correo al cliente en sucursal si el estado cambio a En sucursal
+                    if (paqueteActualizadoParaCorreo.EstadoRuta == "En sucursal")
+                    {
+                        Task<ActionResult> taskSendEmail = _correoController.enviarCorreoActualizarEstadoPaqueteEnSucursal(paqueteActualizadoParaCorreo);
+                    }
+                    // se envia correo al cliente a entregado si el estado cambio a Entregado
+                    if (paqueteActualizadoParaCorreo.EstadoRuta == "Entregado")
+                    {
+                        Task<ActionResult> taskSendEmail = _correoController.enviarCorreoActualizarEstadoPaqueteEntregado(paqueteActualizadoParaCorreo);
+                    }
 
+                } // Termina el if que valida si se envia el correo o no.
 
 
                 return RedirectToAction("Paquetes");
 
-
-
-
             }
+
+            
             return NotFound();
         }
 
