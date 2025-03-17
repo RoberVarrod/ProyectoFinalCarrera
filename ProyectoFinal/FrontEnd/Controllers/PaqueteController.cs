@@ -7,6 +7,7 @@ using FrontEnd.Services;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.CodeAnalysis.Options;
 using Newtonsoft.Json.Linq;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace FrontEnd.Controllers
 {
@@ -232,18 +233,7 @@ namespace FrontEnd.Controllers
             
             return NotFound();
         }
-
-
-        public IActionResult Historial()
-        {
-            return View();
-        }
-        /*
-        public IActionResult Paquetes()
-        {
-            return View();
-        }
-        */
+  
         public async Task<IActionResult> EstadoPaquetes()
         {
             var listaPaquetes = await _context.Paquetes.ToListAsync();
@@ -447,6 +437,21 @@ namespace FrontEnd.Controllers
             }
             return NotFound();
         }
+
+
+        public async Task<IActionResult> Historial(int pid)
+        {
+
+            var lista = await _context.HistorialCambiosPaquetes.Where(h => h.IdPaquete == pid).OrderBy(h => h.Sequencia).ToListAsync();
+
+            List<HistorialCambiosPaquete> listaCambiosPaquete  = new List<HistorialCambiosPaquete>();
+
+            listaCambiosPaquete = lista;
+
+            return View(listaCambiosPaquete);
+    
+        }
+
 
     }
 }

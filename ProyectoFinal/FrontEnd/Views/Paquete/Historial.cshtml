@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<FrontEnd.Models.HistorialCambiosPaquete>
+@{
     ViewData["Title"] = "Historial de paquetes";
     Layout = "~/Views/Shared/_LayoutPaqueteHistorial.cshtml";
 }
@@ -19,35 +20,52 @@
 
 
 <div class="timelinePaquetes">
+
+    @foreach(var row in Model)
+    {
+        
+        if(row.Sequencia%2 != 0)
+        {
+            <div class="containertimelinepaquete leftcontenttimeline">
+                <div class="contenttimeline">
+                    <h2>@row.FechaRegistro</h2>
+                    <h3>@row.Descripcion</h3>
+                    <p>@row.Informacion</p>
+                </div>
+
+            </div>
+        }else{
+            <div class="containertimelinepaquete rightcontenttimeline">
+                <div class="contenttimeline">
+                    <h2>@row.FechaRegistro</h2>
+                    <h3>@row.Descripcion</h3>
+                    <p>@row.Informacion</p>
+                </div>
+            </div>
+        }
+
+
+    }
+
+    <!--
     <div class="containertimelinepaquete leftcontenttimeline">
         <div class="contenttimeline">
             <h2>20 Febrero 2024</h2>
-            <p>Paquete recibido en sucursal San José</p>
+            <h3>Paquete recibido en sucursal San José</h3>
+            <p>info</p>
         </div>
+
     </div>
+
     <div class="containertimelinepaquete rightcontenttimeline">
         <div class="contenttimeline">
-            <h2>25 Febrero 2024</h2>
-            <p>Cliente contactado por teléfono</p>
+            <h2>20 Febrero 2024</h2>
+            <h3>Paquete recibido en sucursal San José</h3>
+            <p>info</p>
         </div>
     </div>
-    <div class="containertimelinepaquete leftcontenttimeline">
-        <div class="contenttimeline">
-            <h2>28 Febrero 2024</h2>
-            <p>Cliente realiza el pago</p>
-        </div>
-    </div>
-    <div class="containertimelinepaquete rightcontenttimeline">
-        <div class="contenttimeline">
-            <h2>02 Marzo 2024</h2>
-            <p>Paquete enviado a ruta, fecha estimada de entrega 03 de Marzo 2024</p>
-        </div>
-    </div>
-    <div class="containertimelinepaquete leftcontenttimeline">
-        <div class="contenttimeline">
-            <h2>03 Marzo 2024</h2>
-            <p>Paquete entregado al Cliente</p>
-        </div>
-    </div>
+
+    -->
+
 </div>
 
