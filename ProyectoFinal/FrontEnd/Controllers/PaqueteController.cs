@@ -81,6 +81,9 @@ namespace FrontEnd.Controllers
                 // se envia correo al cliente
                 Task<ActionResult> taskSendEmail = _correoController.enviarCorreoRegistroPaquete(nuevoPaquete);
 
+                //se agrega el registro en el historial
+                registrarCambioHistorialPaquete(nuevoPaquete,"Registro");
+
 
                 TempData["MensajePaqueteRegistrado"] = "Paquete registrado correctamente, Usuario notificado via email";
                 return View();
@@ -211,16 +214,26 @@ namespace FrontEnd.Controllers
                     if (paqueteActualizadoParaCorreo.EstadoRuta == "En ruta")
                     {
                         Task<ActionResult> taskSendEmail = _correoController.enviarCorreoActualizarEstadoPaqueteEnRuta(paqueteActualizadoParaCorreo);
+
+                        //Se registra el cambio en el historial
+                        registrarCambioHistorialPaquete(paqueteActualizadoParaCorreo, "En ruta");
+
                     }
                     // se envia correo al cliente en sucursal si el estado cambio a En sucursal
                     if (paqueteActualizadoParaCorreo.EstadoRuta == "En sucursal")
                     {
                         Task<ActionResult> taskSendEmail = _correoController.enviarCorreoActualizarEstadoPaqueteEnSucursal(paqueteActualizadoParaCorreo);
+
+                        //Se registra el cambio en el historial
+                         registrarCambioHistorialPaquete(paqueteActualizadoParaCorreo, "En sucursal");
                     }
                     // se envia correo al cliente a entregado si el estado cambio a Entregado
                     if (paqueteActualizadoParaCorreo.EstadoRuta == "Entregado")
                     {
                         Task<ActionResult> taskSendEmail = _correoController.enviarCorreoActualizarEstadoPaqueteEntregado(paqueteActualizadoParaCorreo);
+
+                        //Se registra el cambio en el historial
+                       registrarCambioHistorialPaquete(paqueteActualizadoParaCorreo, "Entregado");
                     }
 
                 } // Termina el if que valida si se envia el correo o no.
@@ -452,6 +465,93 @@ namespace FrontEnd.Controllers
     
         }
 
+        //registrarCambioHistorial
+        // POST api/<CorreoController>
+        [HttpPost]
+        public ActionResult registrarCambioHistorialPaquete(Paquete paquete, string accion)
+        {
+
+            HistorialCambiosPaquete nuevoRegistro = new HistorialCambiosPaquete();
+
+            string infoTitulo = "";
+            string descCuerpo = "";
+          
+
+
+            //Titulo y cuerpo de acuerdo a la accion 
+            if(accion == "Registro")
+            {
+                // buscar Datos de Sucursal
+                var sucursal = _context.Sucursals
+                .FirstOrDefault(u => u.IdSucursal == paquete.IdSucursal);
+
+                infoTitulo = "Paquete: " + paquete.NumeroRegistro + " registrado en el sistema";
+                descCuerpo = "Estado actual del paquete: " + paquete.EstadoPago + "\n" +
+               "Descripción: " + paquete.Descripcion + "\n" +
+               "Sucursal: " + sucursal.Nombre;
+
+            }else if(accion == "En ruta")
+            {
+                // buscar Datos de Sucursal
+                var sucursal = _context.Sucursals
+                .FirstOrDefault(u => u.IdSucursal == paquete.IdSucursal);
+
+                infoTitulo = "Paquete: " + paquete.NumeroRegistro + " Se encuentra en ruta al destino solicitado";
+                descCuerpo = "Estado actual del paquete: " + "En ruta a destino acordado" + "\n" +
+               "Dirección de entrega: " + paquete.DireccionEntrega + "\n" +
+               "Ubicación actual: " + sucursal.Nombre + "\n";
+
+            }else if(accion == "En sucursal")
+            {
+
+                // buscar Datos de Sucursal
+                var sucursal = _context.Sucursals
+                .FirstOrDefault(u => u.IdSucursal == paquete.IdSucursal);
+
+                infoTitulo = "Paquete: " + paquete.NumeroRegistro + " Se encuentra en la sucursal solicitada";
+                descCuerpo = "Estado actual del paquete: " + "en sucursal " + sucursal.Nombre+ "\n" +
+                "Dirección de entrega: " + "Sucursal acordada" + "\n" +
+                "Ubicación: " + sucursal.Nombre;
+
+            }else if (accion == "Entregado")
+            {
+                infoTitulo = "Paquete: " + paquete.NumeroRegistro + " ha sido entregado";
+                descCuerpo = "Estado actual del paquete: " + "paquete entregado" + "\n" +
+                "Dirección de entrega: " + paquete.DireccionEntrega + "\n";
+
+            }
+            else
+            {
+                infoTitulo = "error";
+                descCuerpo = "error";
+            }
+
+
+            //sacar la sequencia
+            /*
+           int seqMaxima = (from seq in _context.HistorialCambiosPaquetes
+                            where seq.IdPaquete == paquete.IdPaquete
+                            select seq.Sequencia).DefaultIfEmpty(0).Max();
+            */
+            //int seqMax = _context.HistorialCambiosPaquetes.Where(h => h.IdPaquete == paquete.IdPaquete).Select(h => h.Sequencia).DefaultIfEmpty(0).Max();
+            int seqMax = _context.HistorialCambiosPaquetes.Where(x => x.IdPaquete == paquete.IdPaquete).Max(x => x.Sequencia as int?) ?? 0; /// solo esta funciona...
+
+
+
+            nuevoRegistro.FechaRegistro = DateTime.Now;
+            nuevoRegistro.Informacion = infoTitulo;
+            nuevoRegistro.Descripcion = descCuerpo;
+            nuevoRegistro.IdPaquete = paquete.IdPaquete;
+            nuevoRegistro.Sequencia = seqMax + 1;  /// le sumo uno a la sequencia cada vez, se supone que la primera vez tiene que dar 0
+
+
+
+            _context.HistorialCambiosPaquetes.Add(nuevoRegistro);
+            _context.SaveChanges();
+
+            return Ok();
+
+        }
 
     }
 }

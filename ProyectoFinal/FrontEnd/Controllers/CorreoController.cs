@@ -183,7 +183,7 @@ namespace FrontEnd.Controllers
 
   
                 "Número de registro: " + paqueteActual.NumeroRegistro + "\n" +
-                "Estado actual del paquete: " + "En sucursal: " + sucursal.Nombre + "\n" +
+                "Estado actual del paquete: " + "en sucursal " + sucursal.Nombre + "\n" +
                 "Descripción: " + paqueteActual.Descripcion + "\n" +
                 "Estado de pago: " + paqueteActual.EstadoPago + "\n" +
                 "Dirección de entrega: " +"Sucursal acordada" + "\n" +

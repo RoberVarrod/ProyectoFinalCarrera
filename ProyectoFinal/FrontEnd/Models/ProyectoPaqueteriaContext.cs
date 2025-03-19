@@ -30,7 +30,6 @@ public partial class ProyectoPaqueteriaContext : DbContext
     public virtual DbSet<Sucursal> Sucursals { get; set; }
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
-
 /*
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -116,7 +115,7 @@ public partial class ProyectoPaqueteriaContext : DbContext
 
             entity.Property(e => e.IdHistorialCambiosPaquete).HasColumnName("id_historial_cambios_paquete");
             entity.Property(e => e.Descripcion)
-                .HasMaxLength(50)
+                .HasMaxLength(1000)
                 .IsUnicode(false)
                 .HasColumnName("descripcion");
             entity.Property(e => e.FechaRegistro)
@@ -124,7 +123,7 @@ public partial class ProyectoPaqueteriaContext : DbContext
                 .HasColumnName("fecha_registro");
             entity.Property(e => e.IdPaquete).HasColumnName("id_paquete");
             entity.Property(e => e.Informacion)
-                .HasMaxLength(50)
+                .HasMaxLength(1000)
                 .IsUnicode(false)
                 .HasColumnName("informacion");
             entity.Property(e => e.Sequencia).HasColumnName("sequencia");
