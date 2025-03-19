@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace FrontEnd.Controllers
 {
@@ -165,59 +166,82 @@ namespace FrontEnd.Controllers
         }
 
         [HttpGet]
-        public IActionResult ObtenerPaquetesPorTracking(string trackingId)
+        public IActionResult ObtenerPagosPorUsuario()
         {
-            if (string.IsNullOrEmpty(trackingId))
+            var clienteId = HttpContext.Session.GetString("ClienteId");
+
+            if (string.IsNullOrEmpty(clienteId))
             {
-                return BadRequest("El Número de Registro no puede estar vacío.");
+                return StatusCode(401, "No hay sesión activa.");
             }
 
-            var paquetes = _context.Paquetes
-                .Where(p => p.NumeroRegistro == trackingId)
-                .Select(p => new
-                {
-                    p.NumeroRegistro,
-                    p.Nombre,
-                    p.EstadoRuta,
-                    p.FechaEntrega,
-                    p.TipoEntrega,
-                    p.Precio,
-                    p.IdPaquete
-                })
-                .ToList();
+            try
+            {
+                var pagosDb = _context.Pagos
+                    .Include(p => p.IdPaqueteNavigation)
+                    .Where(p => p.IdCliente == int.Parse(clienteId))
+                    .ToList(); // Ejecutar la consulta primero para evitar errores de LINQ
 
-            return Json(paquetes);
+                var pagos = pagosDb.Select(p => new
+                {
+                    IdPago = p.IdPago,
+                    NumeroRegistro = p.IdPaqueteNavigation != null ? p.IdPaqueteNavigation.NumeroRegistro : "No asignado",
+                    FechaPago = p.FechaPago.HasValue ? p.FechaPago.Value.ToString("dd/MM/yyyy") : "Sin registrar",
+                    EstadoPago = !string.IsNullOrEmpty(p.PagoEstado) ? p.PagoEstado : "Sin estado",
+                    Monto = decimal.TryParse(p.Total, out decimal monto) ? monto : 0.00m, // Ahora está fuera del LINQ
+                    MetodoPago = !string.IsNullOrEmpty(p.PagoMetodo) ? p.PagoMetodo : "No especificado",
+                    Descripcion = p.Descripcion ?? "Sin descripción"
+                }).ToList();
+
+                Console.WriteLine("Pagos enviados al cliente: " + System.Text.Json.JsonSerializer.Serialize(pagos));
+
+                return Json(pagos);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error en el servidor: " + ex.Message);
+                return StatusCode(500, $"Error en el servidor: {ex.Message}");
+            }
         }
 
-        // Método para obtener detalles de un paquete específico
+
         [HttpGet]
-        public IActionResult ObtenerDetallesPaquete(int idPaquete)
+        public IActionResult ObtenerDetallesPago(int idPago)
         {
-            var paquete = _context.Paquetes
-                .Where(p => p.IdPaquete == idPaquete)
-                .Select(p => new
-                {
-                    p.NumeroRegistro,
-                    p.Nombre,
-                    p.EstadoRuta,
-                    p.FechaEntrega,
-                    p.TipoEntrega,
-                    p.Precio,
-                    // Asegúrate de incluir todas las propiedades necesarias
-                })
-                .FirstOrDefault();
+            var pagoDb = _context.Pagos
+                .Include(p => p.IdPaqueteNavigation)
+                .Where(p => p.IdPago == idPago)
+                .ToList() // Ejecutamos la consulta en memoria
+                .FirstOrDefault(); // Obtenemos el primer resultado
 
-            if (paquete == null)
+            if (pagoDb == null)
             {
-                return NotFound("Paquete no encontrado.");
+                return NotFound("Pago no encontrado.");
             }
 
-            return Json(paquete);
+            // Convertimos el monto fuera de LINQ
+            decimal.TryParse(pagoDb.Total, out decimal monto);
+
+            var pago = new
+            {
+                IdPago = pagoDb.IdPago,
+                NumeroRegistro = pagoDb.IdPaqueteNavigation != null ? pagoDb.IdPaqueteNavigation.NumeroRegistro : "No asignado",
+                FechaPago = pagoDb.FechaPago.HasValue ? pagoDb.FechaPago.Value.ToString("dd/MM/yyyy") : "Sin registrar",
+                EstadoPago = !string.IsNullOrEmpty(pagoDb.PagoEstado) ? pagoDb.PagoEstado : "Sin estado",
+                Monto = monto, // Ahora es seguro
+                MetodoPago = !string.IsNullOrEmpty(pagoDb.PagoMetodo) ? pagoDb.PagoMetodo : "No especificado",
+                Descripcion = pagoDb.Descripcion ?? "Sin descripción"
+            };
+
+            return Json(pago);
         }
 
-        public IActionResult Historial()
-        {
-            return View();
-        }
+
+
+
     }
 }
+
+
+
+

@@ -59,8 +59,10 @@ app.UseSession(); // Middleware para usar sesiones
 
 app.UseAuthorization();
 
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 app.Run();
