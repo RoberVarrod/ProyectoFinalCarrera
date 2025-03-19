@@ -268,7 +268,7 @@ namespace FrontEnd.Controllers
         }
 
 
-        public async Task<IActionResult> Administracion()
+        public async Task<IActionResult> Administracion(string buscar)
         {
             var usuarios = await _context.Usuarios.ToListAsync();
             var sucursales = await _context.Sucursals.ToListAsync();
@@ -277,8 +277,18 @@ namespace FrontEnd.Controllers
             ViewBag.Sucursales = sucursales;
             ViewBag.Roles = roles; // Asegurar que se pasa la lista de roles
 
+            if (!string.IsNullOrEmpty(buscar))
+            {
+                usuarios = usuarios.Where(c => c.Cedula.Equals(buscar)).ToList();
+            }
+
+            if (usuarios == null || usuarios.Count == 0)
+            {
+                usuarios = new List<Usuario>(); // Evita valores nulos
+            }
             return View(usuarios);
         }
+
 
 
 
@@ -318,9 +328,14 @@ namespace FrontEnd.Controllers
 
 
         // GET: Lista de Clientes
-        public IActionResult AdministracionCliente()
+        public IActionResult AdministracionCliente(string buscar)
         {
             var clientes = _context.Clientes.ToList();
+
+            if (!string.IsNullOrEmpty(buscar))
+            {
+                clientes = clientes.Where(c => c.Cedula.Equals(buscar)).ToList();
+            }
 
             if (clientes == null || clientes.Count == 0)
             {
@@ -329,6 +344,7 @@ namespace FrontEnd.Controllers
 
             return View(clientes);
         }
+
 
         // GET: Detalles del Cliente
         public IActionResult DetallesCliente(int id)

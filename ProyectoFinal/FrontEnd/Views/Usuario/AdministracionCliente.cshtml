@@ -11,10 +11,12 @@
         <h1 class="text-white display-3 mb-5">Administración de clientes</h1>
         <div class="mx-auto" style="width: 100%; max-width: 600px;">
             <div class="input-group">
-                <input type="text" id="trackingInput" class="form-control border-light" style="padding: 30px;" placeholder="Cédula cliente">
-                <div class="input-group-append">
-                    <button class="btn btn-primary px-3" id="btnBuscar">Buscar</button>
-                </div>
+                <form asp-controller="Usuario" asp-action="AdministracionCliente" method="get" class="w-100 d-flex">
+                    <input type="text" name="buscar" class="form-control border-light" style="padding: 30px;" placeholder="Cédula cliente">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary px-3">Buscar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
