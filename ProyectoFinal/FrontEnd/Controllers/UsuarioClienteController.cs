@@ -135,8 +135,22 @@ namespace FrontEnd.Controllers
 
         public IActionResult EstadoPaquetes()
         {
-            return View();
+            var sessionId = HttpContext.Session.GetString("ClienteId");
+
+            if (string.IsNullOrEmpty(sessionId) || !int.TryParse(sessionId, out int clienteId))
+            {
+                return RedirectToAction("InicioSesionCliente", "Acceso");
+            }
+
+            var paquetes = _context.PaquetesUsuarioSucursal?
+                .Where(p => p.IdCliente != null && p.IdCliente == clienteId)
+                .ToList() ?? new List<PaqueteUsuarioSucursal>();
+
+            return View(paquetes);
         }
+
+
+
 
         public IActionResult Notificaciones()
         {
@@ -156,14 +170,22 @@ namespace FrontEnd.Controllers
         public IActionResult Paquetes()
         {
             var sessionId = HttpContext.Session.GetString("ClienteId");
-            if (sessionId != null)
+            if (!string.IsNullOrEmpty(sessionId))
             {
-                var clienteId = int.Parse(sessionId);
-                var paquetes = _context.Paquetes.Where(p => p.IdCliente == clienteId).ToList();
-                return View(paquetes);
+                if (int.TryParse(sessionId, out int clienteId))
+                {
+                    var paquetes = _context.Paquetes
+                        .Where(p => p.IdCliente == clienteId)
+                        .ToList();
+
+                    return View(paquetes ?? new List<Paquete>()); // Asegurar que nunca sea null
+                }
             }
+
             return RedirectToAction("InicioSesionCliente", "Acceso");
         }
+
+
 
         [HttpGet]
         public IActionResult ObtenerPagosPorUsuario()

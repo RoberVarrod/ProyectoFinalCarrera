@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 
 namespace FrontEnd.Models;
@@ -49,5 +50,8 @@ public partial class PaqueteUsuarioSucursal
 
     public int? IdCliente { get; set; }
 
-   
+    public DbSet<PaqueteUsuarioSucursal> PaquetesUsuarioSucursal { get; set; }
+
+
+
 }

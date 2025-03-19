@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<FrontEnd.Models.PaqueteUsuarioSucursal>
+@{
     ViewData["Title"] = "Estado de Paquetes";
     Layout = "~/Views/Shared/_LayoutClientes.cshtml";
 }
@@ -19,172 +20,92 @@
     </div>
 </div>
 <!-- Header End -->
-<!-- Central Panel Section Start -->
-<div class="container-fluid py-4">
-    <div class="row justify-content-center">
-        <!-- Panel: Estado de Paquetes o Órdenes en Proceso Start -->
-        <div class="col-md-6">
-            <div class="card border-0 shadow-lg text-center">
-                <div class="card-body">
-                    <h4 class="card-title text-primary">Estado de Paquetes</h4>
-                    <h1 class="text-primary mb-2" data-toggle="counter-up">80</h1>
-                    <a href="@Url.Action("Paquetes","UsuarioCliente")" class="btn btn-outline-dark btn-sm mt-2">Ver Todos mis Paquetes</a>
-                    <ul class="list-inline row mt-4 justify-content-center">
-                        <li class="col-6">
-                            <h5 class="text-dark">40</h5>
-                            <p class="mb-0 text-muted">Entregados</p>
-                        </li>
-                        <li class="col-6">
-                            <h5 class="text-dark">40</h5>
-                            <p class="mb-0 text-muted">Pendientes</p>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <!-- Panel: Estado de Paquetes o Órdenes en Proceso End-->
-    </div>
-</div>
-<!-- Central Panel Section End -->
-<!-- Lista de Paquetes (Entregados y Pendientes) Start-->
+<!-- Lista de Paquetes -->
 <div class="container-fluid py-4">
     <h4 class="mb-4 text-primary">Lista de Paquetes</h4>
     <table class="table table-hover table-striped shadow-sm">
         <thead class="thead-dark">
             <tr>
                 <th>Tracking ID</th>
-                <th>Nombre</th>
-                <th>Estado</th>
-                <th>Fecha Entrega</th>
+                <th>Oficina</th>
+                <th>Nombre Cliente</th>
+                <th>Estado de pago</th>
+                <th>Fecha de entrega estimada</th>
                 <th>Tipo de Entrega</th>
                 <th>Precio</th>
+                <th>Estado de paquete</th>
                 <th>Detalles</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>123456</td>
-                <td>Paquete 1</td>
-                <td><strong style="color: #9E1218;">Entregado</strong></td>
-                <td>04/12/2024</td>
-                <td>Entrega a Domicilio</td>
-                <td>$15.00</td>
-                <td>
-                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal"><i class="fas fa-ellipsis-h"></i></button>
-                </td>
-            </tr>
-            <tr>
-                <td>123457</td>
-                <td>Paquete 2</td>
-                <td><strong style="color: #757575;">Pendiente</strong></td>
-                <td>05/12/2024</td>
-                <td>Retiro en Sucursal</td>
-                <td>$10.00</td>
-                <td>
-                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal"><i class="fas fa-ellipsis-h"></i></button>
-                </td>
-            </tr>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var paquete in Model.Where(p => p.EstadoRuta == "En Sucursal" || p.EstadoRuta == "Entregado"))
+                {
+                    <tr>
+                        <td>@paquete.NumeroRegistro</td>
+                        <td>@(paquete.PaqueteSucursalNombre ?? "Sucursal Desconocida")</td>
+                        <td>@(paquete.PaqueteUsuarioNombre ?? "Desconocido")</td>
+                        <td>@paquete.EstadoPago</td>
+                        <td>@(paquete.FechaEntregaEstimada?.ToString("dd/MM/yyyy") ?? "Fecha no disponible")</td>
+                        <td>@(paquete.TipoEntrega ?? "No especificado")</td>
+                        <td>$@(paquete.Precio ?? 0)</td>
+                        <td>@paquete.EstadoRuta</td>
+                        <td>
+                            <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal-@paquete.IdPaquete">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="9" class="text-center">No hay paquetes disponibles.</td>
+                </tr>
+            }
         </tbody>
     </table>
 </div>
-<!-- Lista de Paquetes (Entregados y Pendientes) End -->
-<!-- Modal Start -->
-<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="detailsModalLabel">Detalles del Paquete</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p><strong>Tracking ID:</strong> 123456</p>
-                <p><strong>Nombre del Paquete:</strong> Paquete 1</p>
-                <p>
-                    <strong>Detalles:</strong>
+<!-- Lista de Paquetes End -->
+<!-- Modal Detalles -->
+@foreach (var paquete in Model.Where(p => p.EstadoRuta == "En Sucursal" || p.EstadoRuta == "Entregado"))
+{
+    <div class="modal fade" id="detailsModal-@paquete.IdPaquete" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalles del Paquete</h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span>&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Tracking ID:</strong> @paquete.NumeroRegistro</p>
+                    <p><strong>Nombre del Cliente:</strong> @paquete.PaqueteUsuarioNombre</p>
+                    <p><strong>Detalles:</strong></p>
                     <ul>
-                        <li>Alto: 30cm</li>
-                        <li>Largo: 50cm</li>
-                        <li>Ancho: 20cm</li>
+                        <li>Alto: @paquete.PaqueteAlto cm</li>
+                        <li>Largo: @paquete.PaqueteLargo cm</li>
+                        <li>Ancho: @paquete.PaqueteAncho cm</li>
                     </ul>
-                </p>
-                <p><strong>Estado:</strong> En Ruta</p>
-                <p><strong>Pago:</strong> Cancelado</p>
-                <p><strong>Estado:</strong> Entregado</p>
-                <p><strong>Fecha Aproximada de Entrega:</strong> 04/12/2024</p>
-                <p><strong>Tipo de Entrega:</strong> Entrega a Domicilio</p>
-                <p><strong>Precio:</strong> $15.00</p>
-                <hr />
-                <h5 class="mt-3">Selecciona el Método de Entrega</h5>
-                <div class="btn-group" role="group" aria-label="Métodos de entrega">
-                    <button id="domicilioButton" class="btn btn-outline-primary">Entrega a Domicilio</button>
-                    <button id="sucursalButton" class="btn btn-outline-dark">Retiro en Sucursal</button>
+                    <p><strong>Estado:</strong> @paquete.EstadoRuta</p>
+                    <p><strong>Pago:</strong> @paquete.EstadoPago</p>
+                    <p><strong>Fecha Estimada de Entrega:</strong> @(paquete.FechaEntregaEstimada?.ToString("dd/MM/yyyy") ?? "Fecha no disponible")</p>
+                    <p><strong>Tipo de Entrega:</strong> @(paquete.TipoEntrega ?? "No especificado")</p>
+                    <p><strong>Precio:</strong> $@(paquete.Precio ?? 0)</p>
                 </div>
-                <div id="methodDescription" class="mt-3"></div>
-
-                <div id="domicilioConfirmation" class="mt-3" style="display: none;">
-                    <p><strong>Descripción:</strong> La entrega a domicilio tarda entre 3-4 días habiles. Costo: ₡3500</p>
-                    <button class="btn btn-success" id="confirmDomicilioBtn">Confirmar Entrega a Domicilio</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 </div>
-
-                <div id="sucursalConfirmation" class="mt-3" style="display: none;">
-                    <p><strong>Descripción:</strong> El retiro en sucursal se puede realizar en cualquiera de las sucursales disponibles.</p>
-                    <ul>
-                        <li>
-                            <strong>Naranjo (CR) </strong>
-                            <br />
-                            <br /><strong>Horario: </strong>Lunes a Viernes 8:00 a.m. a 5:00 p.m. - Sábado 8:00 a.m. a 12:00 m.d.
-                            <br /><strong>Teléfono: </strong> +506 2455 1600
-                            <br /><strong>Dirección: </strong> Cruce de Naranjo, 500m Oeste de la Soda Jairos contiguo al Bar la Gallera.
-                            <br />Alajuela, Naranjo, San Miguel
-                            <br />20602 - Costa Rica
-                        </li>
-                        <br />
-                        <li>
-                            <strong>Pérez Zeledón (CR) </strong>
-                            <br />
-                            <br /><strong>Horario: </strong>Lunes a Viernes 8:00 a.m. a 12:00 m.d. y de 1:00 p.m. 5:00 p.m. - Sábado 8:00 a.m. a 12:00 m.d.
-                            <br /><strong>Teléfono: </strong> +506 2771 9715
-                            <br /><strong>Dirección: </strong> Barrio San Luis, 100m Norte y 100m Oeste de la Gasolinera Gasotica.
-                        </li>
-                        <br />
-                    </ul>
-                    <button class="btn btn-success" id="confirmSucursalBtn">Confirmar Retiro en Sucursal</button>
-                </div>
-                <div id="domicilioAddressForm" class="mt-3" style="display: none;">
-                    <h5>Confirmar Dirección de Entrega</h5>
-                    <div class="form-group">
-                        <label>Provincia</label>
-                        <input type="text" class="form-control" name="Provincia" value="Provincia" required disabled>
-                    </div>
-                    <div class="form-group">
-                        <label>Cantón</label>
-                        <input type="text" class="form-control" name="Canton" value="Cantón" required disabled>
-                    </div>
-                    <div class="form-group">
-                        <label>Distrito</label>
-                        <input type="text" class="form-control" name="Distrito" value="Distrito" required disabled>
-                    </div>
-                    <div class="form-group">
-                        <label>Código Postal</label>
-                        <input type="text" class="form-control" name="CodigoPostal" value="10101" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label>Dirección</label>
-                        <textarea class="form-control" name="Direccion" required disabled>Calle Ficticia 123</textarea>
-                    </div>
-                    <button class="btn btn-warning" id="modifyAddressBtn">Modificar Dirección</button>
-                    <button class="btn btn-success" id="verifyAddressBtn">Verificar Dirección</button>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
-</div>
+}
 <!-- Modal End -->
+
+
 
 <script>
     // Variables
