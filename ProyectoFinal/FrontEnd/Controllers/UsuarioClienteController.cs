@@ -235,6 +235,60 @@ namespace FrontEnd.Controllers
 
             return Json(pago);
         }
+        [HttpGet]
+        public IActionResult ObtenerPaquetesUsuario()
+        {
+            var clienteId = HttpContext.Session.GetString("ClienteId");
+
+            if (string.IsNullOrEmpty(clienteId))
+            {
+                return StatusCode(401, "No hay sesión activa.");
+            }
+
+            try
+            {
+                var paquetes = _context.Paquetes
+                    .Where(p => p.IdCliente == int.Parse(clienteId))
+                    .Select(p => new
+                    {
+                        TrackingId = p.NumeroRegistro,
+                        Nombre = p.Nombre,
+                        EstadoRuta = p.EstadoRuta ?? "No disponible",
+                        FechaEntrega = p.FechaEntrega.HasValue ? p.FechaEntrega.Value.ToString("dd/MM/yyyy") : "Sin registrar",
+                        TipoEntrega = p.TipoEntrega ?? "No especificado",
+                        Precio = p.Precio,
+                        Detalles = new
+                        {
+                            Alto = p.PaqueteAlto,  // ← Nombre corregido
+                            Largo = p.PaqueteLargo,  // ← Nombre corregido
+                            Ancho = p.PaqueteAncho,  // ← Nombre corregido
+                            Descripcion = p.Descripcion ?? "Sin descripción",
+                            EstadoPago = p.EstadoPago ?? "No disponible"
+                        },
+                        DireccionEntrega = new
+                        {
+                            p.DireccionEntrega,
+                            Cliente = new
+                            {
+                                Provincia = p.IdClienteNavigation.Provincia ?? "No especificado",
+                                Canton = p.IdClienteNavigation.Canton ?? "No especificado",
+                                Distrito = p.IdClienteNavigation.Distrito ?? "No especificado",
+                                CodigoPostal = p.IdClienteNavigation.CodigoPostal ?? "No especificado",
+                                Direccion = p.IdClienteNavigation.Direccion ?? "No especificado"
+                            }
+                        }
+                    })
+                    .ToList();
+
+                return Json(paquetes);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error en el servidor: {ex.Message}");
+            }
+        }
+
+
 
 
 

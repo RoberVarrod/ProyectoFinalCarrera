@@ -246,63 +246,50 @@ namespace FrontEnd.Controllers
             
             return NotFound();
         }
-  
+
         public async Task<IActionResult> EstadoPaquetes()
         {
             var listaPaquetes = await _context.Paquetes.ToListAsync();
+            List<PaqueteUsuarioSucursal> listaFinalPaquetes = new List<PaqueteUsuarioSucursal>();
 
-            List<PaqueteUsuarioSucursal> listaFinalPaquetes = new List<PaqueteUsuarioSucursal>();   //// esta es mi lista final Ienumerable para la vista
-
-            foreach (var item in listaPaquetes) // se recorre la lista de paquetes en la base de datos
+            foreach (var item in listaPaquetes)
             {
+                var cliente = _context.Clientes.FirstOrDefault(u => u.IdCliente == item.IdCliente);
+                var NombreCliente = cliente?.Nombre ?? "Cliente Desconocido";
 
-                //se extraen los datos del cliente y la sucursal linkeados al paquete
+                var sucursal = _context.Sucursals.FirstOrDefault(u => u.IdSucursal == item.IdSucursal);
+                var NombreSucursal = sucursal?.Nombre ?? "Sucursal Desconocida";
 
-                // buscar Datos del cliente.
-                var cliente = _context.Clientes
-                   .FirstOrDefault(u => u.IdCliente == item.IdCliente);
+                PaqueteUsuarioSucursal paqueteNuevo = new PaqueteUsuarioSucursal
+                {
+                    IdPaquete = item.IdPaquete,
+                    NumeroRegistro = item.NumeroRegistro,
+                    Nombre = item.Nombre,
+                    Precio = item.Precio,
+                    PaqueteLargo = item.PaqueteLargo,
+                    PaqueteAncho = item.PaqueteAncho,
+                    PaqueteAlto = item.PaqueteAlto,
+                    TipoPaquete = item.TipoPaquete,
+                    TipoEntrega = item.TipoEntrega,
+                    Descripcion = item.Descripcion,
+                    EstadoPago = item.EstadoPago,
+                    EstadoRuta = item.EstadoRuta,
+                    FechaRegistro = item.FechaRegistro,
+                    FechaEntrega = item.FechaEntrega,
+                    FechaEntregaEstimada = item.FechaEntregaEstimada,
+                    DireccionEntrega = item.DireccionEntrega,
+                    RetiroSucursal = item.RetiroSucursal,
+                    PaqueteUsuarioNombre = NombreCliente,
+                    PaqueteSucursalNombre = NombreSucursal,
+                    IdSucursal = item.IdSucursal,
+                    IdUsuario = item.IdUsuario,
+                    IdCliente = item.IdCliente
+                };
 
-                var NombreCliente = cliente.Nombre;
-
-                // buscar Datos de Sucursal
-                var sucursal = _context.Sucursals
-                   .FirstOrDefault(u => u.IdSucursal == item.IdSucursal);
-
-                var NombreSucursal = sucursal.Nombre;
-
-                PaqueteUsuarioSucursal paqueteNuevo = new PaqueteUsuarioSucursal(); // se hace el nuevo objeto 
-
-                paqueteNuevo.IdPaquete = item.IdPaquete;
-                paqueteNuevo.NumeroRegistro = item.NumeroRegistro;
-                paqueteNuevo.Nombre = item.Nombre;
-                paqueteNuevo.Precio = item.Precio;
-                paqueteNuevo.PaqueteLargo = item.PaqueteLargo;
-                paqueteNuevo.PaqueteAncho = item.PaqueteAncho;
-                paqueteNuevo.PaqueteAlto = item.PaqueteAlto;
-                paqueteNuevo.TipoPaquete = item.TipoPaquete;
-                paqueteNuevo.TipoEntrega = item.TipoEntrega;
-                paqueteNuevo.Descripcion = item.Descripcion;
-                paqueteNuevo.EstadoPago = item.EstadoPago;
-                paqueteNuevo.EstadoRuta = item.EstadoRuta;
-                paqueteNuevo.FechaRegistro = item.FechaRegistro;
-                paqueteNuevo.FechaEntrega = item.FechaEntrega;
-                paqueteNuevo.FechaEntregaEstimada = item.FechaEntregaEstimada;
-                paqueteNuevo.DireccionEntrega = item.DireccionEntrega;
-                paqueteNuevo.RetiroSucursal = item.RetiroSucursal;
-                //////////////// Nombre del usuario del paquete, aqui se asigna los nuevos valores
-                paqueteNuevo.PaqueteUsuarioNombre = NombreCliente;
-                //////////////// Nombre de la sucursal del paquete, aqui se asigna los nuevos valores
-                paqueteNuevo.PaqueteSucursalNombre = NombreSucursal;
-                //////////////// Ids opcionales, pero pueden ser utilies para otros methodos.
-                paqueteNuevo.IdSucursal = item.IdSucursal;
-                paqueteNuevo.IdUsuario = item.IdUsuario;
-                paqueteNuevo.IdCliente = item.IdCliente;
-
-                listaFinalPaquetes.Add(paqueteNuevo); // paquete agregado a la lista
-
+                listaFinalPaquetes.Add(paqueteNuevo);
             }
 
-            return View(listaFinalPaquetes); // retornar la lista de la clase nueva con la lista de paquetes .. listo
+            return View(listaFinalPaquetes);
         }
 
         // El metodo de actualizar y borrar al final tiene que hacer un redirect to action a public async Task<IActionResult> Paquetes()
@@ -353,59 +340,51 @@ namespace FrontEnd.Controllers
         {
             var listaPaquetes = await _context.Paquetes.ToListAsync();
 
-            List<PaqueteUsuarioSucursal> listaFinalPaquetes = new List<PaqueteUsuarioSucursal>();   //// esta es mi lista final Ienumerable para la vista
+            List<PaqueteUsuarioSucursal> listaFinalPaquetes = new List<PaqueteUsuarioSucursal>(); // lista final
 
             foreach (var item in listaPaquetes) // se recorre la lista de paquetes en la base de datos
             {
+                // Buscar datos del cliente
+                var cliente = _context.Clientes.FirstOrDefault(u => u.IdCliente == item.IdCliente);
+                var NombreCliente = cliente?.Nombre ?? "Cliente Desconocido"; // Manejo de null
 
-                //se extraen los datos del cliente y la sucursal linkeados al paquete
+                // Buscar datos de Sucursal
+                var sucursal = _context.Sucursals.FirstOrDefault(u => u.IdSucursal == item.IdSucursal);
+                var NombreSucursal = sucursal?.Nombre ?? "Sucursal Desconocida"; // Manejo de null
 
-                // buscar Datos del cliente.
-                var cliente = _context.Clientes
-                   .FirstOrDefault(u => u.IdCliente == item.IdCliente);
+                // Crear el objeto de respuesta
+                PaqueteUsuarioSucursal paqueteNuevo = new PaqueteUsuarioSucursal
+                {
+                    IdPaquete = item.IdPaquete,
+                    NumeroRegistro = item.NumeroRegistro,
+                    Nombre = item.Nombre,
+                    Precio = item.Precio,
+                    PaqueteLargo = item.PaqueteLargo,
+                    PaqueteAncho = item.PaqueteAncho,
+                    PaqueteAlto = item.PaqueteAlto,
+                    TipoPaquete = item.TipoPaquete,
+                    TipoEntrega = item.TipoEntrega,
+                    Descripcion = item.Descripcion,
+                    EstadoPago = item.EstadoPago,
+                    EstadoRuta = item.EstadoRuta,
+                    FechaRegistro = item.FechaRegistro,
+                    FechaEntrega = item.FechaEntrega,
+                    FechaEntregaEstimada = item.FechaEntregaEstimada,
+                    DireccionEntrega = item.DireccionEntrega,
+                    RetiroSucursal = item.RetiroSucursal,
+                    PaqueteUsuarioNombre = NombreCliente, // Nombre del cliente (seguro contra null)
+                    PaqueteSucursalNombre = NombreSucursal, // Nombre de la sucursal (seguro contra null)
+                    IdSucursal = item.IdSucursal,
+                    IdUsuario = item.IdUsuario,
+                    IdCliente = item.IdCliente
+                };
 
-                var NombreCliente = cliente.Nombre;
-
-                // buscar Datos de Sucursal
-                var sucursal = _context.Sucursals
-                   .FirstOrDefault(u => u.IdSucursal == item.IdSucursal);
-
-                var NombreSucursal = sucursal.Nombre;
-
-                PaqueteUsuarioSucursal paqueteNuevo = new PaqueteUsuarioSucursal(); // se hace el nuevo objeto 
-
-                paqueteNuevo.IdPaquete = item.IdPaquete;
-                paqueteNuevo.NumeroRegistro = item.NumeroRegistro;
-                paqueteNuevo.Nombre = item.Nombre;
-                paqueteNuevo.Precio = item.Precio;
-                paqueteNuevo.PaqueteLargo = item.PaqueteLargo;
-                paqueteNuevo.PaqueteAncho = item.PaqueteAncho;
-                paqueteNuevo.PaqueteAlto = item.PaqueteAlto;
-                paqueteNuevo.TipoPaquete = item.TipoPaquete;
-                paqueteNuevo.TipoEntrega = item.TipoEntrega;
-                paqueteNuevo.Descripcion = item.Descripcion;
-                paqueteNuevo.EstadoPago = item.EstadoPago;
-                paqueteNuevo.EstadoRuta = item.EstadoRuta;
-                paqueteNuevo.FechaRegistro = item.FechaRegistro;
-                paqueteNuevo.FechaEntrega = item.FechaEntrega;
-                paqueteNuevo.FechaEntregaEstimada = item.FechaEntregaEstimada;
-                paqueteNuevo.DireccionEntrega = item.DireccionEntrega;
-                paqueteNuevo.RetiroSucursal = item.RetiroSucursal;
-                //////////////// Nombre del usuario del paquete, aqui se asigna los nuevos valores
-                paqueteNuevo.PaqueteUsuarioNombre = NombreCliente;
-                //////////////// Nombre de la sucursal del paquete, aqui se asigna los nuevos valores
-                paqueteNuevo.PaqueteSucursalNombre = NombreSucursal;
-                //////////////// Ids opcionales, pero pueden ser utilies para otros methodos.
-                paqueteNuevo.IdSucursal = item.IdSucursal;
-                paqueteNuevo.IdUsuario = item.IdUsuario;
-                paqueteNuevo.IdCliente = item.IdCliente;
-
-                listaFinalPaquetes.Add(paqueteNuevo); // paquete agregado a la lista
-
+                listaFinalPaquetes.Add(paqueteNuevo); // agregar a la lista
             }
 
-            return View(listaFinalPaquetes); // retornar la lista de la clase nueva con la lista de paquetes .. listo
+            return View(listaFinalPaquetes); // retornar la lista de la clase nueva con la lista de paquetes
         }
+
 
         // El metodo de actualizar y borrar al final tiene que hacer un redirect to action a public async Task<IActionResult> Paquetes()
 
