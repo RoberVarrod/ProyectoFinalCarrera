@@ -135,18 +135,7 @@ namespace FrontEnd.Controllers
 
         public IActionResult EstadoPaquetes()
         {
-            var sessionId = HttpContext.Session.GetString("ClienteId");
-
-            if (string.IsNullOrEmpty(sessionId) || !int.TryParse(sessionId, out int clienteId))
-            {
-                return RedirectToAction("InicioSesionCliente", "Acceso");
-            }
-
-            var paquetes = _context.PaquetesUsuarioSucursal?
-                .Where(p => p.IdCliente != null && p.IdCliente == clienteId)
-                .ToList() ?? new List<PaqueteUsuarioSucursal>();
-
-            return View(paquetes);
+            return View();
         }
 
 

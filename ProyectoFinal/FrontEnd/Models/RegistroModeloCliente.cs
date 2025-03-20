@@ -18,6 +18,7 @@ namespace FrontEnd.Models
         public string? Distrito { get; set; }
         public string? CodigoPostal { get; set; }
         public string? Direccion { get; set; }
+        public string FotoPerfil { get; set; } = "/imagenesperfil/profile.jpg"; // foro de perfil por defecto
 
     }
 }

@@ -30,16 +30,11 @@ public partial class ProyectoPaqueteriaContext : DbContext
     public virtual DbSet<Sucursal> Sucursals { get; set; }
 
     public virtual DbSet<Usuario> Usuarios { get; set; }
-    public DbSet<PaqueteUsuarioSucursal> PaquetesUsuarioSucursal { get; set; }
-
-
-
-
     /*
-protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-=> optionsBuilder.UseSqlServer("Server=DESKTOP-82180HC\\SQLEXPRESS;Database=ProyectoPaqueteria;Integrated Security=True;Trusted_Connection=True; TrustServerCertificate=True;");
-*/
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+            => optionsBuilder.UseSqlServer("Server=DESKTOP-82180HC\\SQLEXPRESS;Database=ProyectoPaqueteria;Integrated Security=True;Trusted_Connection=True; TrustServerCertificate=True;");
+    */
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Cliente>(entity =>
@@ -328,8 +323,6 @@ protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
                 .IsUnicode(false)
                 .HasColumnName("telefono");
         });
-
-
 
         modelBuilder.Entity<Usuario>(entity =>
         {

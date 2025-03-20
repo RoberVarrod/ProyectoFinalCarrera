@@ -14,7 +14,7 @@ namespace FrontEnd.Controllers
         private readonly ProyectoPaqueteriaContext _context;
         private readonly CorreoController _correoController;
 
-        public AccesoController(ProyectoPaqueteriaContext context , CorreoController correoController)
+        public AccesoController(ProyectoPaqueteriaContext context, CorreoController correoController)
         {
             _context = context;
             _correoController = correoController;
@@ -76,7 +76,8 @@ namespace FrontEnd.Controllers
                     Direccion = modelo.Direccion,
                     Oficina = modelo.Oficina,
                     IdRol = modelo.IdRol,
-                    IdSucursal = modelo.IdSucursal
+                    IdSucursal = modelo.IdSucursal,
+                    FotoPerfil = modelo.FotoPerfil
 
 
                 };
@@ -107,7 +108,7 @@ namespace FrontEnd.Controllers
             VerificarSesion();
             return View();
         }
-        
+
         [AllowAnonymous]
         [HttpPost]
         public IActionResult InicioSesionUsuario(LoginModeloUsuario modelo)
@@ -182,7 +183,8 @@ namespace FrontEnd.Controllers
                     Canton = modelo.Canton,
                     Distrito = modelo.Distrito,
                     CodigoPostal = modelo.CodigoPostal,
-                    Direccion = modelo.Direccion
+                    Direccion = modelo.Direccion,
+                    FotoPerfil = modelo.FotoPerfil
 
 
                 };

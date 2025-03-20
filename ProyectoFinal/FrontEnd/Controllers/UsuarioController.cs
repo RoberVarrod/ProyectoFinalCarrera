@@ -25,11 +25,50 @@ namespace FrontEnd.Controllers
             if (!string.IsNullOrEmpty(usuarioId))
             {
                 var usuario = _context.Usuarios.FirstOrDefault(c => c.IdUsuario == int.Parse(usuarioId));
-                return View(usuario);
+                // Verifica que el campo FotoPerfil tenga la ruta de la imagen
+                if (usuario != null && !string.IsNullOrEmpty(usuario.FotoPerfil))
+                {
+                    return View(usuario);
+                }
             }
 
             return RedirectToAction("InicioSesionUsuario", "Acceso");
         }
+
+
+        [HttpPost]
+        public IActionResult Configuracion(IFormFile profileImage)
+        {
+            var usuarioId = HttpContext.Session.GetString("UsuarioId");
+
+            if (!string.IsNullOrEmpty(usuarioId) && profileImage != null)
+            {
+                var usuario = _context.Usuarios.FirstOrDefault(c => c.IdUsuario == int.Parse(usuarioId));
+                if (usuario != null)
+                {
+                    // Usar la cédula del cliente como nombre del archivo
+                    var extension = Path.GetExtension(profileImage.FileName);
+                    var nombreArchivo = usuario.Cedula + extension;
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "imagenesperfil", nombreArchivo);
+
+                    // Guardar la imagen en el servidor
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        profileImage.CopyTo(stream);
+                    }
+
+                    // Guardar la ruta de la imagen en el campo FotoPerfil
+                    usuario.FotoPerfil = "/imagenesperfil/" + nombreArchivo;
+                    _context.SaveChanges();
+
+                    return RedirectToAction("Configuracion");
+                }
+            }
+
+            return RedirectToAction("InicioSesionUsuario", "Acceso");
+        }
+
+
 
         [HttpPost]
         public IActionResult EditarInformacion(Usuario usuario)
