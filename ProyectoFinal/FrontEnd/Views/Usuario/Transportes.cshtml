@@ -47,17 +47,133 @@
 <!-- Buscar Mejores Rutas Start -->
 <div class="container-fluid py-4">
     <h4 class="mb-4 text-primary">Buscar Mejores Rutas</h4>
-    <form>
+
+    <!-- Formulario para ingresar origen y destino -->
+    <form id="routesForm">
         <div class="form-group">
-            <label for="startPoint">Punto de Partida</label>
-            <input type="text" class="form-control" id="startPoint" placeholder="Ejemplo: San José">
+            <label for="origin">Punto de inicio:</label>
+            <input type="text" class="form-control" id="origin" name="origin" placeholder="Ejemplo: San José, Costa Rica" required>
         </div>
         <div class="form-group">
-            <label for="endPoint">Destino</label>
-            <input type="text" class="form-control" id="endPoint" placeholder="Ejemplo: Liberia">
+            <label for="destination">Destino:</label>
+            <input type="text" class="form-control" id="destination" name="destination" placeholder="Ejemplo: Limón, Costa Rica" required>
         </div>
-        <button type="submit" class="btn btn-primary">Buscar Ruta</button>
+        <button type="submit" class="btn btn-primary">Obtener Ruta</button>
     </form>
+
+    <!-- Contenedor para el mapa -->
+    <div id="map" style="height: 500px; width: 100%; margin-top: 20px;"></div>
+
+    <!-- Script para inicializar el mapa, manejar la API de Routes y agregar autocompletado -->
+    <script>
+        let map;
+        let directionsRenderer;
+        let autocompleteOrigin;
+        let autocompleteDestination;
+
+        // Función para inicializar el mapa
+        function initMap() {
+            // Centrar el mapa en Costa Rica
+            map = new google.maps.Map(document.getElementById("map"), {
+                center: { lat: 9.7489, lng: -83.7534 }, // Coordenadas de Costa Rica
+                zoom: 8,
+            });
+
+            // Inicializar el renderizador de direcciones
+            directionsRenderer = new google.maps.DirectionsRenderer();
+            directionsRenderer.setMap(map);
+
+            // Inicializar el autocompletado para el campo de origen
+            autocompleteOrigin = new google.maps.places.Autocomplete(
+                document.getElementById("origin"),
+                {
+                    types: ["geocode"], // Limita los resultados a direcciones geográficas
+                }
+            );
+
+            // Inicializar el autocompletado para el campo de destino
+            autocompleteDestination = new google.maps.places.Autocomplete(
+                document.getElementById("destination"),
+                {
+                    types: ["geocode"], // Limita los resultados a direcciones geográficas
+                }
+            );
+        }
+
+        // Función para calcular y mostrar la ruta usando la API de Routes
+        async function calculateAndDisplayRoute(origin, destination) {
+            const apiKey = "AIzaSyCSzgCfKggkWFEA3ZTF8ZHwrRQluVgz1GU"; // Reemplaza con tu clave de API
+            const requestUrl = `https://routes.googleapis.com/directions/v2:computeRoutes?key=${apiKey}`;
+
+            const requestBody = {
+                origin: { address: origin },
+                destination: { address: destination },
+                travelMode: "DRIVE",
+                routingPreference: "TRAFFIC_AWARE",
+            };
+
+            try {
+                const response = await fetch(requestUrl, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(requestBody),
+                });
+
+                if (!response.ok) {
+                    throw new Error("Error al calcular la ruta");
+                }
+
+                const data = await response.json();
+
+                // Dibujar la ruta en el mapa
+                const route = data.routes[0];
+                const path = route.polyline.encodedPolyline;
+                const decodedPath = google.maps.geometry.encoding.decodePath(path);
+
+                const routePath = new google.maps.Polyline({
+                    path: decodedPath,
+                    geodesic: true,
+                    strokeColor: "#FF0000",
+                    strokeOpacity: 1.0,
+                    strokeWeight: 2,
+                });
+
+                routePath.setMap(map);
+
+                // Ajustar el mapa para que se vea toda la ruta
+                const bounds = new google.maps.LatLngBounds();
+                decodedPath.forEach((point) => bounds.extend(point));
+                map.fitBounds(bounds);
+
+            } catch (error) {
+                alert("Error al calcular la ruta: " + error.message);
+            }
+        }
+
+        // Manejar el envío del formulario
+        document.getElementById("routesForm").addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const origin = document.getElementById("origin").value;
+            const destination = document.getElementById("destination").value;
+
+            // Calcular y mostrar la ruta
+            calculateAndDisplayRoute(origin, destination);
+        });
+
+        // Cargar la API de Google Maps con la biblioteca de Places
+        function loadGoogleMapsScript() {
+            const script = document.createElement("script");
+            script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDl_hVi8ToU_Pv1BHohwA1EOsZCEMSNe_s&callback=initMap&libraries=places,geometry`;
+            script.defer = true;
+            document.head.appendChild(script);
+        }
+
+        // Cargar el script de Google Maps al cargar la página
+        window.onload = loadGoogleMapsScript;
+    </script>
 </div>
 <!-- Buscar Mejores Rutas End -->
 <!-- Notificaciones de Envíos Start -->
