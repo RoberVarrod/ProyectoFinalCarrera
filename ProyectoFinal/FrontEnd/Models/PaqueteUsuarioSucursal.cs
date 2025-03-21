@@ -50,6 +50,16 @@ public partial class PaqueteUsuarioSucursal
 
     public int? IdCliente { get; set; }
 
+    public string? PaqueteUsuarioProvincia { get; set; }
+
+    public string? PaqueteUsuarioCanton { get; set; }
+
+    public string? PaqueteUsuarioDistrito { get; set; }
+
+    public string? PaqueteUsuarioCodigoPostal { get; set; }
+
+    public string? PaqueteUsuarioDireccion { get; set; }
+
     public DbSet<PaqueteUsuarioSucursal> PaquetesUsuarioSucursal { get; set; }
 
 

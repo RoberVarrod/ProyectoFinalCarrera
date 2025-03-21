@@ -189,6 +189,7 @@ namespace FrontEnd.Controllers
                 return RedirectToAction("InicioSesionCliente", "Acceso");
             }
 
+            // Obtener los paquetes para el cliente
             var listaPaquetes = await _context.Paquetes
                 .Where(p => p.IdCliente == clienteId)
                 .ToListAsync();
@@ -197,8 +198,8 @@ namespace FrontEnd.Controllers
 
             foreach (var item in listaPaquetes)
             {
-                var cliente = _context.Clientes.FirstOrDefault(u => u.IdCliente == item.IdCliente);
-                var sucursal = _context.Sucursals.FirstOrDefault(u => u.IdSucursal == item.IdSucursal);
+                var cliente = await _context.Clientes.FirstOrDefaultAsync(u => u.IdCliente == item.IdCliente);
+                var sucursal = await _context.Sucursals.FirstOrDefaultAsync(u => u.IdSucursal == item.IdSucursal);
 
                 PaqueteUsuarioSucursal paqueteNuevo = new PaqueteUsuarioSucursal()
                 {
@@ -220,6 +221,11 @@ namespace FrontEnd.Controllers
                     DireccionEntrega = item.DireccionEntrega,
                     RetiroSucursal = item.RetiroSucursal,
                     PaqueteUsuarioNombre = cliente?.Nombre ?? "Desconocido",
+                    PaqueteUsuarioProvincia = cliente?.Provincia ?? "Desconocido",
+                    PaqueteUsuarioCanton = cliente?.Canton ?? "Desconocido",
+                    PaqueteUsuarioDistrito = cliente?.Distrito ?? "Desconocido",
+                    PaqueteUsuarioCodigoPostal = cliente?.CodigoPostal ?? "Desconocido",
+                    PaqueteUsuarioDireccion = cliente?.Direccion ?? "Desconocido",
                     PaqueteSucursalNombre = sucursal?.Nombre ?? "Desconocida",
                     IdSucursal = item.IdSucursal,
                     IdUsuario = item.IdUsuario,
@@ -238,6 +244,70 @@ namespace FrontEnd.Controllers
 
             return View(listaFinalPaquetes);
         }
+
+
+        [HttpPost]
+        public IActionResult ActualizarMetodoEntrega(int idPaquete, string tipoEntrega, int? idSucursal)
+        {
+            var paquete = _context.Paquetes.FirstOrDefault(p => p.IdPaquete == idPaquete);
+
+            if (paquete == null)
+            {
+                return NotFound();
+            }
+
+            // Actualiza el tipo de entrega (Domicilio o Sucursal)
+            paquete.TipoEntrega = tipoEntrega;
+
+            if (idSucursal.HasValue)
+            {
+                var sucursal = _context.Sucursals.FirstOrDefault(s => s.IdSucursal == idSucursal);
+                if (sucursal != null)
+                {
+                    paquete.IdSucursal = sucursal.IdSucursal;
+                }
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Paquetes");
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> ActualizarDireccion(int idPaquete, string provincia, string canton, string distrito, string codigoPostal, string direccion, string tipoEntrega)
+        {
+            var sessionId = HttpContext.Session.GetString("ClienteId");
+            if (string.IsNullOrEmpty(sessionId) || !int.TryParse(sessionId, out int clienteId))
+            {
+                return RedirectToAction("InicioSesionCliente", "Acceso");
+            }
+
+            var paquete = await _context.Paquetes.FirstOrDefaultAsync(p => p.IdPaquete == idPaquete && p.IdCliente == clienteId);
+            if (paquete == null)
+            {
+                return NotFound();
+            }
+
+            paquete.TipoEntrega = tipoEntrega;
+
+            var cliente = await _context.Clientes.FirstOrDefaultAsync(c => c.IdCliente == clienteId);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            cliente.Provincia = provincia;
+            cliente.Canton = canton;
+            cliente.Distrito = distrito;
+            cliente.CodigoPostal = codigoPostal;
+            cliente.Direccion = direccion;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Paquetes");
+        }
+
 
         public async Task<IActionResult> Historial(int pid)
         {
@@ -365,6 +435,11 @@ namespace FrontEnd.Controllers
                     DireccionEntrega = item.DireccionEntrega,
                     RetiroSucursal = item.RetiroSucursal,
                     PaqueteUsuarioNombre = cliente?.Nombre ?? "Desconocido",
+                    PaqueteUsuarioProvincia = cliente?.Provincia ?? "Desconocido",
+                    PaqueteUsuarioCanton = cliente?.Canton ?? "Desconocido",
+                    PaqueteUsuarioDistrito = cliente?.Distrito ?? "Desconocido",
+                    PaqueteUsuarioCodigoPostal = cliente?.CodigoPostal ?? "Desconocido",
+                    PaqueteUsuarioDireccion = cliente?.Direccion ?? "Desconocido",
                     PaqueteSucursalNombre = sucursal?.Nombre ?? "Desconocida",
                     IdSucursal = item.IdSucursal,
                     IdUsuario = item.IdUsuario,
@@ -384,6 +459,67 @@ namespace FrontEnd.Controllers
             return View(listaFinalPaquetes);
         }
 
+        [HttpPost]
+        public IActionResult ActualizarMetodoEntregaEstado(int idPaquete, string tipoEntrega, int? idSucursal)
+        {
+            var paquete = _context.Paquetes.FirstOrDefault(p => p.IdPaquete == idPaquete);
+
+            if (paquete == null)
+            {
+                return NotFound();
+            }
+
+            // Actualiza el tipo de entrega (Domicilio o Sucursal)
+            paquete.TipoEntrega = tipoEntrega;
+
+            if (idSucursal.HasValue)
+            {
+                var sucursal = _context.Sucursals.FirstOrDefault(s => s.IdSucursal == idSucursal);
+                if (sucursal != null)
+                {
+                    paquete.IdSucursal = sucursal.IdSucursal;
+                }
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction("EstadoPaquetes");
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> ActualizarDireccionEstado(int idPaquete, string provincia, string canton, string distrito, string codigoPostal, string direccion, string tipoEntrega)
+        {
+            var sessionId = HttpContext.Session.GetString("ClienteId");
+            if (string.IsNullOrEmpty(sessionId) || !int.TryParse(sessionId, out int clienteId))
+            {
+                return RedirectToAction("InicioSesionCliente", "Acceso");
+            }
+
+            var paquete = await _context.Paquetes.FirstOrDefaultAsync(p => p.IdPaquete == idPaquete && p.IdCliente == clienteId);
+            if (paquete == null)
+            {
+                return NotFound();
+            }
+
+            paquete.TipoEntrega = tipoEntrega;
+
+            var cliente = await _context.Clientes.FirstOrDefaultAsync(c => c.IdCliente == clienteId);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            cliente.Provincia = provincia;
+            cliente.Canton = canton;
+            cliente.Distrito = distrito;
+            cliente.CodigoPostal = codigoPostal;
+            cliente.Direccion = direccion;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("EstadoPaquetes");
+        }
 
         public async Task<IActionResult> OrdenesProceso(string buscar)
         {
@@ -424,6 +560,11 @@ namespace FrontEnd.Controllers
                     DireccionEntrega = item.DireccionEntrega,
                     RetiroSucursal = item.RetiroSucursal,
                     PaqueteUsuarioNombre = cliente?.Nombre ?? "Desconocido",
+                    PaqueteUsuarioProvincia = cliente?.Provincia ?? "Desconocido",
+                    PaqueteUsuarioCanton = cliente?.Canton ?? "Desconocido",
+                    PaqueteUsuarioDistrito = cliente?.Distrito ?? "Desconocido",
+                    PaqueteUsuarioCodigoPostal = cliente?.CodigoPostal ?? "Desconocido",
+                    PaqueteUsuarioDireccion = cliente?.Direccion ?? "Desconocido",
                     PaqueteSucursalNombre = sucursal?.Nombre ?? "Desconocida",
                     IdSucursal = item.IdSucursal,
                     IdUsuario = item.IdUsuario,
@@ -443,9 +584,67 @@ namespace FrontEnd.Controllers
             return View(listaFinalPaquetes);
         }
 
+        [HttpPost]
+        public IActionResult ActualizarMetodoEntregaOrdenes(int idPaquete, string tipoEntrega, int? idSucursal)
+        {
+            var paquete = _context.Paquetes.FirstOrDefault(p => p.IdPaquete == idPaquete);
+
+            if (paquete == null)
+            {
+                return NotFound();
+            }
+
+            // Actualiza el tipo de entrega (Domicilio o Sucursal)
+            paquete.TipoEntrega = tipoEntrega;
+
+            if (idSucursal.HasValue)
+            {
+                var sucursal = _context.Sucursals.FirstOrDefault(s => s.IdSucursal == idSucursal);
+                if (sucursal != null)
+                {
+                    paquete.IdSucursal = sucursal.IdSucursal;
+                }
+            }
+
+            _context.SaveChanges();
+
+            return RedirectToAction("OrdenesProceso");
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> ActualizarDireccionOrdenes(int idPaquete, string provincia, string canton, string distrito, string codigoPostal, string direccion, string tipoEntrega)
+        {
+            var sessionId = HttpContext.Session.GetString("ClienteId");
+            if (string.IsNullOrEmpty(sessionId) || !int.TryParse(sessionId, out int clienteId))
+            {
+                return RedirectToAction("InicioSesionCliente", "Acceso");
+            }
+
+            var paquete = await _context.Paquetes.FirstOrDefaultAsync(p => p.IdPaquete == idPaquete && p.IdCliente == clienteId);
+            if (paquete == null)
+            {
+                return NotFound();
+            }
+
+            paquete.TipoEntrega = tipoEntrega;
+
+            var cliente = await _context.Clientes.FirstOrDefaultAsync(c => c.IdCliente == clienteId);
+            if (cliente == null)
+            {
+                return NotFound();
+            }
+
+            cliente.Provincia = provincia;
+            cliente.Canton = canton;
+            cliente.Distrito = distrito;
+            cliente.CodigoPostal = codigoPostal;
+            cliente.Direccion = direccion;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("OrdenesProceso");
+        }
+        
     }
 }
-
-
-
-
