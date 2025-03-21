@@ -25,7 +25,44 @@ namespace FrontEnd.Controllers
             if (!string.IsNullOrEmpty(clienteId))
             {
                 var cliente = _context.Clientes.FirstOrDefault(c => c.IdCliente == int.Parse(clienteId));
-                return View(cliente);
+                // Verifica que el campo FotoPerfil tenga la ruta de la imagen
+                if (cliente != null && !string.IsNullOrEmpty(cliente.FotoPerfil))
+                {
+                    return View(cliente);
+                }
+            }
+
+            return RedirectToAction("InicioSesionCliente", "Acceso");
+        }
+
+
+        [HttpPost]
+        public IActionResult Configuracion(IFormFile profileImage)
+        {
+            var clienteId = HttpContext.Session.GetString("ClienteId");
+
+            if (!string.IsNullOrEmpty(clienteId) && profileImage != null)
+            {
+                var cliente = _context.Clientes.FirstOrDefault(c => c.IdCliente == int.Parse(clienteId));
+                if (cliente != null)
+                {
+                    // Usar la cédula del cliente como nombre del archivo
+                    var extension = Path.GetExtension(profileImage.FileName);
+                    var nombreArchivo = cliente.Cedula + extension;
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "imagenesperfil", nombreArchivo);
+
+                    // Guardar la imagen en el servidor
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        profileImage.CopyTo(stream);
+                    }
+
+                    // Guardar la ruta de la imagen en el campo FotoPerfil
+                    cliente.FotoPerfil = "/imagenesperfil/" + nombreArchivo;
+                    _context.SaveChanges();
+
+                    return RedirectToAction("Configuracion");
+                }
             }
 
             return RedirectToAction("InicioSesionCliente", "Acceso");
@@ -133,45 +170,86 @@ namespace FrontEnd.Controllers
             return View();
         }
 
-        public IActionResult EstadoPaquetes()
-        {
-            return View();
-        }
-
-
-
-
         public IActionResult Notificaciones()
         {
             return View();
         }
 
-        public IActionResult OrdenesProceso()
-        {
-            return View();
-        }
 
         public IActionResult Pagos()
         {
             return View();
         }
 
-        public IActionResult Paquetes()
+        public async Task<IActionResult> Paquetes(string buscar)
         {
             var sessionId = HttpContext.Session.GetString("ClienteId");
-            if (!string.IsNullOrEmpty(sessionId))
+            if (string.IsNullOrEmpty(sessionId) || !int.TryParse(sessionId, out int clienteId))
             {
-                if (int.TryParse(sessionId, out int clienteId))
-                {
-                    var paquetes = _context.Paquetes
-                        .Where(p => p.IdCliente == clienteId)
-                        .ToList();
-
-                    return View(paquetes ?? new List<Paquete>()); // Asegurar que nunca sea null
-                }
+                return RedirectToAction("InicioSesionCliente", "Acceso");
             }
 
-            return RedirectToAction("InicioSesionCliente", "Acceso");
+            var listaPaquetes = await _context.Paquetes
+                .Where(p => p.IdCliente == clienteId)
+                .ToListAsync();
+
+            List<PaqueteUsuarioSucursal> listaFinalPaquetes = new List<PaqueteUsuarioSucursal>();
+
+            foreach (var item in listaPaquetes)
+            {
+                var cliente = _context.Clientes.FirstOrDefault(u => u.IdCliente == item.IdCliente);
+                var sucursal = _context.Sucursals.FirstOrDefault(u => u.IdSucursal == item.IdSucursal);
+
+                PaqueteUsuarioSucursal paqueteNuevo = new PaqueteUsuarioSucursal()
+                {
+                    IdPaquete = item.IdPaquete,
+                    NumeroRegistro = item.NumeroRegistro,
+                    Nombre = item.Nombre,
+                    Precio = item.Precio,
+                    PaqueteLargo = item.PaqueteLargo,
+                    PaqueteAncho = item.PaqueteAncho,
+                    PaqueteAlto = item.PaqueteAlto,
+                    TipoPaquete = item.TipoPaquete,
+                    TipoEntrega = item.TipoEntrega,
+                    Descripcion = item.Descripcion,
+                    EstadoPago = item.EstadoPago,
+                    EstadoRuta = item.EstadoRuta,
+                    FechaRegistro = item.FechaRegistro,
+                    FechaEntrega = item.FechaEntrega,
+                    FechaEntregaEstimada = item.FechaEntregaEstimada,
+                    DireccionEntrega = item.DireccionEntrega,
+                    RetiroSucursal = item.RetiroSucursal,
+                    PaqueteUsuarioNombre = cliente?.Nombre ?? "Desconocido",
+                    PaqueteSucursalNombre = sucursal?.Nombre ?? "Desconocida",
+                    IdSucursal = item.IdSucursal,
+                    IdUsuario = item.IdUsuario,
+                    IdCliente = item.IdCliente
+                };
+
+                listaFinalPaquetes.Add(paqueteNuevo);
+            }
+
+            if (!string.IsNullOrEmpty(buscar))
+            {
+                listaFinalPaquetes = listaFinalPaquetes
+                    .Where(p => p.NumeroRegistro.Equals(buscar, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
+            return View(listaFinalPaquetes);
+        }
+
+        public async Task<IActionResult> Historial(int pid)
+        {
+
+            var lista = await _context.HistorialCambiosPaquetes.Where(h => h.IdPaquete == pid).OrderBy(h => h.Sequencia).ToListAsync();
+
+            List<HistorialCambiosPaquete> listaCambiosPaquete = new List<HistorialCambiosPaquete>();
+
+            listaCambiosPaquete = lista;
+
+            return View(listaCambiosPaquete);
+
         }
 
 
@@ -216,6 +294,7 @@ namespace FrontEnd.Controllers
         }
 
 
+
         [HttpGet]
         public IActionResult ObtenerDetallesPago(int idPago)
         {
@@ -246,63 +325,123 @@ namespace FrontEnd.Controllers
 
             return Json(pago);
         }
-        [HttpGet]
-        public IActionResult ObtenerPaquetesUsuario()
+
+        public async Task<IActionResult> EstadoPaquetes(string buscar)
         {
-            var clienteId = HttpContext.Session.GetString("ClienteId");
-
-            if (string.IsNullOrEmpty(clienteId))
+            var sessionId = HttpContext.Session.GetString("ClienteId");
+            if (string.IsNullOrEmpty(sessionId) || !int.TryParse(sessionId, out int clienteId))
             {
-                return StatusCode(401, "No hay sesión activa.");
+                return RedirectToAction("InicioSesionCliente", "Acceso");
             }
 
-            try
+            var listaPaquetes = await _context.Paquetes
+                .Where(p => p.IdCliente == clienteId)
+                .ToListAsync();
+
+            List<PaqueteUsuarioSucursal> listaFinalPaquetes = new List<PaqueteUsuarioSucursal>();
+
+            foreach (var item in listaPaquetes)
             {
-                var paquetes = _context.Paquetes
-                    .Where(p => p.IdCliente == int.Parse(clienteId))
-                    .Select(p => new
-                    {
-                        TrackingId = p.NumeroRegistro,
-                        Nombre = p.Nombre,
-                        EstadoRuta = p.EstadoRuta ?? "No disponible",
-                        FechaEntrega = p.FechaEntrega.HasValue ? p.FechaEntrega.Value.ToString("dd/MM/yyyy") : "Sin registrar",
-                        TipoEntrega = p.TipoEntrega ?? "No especificado",
-                        Precio = p.Precio,
-                        Detalles = new
-                        {
-                            Alto = p.PaqueteAlto,  // ← Nombre corregido
-                            Largo = p.PaqueteLargo,  // ← Nombre corregido
-                            Ancho = p.PaqueteAncho,  // ← Nombre corregido
-                            Descripcion = p.Descripcion ?? "Sin descripción",
-                            EstadoPago = p.EstadoPago ?? "No disponible"
-                        },
-                        DireccionEntrega = new
-                        {
-                            p.DireccionEntrega,
-                            Cliente = new
-                            {
-                                Provincia = p.IdClienteNavigation.Provincia ?? "No especificado",
-                                Canton = p.IdClienteNavigation.Canton ?? "No especificado",
-                                Distrito = p.IdClienteNavigation.Distrito ?? "No especificado",
-                                CodigoPostal = p.IdClienteNavigation.CodigoPostal ?? "No especificado",
-                                Direccion = p.IdClienteNavigation.Direccion ?? "No especificado"
-                            }
-                        }
-                    })
+                var cliente = _context.Clientes.FirstOrDefault(u => u.IdCliente == item.IdCliente);
+                var sucursal = _context.Sucursals.FirstOrDefault(u => u.IdSucursal == item.IdSucursal);
+
+                PaqueteUsuarioSucursal paqueteNuevo = new PaqueteUsuarioSucursal()
+                {
+                    IdPaquete = item.IdPaquete,
+                    NumeroRegistro = item.NumeroRegistro,
+                    Nombre = item.Nombre,
+                    Precio = item.Precio,
+                    PaqueteLargo = item.PaqueteLargo,
+                    PaqueteAncho = item.PaqueteAncho,
+                    PaqueteAlto = item.PaqueteAlto,
+                    TipoPaquete = item.TipoPaquete,
+                    TipoEntrega = item.TipoEntrega,
+                    Descripcion = item.Descripcion,
+                    EstadoPago = item.EstadoPago,
+                    EstadoRuta = item.EstadoRuta,
+                    FechaRegistro = item.FechaRegistro,
+                    FechaEntrega = item.FechaEntrega,
+                    FechaEntregaEstimada = item.FechaEntregaEstimada,
+                    DireccionEntrega = item.DireccionEntrega,
+                    RetiroSucursal = item.RetiroSucursal,
+                    PaqueteUsuarioNombre = cliente?.Nombre ?? "Desconocido",
+                    PaqueteSucursalNombre = sucursal?.Nombre ?? "Desconocida",
+                    IdSucursal = item.IdSucursal,
+                    IdUsuario = item.IdUsuario,
+                    IdCliente = item.IdCliente
+                };
+
+                listaFinalPaquetes.Add(paqueteNuevo);
+            }
+
+            if (!string.IsNullOrEmpty(buscar))
+            {
+                listaFinalPaquetes = listaFinalPaquetes
+                    .Where(p => p.NumeroRegistro.Equals(buscar, StringComparison.OrdinalIgnoreCase))
                     .ToList();
+            }
 
-                return Json(paquetes);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Error en el servidor: {ex.Message}");
-            }
+            return View(listaFinalPaquetes);
         }
 
 
+        public async Task<IActionResult> OrdenesProceso(string buscar)
+        {
+            var sessionId = HttpContext.Session.GetString("ClienteId");
+            if (string.IsNullOrEmpty(sessionId) || !int.TryParse(sessionId, out int clienteId))
+            {
+                return RedirectToAction("InicioSesionCliente", "Acceso");
+            }
 
+            var listaPaquetes = await _context.Paquetes
+                .Where(p => p.IdCliente == clienteId)
+                .ToListAsync();
 
+            List<PaqueteUsuarioSucursal> listaFinalPaquetes = new List<PaqueteUsuarioSucursal>();
 
+            foreach (var item in listaPaquetes)
+            {
+                var cliente = _context.Clientes.FirstOrDefault(u => u.IdCliente == item.IdCliente);
+                var sucursal = _context.Sucursals.FirstOrDefault(u => u.IdSucursal == item.IdSucursal);
+
+                PaqueteUsuarioSucursal paqueteNuevo = new PaqueteUsuarioSucursal()
+                {
+                    IdPaquete = item.IdPaquete,
+                    NumeroRegistro = item.NumeroRegistro,
+                    Nombre = item.Nombre,
+                    Precio = item.Precio,
+                    PaqueteLargo = item.PaqueteLargo,
+                    PaqueteAncho = item.PaqueteAncho,
+                    PaqueteAlto = item.PaqueteAlto,
+                    TipoPaquete = item.TipoPaquete,
+                    TipoEntrega = item.TipoEntrega,
+                    Descripcion = item.Descripcion,
+                    EstadoPago = item.EstadoPago,
+                    EstadoRuta = item.EstadoRuta,
+                    FechaRegistro = item.FechaRegistro,
+                    FechaEntrega = item.FechaEntrega,
+                    FechaEntregaEstimada = item.FechaEntregaEstimada,
+                    DireccionEntrega = item.DireccionEntrega,
+                    RetiroSucursal = item.RetiroSucursal,
+                    PaqueteUsuarioNombre = cliente?.Nombre ?? "Desconocido",
+                    PaqueteSucursalNombre = sucursal?.Nombre ?? "Desconocida",
+                    IdSucursal = item.IdSucursal,
+                    IdUsuario = item.IdUsuario,
+                    IdCliente = item.IdCliente
+                };
+
+                listaFinalPaquetes.Add(paqueteNuevo);
+            }
+
+            if (!string.IsNullOrEmpty(buscar))
+            {
+                listaFinalPaquetes = listaFinalPaquetes
+                    .Where(p => p.NumeroRegistro.Equals(buscar, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
+            return View(listaFinalPaquetes);
+        }
 
     }
 }

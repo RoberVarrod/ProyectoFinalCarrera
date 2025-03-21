@@ -230,8 +230,12 @@
                             </div>
                         </div>
                         <!-- Modal update paquete End-->
-                        <!-- Historial del paquete -->
-                        <button class="btn btn-link"> <a href="@Url.Action("Historial","Paquete")"><i class="fas fa-history"></i></a> </button>
+                            <!-- Historial del paquete -->
+                            <form asp-action="Historial" asp-controller="Paquete" method="post">
+                                <input type="text" class="form-control" name="pid" value="@paquete.IdPaquete" hidden />
+                                <button type="submit" class="btn btn-link"><i class="fas fa-history"></i></button>
+                            </form>
+                            <!--  <button class="btn btn-link"> <a href="@Url.Action("Historial", "Paquete", paquete.IdPaquete)"><i class="fas fa-history"></i></a> </button>  -->
                     </td>
                 </tr>
             }

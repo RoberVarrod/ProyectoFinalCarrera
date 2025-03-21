@@ -16,15 +16,40 @@
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
+
             <!-- Header del Perfil Start -->
             <div class="text-center bg-primary py-4 rounded-top">
-                <img src="~/assets/img/profile.jpg" class="rounded-circle border border-light mb-3" alt="Imagen de Perfil" style="width: 120px; height: 120px;">
+                <img src="@Model.FotoPerfil" class="rounded-circle border border-light mb-3" alt="Imagen de Perfil" style="width: 120px; height: 120px;">
                 <h4 class="text-white mb-1">@Model.Nombre @Model.PrimerApellido @Model.SegundoApellido</h4>
                 <a href="#" data-toggle="modal" data-target="#changeProfilePicModal" class="text-white small">
                     <span class="fas fa-camera"></span> Cambiar Foto de Perfil
                 </a>
             </div>
             <!-- Header del Perfil End -->
+            <!-- Modal para Cambiar la Foto Start -->
+            <div class="modal fade" id="changeProfilePicModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Cambiar Foto de Perfil</h5>
+                            <button type="button" class="close" data-dismiss="modal">
+                                <span>&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form method="post" action="/UsuarioCliente/Configuracion" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label>Subir nueva foto</label>
+                                    <input type="file" class="form-control" name="ProfileImage" accept=".jpg,.png" required>
+                                    <small class="form-text text-muted">El archivo debe ser .jpg o .png.</small>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-block">Guardar</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal para Cambiar la Foto End -->
             <!-- Cuerpo del Perfil Start -->
             <div class="bg-light py-4 px-3 rounded-bottom shadow">
                 <!-- Información Personal Start -->
@@ -147,30 +172,6 @@
                 </div>
             </div>
             <!-- Cuerpo del Perfil End -->
-            <!-- Modal para Cambiar la Foto Start -->
-            <div class="modal fade" id="changeProfilePicModal" tabindex="-1" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Cambiar Foto de Perfil</h5>
-                            <button type="button" class="close" data-dismiss="modal">
-                                <span>&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form method="post" action="/Usuario/CambiarFotoPerfil" enctype="multipart/form-data">
-                                <div class="form-group">
-                                    <label>Subir nueva foto</label>
-                                    <input type="file" class="form-control" name="ProfileImage" accept=".jpg,.png" required>
-                                    <small class="form-text text-muted">El archivo debe ser .jpg o .png y no exceder los 300MB.</small>
-                                </div>
-                                <button type="submit" class="btn btn-primary btn-block">Guardar</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- Modal para Cambiar la Foto End -->
         </div>
     </div>
 </div>
