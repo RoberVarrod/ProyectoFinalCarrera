@@ -1,7 +1,17 @@
 ﻿@model IEnumerable<FrontEnd.Models.Notificacion>
 @{
     ViewData["Title"] = "Notificaciones";
-    Layout = "~/Views/Shared/_LayoutUsuarios.cshtml";
+    var clienteRol = Context.Session.GetString("ClienteRol");
+
+    if (clienteRol != null)
+    {
+        Layout = "~/Views/Shared/_LayoutClientes.cshtml";
+
+    } else
+    {
+        Layout = "~/Views/Shared/_LayoutUsuarios.cshtml";
+    }
+    
 }
 
 <!-- Header Start -->
