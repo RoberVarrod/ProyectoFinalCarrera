@@ -56,8 +56,8 @@ namespace FrontEnd.Controllers
                 Notificacion nuevaNotificacion = new Notificacion();
 
                 nuevaNotificacion.Titulo = modelo.Titulo;
-                nuevaNotificacion.Cuerpo = modelo.Titulo;
-                nuevaNotificacion.Tipo = modelo.Titulo;
+                nuevaNotificacion.Cuerpo = modelo.Cuerpo;
+                nuevaNotificacion.Tipo = modelo.Tipo;
                 nuevaNotificacion.FechaRegistro = DateTime.Now;
 
                 // Guardar el paquete en la base de datos

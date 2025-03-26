@@ -26,7 +26,8 @@ namespace FrontEnd.Controllers
             {
                 var cliente = _context.Clientes.FirstOrDefault(c => c.IdCliente == int.Parse(clienteId));
                 // Verifica que el campo FotoPerfil tenga la ruta de la imagen
-                if (cliente != null && !string.IsNullOrEmpty(cliente.FotoPerfil))
+                //if (cliente != null && !string.IsNullOrEmpty(cliente.FotoPerfil))
+                if (cliente != null)
                 {
                     return View(cliente);
                 }
