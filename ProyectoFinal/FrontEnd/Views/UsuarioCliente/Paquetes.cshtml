@@ -185,23 +185,22 @@
                                         <p><strong>Descripción:</strong> @paquete.Descripcion</p>
                                         <hr />
                                         <!-- Navs para seleccionar el método de entrega -->
-                                        <ul class="nav nav-tabs" id="deliveryTabs" role="tablist">
+                                        <ul class="nav nav-tabs" id="deliveryTabs_@paquete.IdPaquete" role="tablist">
                                             <li class="nav-item" role="presentation">
-                                                <a class="nav-link active" id="domicilioTab" data-toggle="tab" href="#domicilioTabContent" role="tab" aria-controls="domicilioTabContent" aria-selected="true">Entrega a Domicilio</a>
+                                                <a class="nav-link active" id="domicilioTab_@paquete.IdPaquete" data-toggle="tab" href="#domicilioTabContent_@paquete.IdPaquete" role="tab" aria-controls="domicilioTabContent_@paquete.IdPaquete" aria-selected="true">Entrega a Domicilio</a>
                                             </li>
                                             <li class="nav-item" role="presentation">
-                                                <a class="nav-link" id="sucursalTab" data-toggle="tab" href="#sucursalTabContent" role="tab" aria-controls="sucursalTabContent" aria-selected="false">Retiro en Sucursal</a>
+                                                <a class="nav-link" id="sucursalTab_@paquete.IdPaquete" data-toggle="tab" href="#sucursalTabContent_@paquete.IdPaquete" role="tab" aria-controls="sucursalTabContent_@paquete.IdPaquete" aria-selected="false">Retiro en Sucursal</a>
                                             </li>
                                         </ul>
-                                        <div class="tab-content mt-3" id="deliveryTabsContent">
+                                        <div class="tab-content mt-3" id="deliveryTabsContent_@paquete.IdPaquete">
                                             <!-- Contenido Entrega a Domicilio -->
-                                            <div class="tab-pane fade show active" id="domicilioTabContent" role="tabpanel" aria-labelledby="domicilioTab">
+                                            <div class="tab-pane fade show active" id="domicilioTabContent_@paquete.IdPaquete" role="tabpanel" aria-labelledby="domicilioTab_@paquete.IdPaquete">
                                                 <p><strong>Descripción:</strong> La entrega a domicilio tarda entre 3-4 días hábiles.</p>
                                                 <p><strong>Costo:</strong> Ya está incluido con el servicio.</p>
-                                                <button class="btn btn-outline-dark" data-toggle="collapse" href="#domicilioAddressForm" role="button" aria-expanded="false" aria-controls="domicilioAddressForm" onclick="updateTipoEntrega('Domicilio')">Confirmar Entrega a Domicilio</button>
-                                                <div class="collapse" id="domicilioAddressForm">
-                                                    @foreach (var PaqueteUsuarioSucursal in Model)
-                                                    {
+                                                <button class="btn btn-outline-dark" data-toggle="collapse" href="#domicilioAddressForm_@paquete.IdPaquete" role="button" aria-expanded="false" aria-controls="domicilioAddressForm_@paquete.IdPaquete" onclick="updateTipoEntrega('Domicilio')">Confirmar Entrega a Domicilio</button>
+                                                <div class="collapse" id="domicilioAddressForm_@paquete.IdPaquete">
+                                                  
                                                         <form method="post" asp-action="ActualizarDireccion" asp-route-idPaquete="@paquete.IdPaquete" asp-route-idSucursal="@paquete.IdSucursal">
                                                            
                                                             <div class="form-group">
@@ -234,11 +233,11 @@
                                                                 </form>
                                                             </div>
                                                         </form>
-                                                    }
+                                                    
                                                 </div>
                                             </div>
                                             <!-- Contenido Retiro en Sucursal -->
-                                            <div class="tab-pane fade" id="sucursalTabContent" role="tabpanel" aria-labelledby="sucursalTab">
+                                            <div class="tab-pane fade" id="sucursalTabContent_@paquete.IdPaquete" role="tabpanel" aria-labelledby="sucursalTab_@paquete.IdPaquete">
                                                 <p><strong>Descripción:</strong> El retiro en sucursal se puede realizar en cualquiera de las sucursales disponibles.</p>
                                                 <ul>
                                                     <li>
@@ -266,8 +265,8 @@
                                                         <label>Seleccione la Sucursal:</label>
                                                         <select class="form-control" name="idSucursal">
                                                             <option value="@paquete.IdSucursal">@paquete.PaqueteSucursalNombre</option>
-                                                            <option value="9">Naranjo (CR)</option>
-                                                            <option value="11">Pérez Zeledón (CR)</option>
+                                                            <option value="2">Naranjo (CR)</option>
+                                                            <option value="3">Pérez Zeledón (CR)</option>
                                                         </select>
                                                     </div>
                                                     <button class="btn btn-primary" type="submit">Confirmar Retiro en Sucursal</button>

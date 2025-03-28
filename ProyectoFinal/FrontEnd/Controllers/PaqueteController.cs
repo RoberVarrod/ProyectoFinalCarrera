@@ -388,6 +388,12 @@ namespace FrontEnd.Controllers
 
                 var NombreSucursal = sucursal.Nombre;
 
+                // buscar datos del cliente
+                var nombreUsuario = _context.Usuarios
+                   .FirstOrDefault(u => u.IdUsuario == item.IdUsuario);
+
+                var nombreUsuarioTransportista = nombreUsuario.Nombre;
+
                 PaqueteUsuarioSucursal paqueteNuevo = new PaqueteUsuarioSucursal(); // se hace el nuevo objeto 
 
                 paqueteNuevo.IdPaquete = item.IdPaquete;
@@ -411,6 +417,8 @@ namespace FrontEnd.Controllers
                 paqueteNuevo.PaqueteUsuarioNombre = NombreCliente;
                 //////////////// Nombre de la sucursal del paquete, aqui se asigna los nuevos valores
                 paqueteNuevo.PaqueteSucursalNombre = NombreSucursal;
+                //////////////// Nombre de la sucursal del paquete, aqui se asigna los nuevos valores
+                paqueteNuevo.PaqueteTransportistaNombre = nombreUsuarioTransportista;
                 //////////////// Ids opcionales, pero pueden ser utilies para otros methodos.
                 paqueteNuevo.IdSucursal = item.IdSucursal;
                 paqueteNuevo.IdUsuario = item.IdUsuario;

@@ -44,6 +44,8 @@ public partial class PaqueteUsuarioSucursal
 
     public string? PaqueteSucursalNombre { get; set; }
 
+    public string? PaqueteTransportistaNombre { get; set; }
+
     public int? IdSucursal { get; set; }
 
     public int? IdUsuario { get; set; }
