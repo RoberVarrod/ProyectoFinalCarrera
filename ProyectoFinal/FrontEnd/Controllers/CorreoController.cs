@@ -253,7 +253,7 @@ namespace FrontEnd.Controllers
 
 
         //enviarCorreoInicioSesionCliente
-        // cuando el cliente inicia sesion
+        // cuando el cliente cambia contrasena
         // POST api/<CorreoController>
         [HttpPost]
         public async Task<ActionResult> enviarCorreoCambioContrasenaCompletadoCliente(Cliente cliente)
@@ -270,8 +270,74 @@ namespace FrontEnd.Controllers
         }
 
 
+        //enviarCorreoInicioSesionCliente
+        // cuando el cliente cambia contrasena
+        // POST api/<CorreoController>
+        [HttpPost]
+        public async Task<ActionResult> enviarCorreoCambioContrasenaCodigoSeguridadCliente(Cliente cliente)
+        {
 
 
+            Random random = new Random();
+
+            string codigoSeguridad = "";
+            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+            codigoSeguridad =  new string(Enumerable.Repeat(chars, 8).Select(s => s[random.Next(s.Length)]).ToArray());
+
+
+            string emailReceiver = cliente.Correo;
+
+            string subject = "Este es su Código de seguridad";
+            string body = "Cliente: " + cliente.Nombre + ", se le comunica que se ha solicitado recuperar la contraseña de su cuenta, fecha: " + DateTime.Now + "\n" +
+                "Este es su código de seguridad para continuar con el proceso, no comparta este código con ningun usuario, los empleados no le solicitarán este codigo" + "\n" +
+                "\n" +
+                "Código de seguridad: " + codigoSeguridad;
+
+                ;
+
+            cliente.ClaveRecupera = codigoSeguridad;
+            _context.SaveChanges();
+
+            await _correoService.EnviarCorreo(emailReceiver, subject, body);
+            return Ok();
+
+        }
+
+
+        //enviarCorreoInicioSesionCliente
+        // se cambia contrasena por una temporal
+        // POST api/<CorreoController>
+        [HttpPost]
+        public async Task<ActionResult> enviarCorreoCambioContrasenaTemporalCliente(Cliente cliente)
+        {
+
+            Random random = new Random();
+
+            string contraseñaTemporal = "";
+            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+            contraseñaTemporal = new string(Enumerable.Repeat(chars, 8).Select(s => s[random.Next(s.Length)]).ToArray());
+
+
+
+            string emailReceiver = cliente.Correo;
+
+            string subject = "Contraseña temporal para iniciar sesión en su cuenta";
+            string body = "Cliente: " + cliente.Nombre + ", A continuación se le brinda una contraseña temporal para que pueda iniciar sesión en su cuenta" + "\n" +
+                "Favor cambiar su contraseña una vez inicie sesión desde su perfil" + "\n" +
+                "\n" +
+                "Nueva contraseña: " + contraseñaTemporal;
+
+            ;
+
+            cliente.Contrasena = contraseñaTemporal;
+            _context.SaveChanges();
+
+            await _correoService.EnviarCorreo(emailReceiver, subject, body);
+            return Ok();
+
+        }
 
 
 

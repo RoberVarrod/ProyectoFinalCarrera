@@ -23,6 +23,27 @@
                                 @TempData["MensajeInicioFallido"]
                             </div>
                         }
+
+                        @if (TempData["MensajeCorreoUsuarioNoEncontrado"] != null)
+                        {
+                            <div class="alert alert-primary" role="alert">
+                                @TempData["MensajeCorreoUsuarioNoEncontrado"]
+                            </div>
+                        }
+
+                        @if (TempData["MensajeContrasenaTemporalEnviada"] != null)
+                        {
+                            <div class="alert alert-success" role="alert">
+                                @TempData["MensajeContrasenaTemporalEnviada"]
+                            </div>
+                        }
+
+                        @if (TempData["MensajeCodigoDeSeguridadIncorrecto"] != null)
+                        {
+                            <div class="alert alert-primary" role="alert">
+                                @TempData["MensajeCodigoDeSeguridadIncorrecto"]
+                            </div>
+                        }
                         <div class="form-group">
                             <input type="email" class="form-control border-0 p-4" placeholder="Correo electrónico" asp-for="Correo" required />
                         </div>
@@ -35,10 +56,10 @@
                         <div class="text-center mt-3">
                             <p class="text-white">¿No tienes una cuenta? <a href="/Acceso/RegistroCliente" class="text-dark font-weight-bold">Regístrate aquí</a></p>
                         </div>
-                        <div class="form-group d-flex justify-content-center">
-                            <a href="#" class="text-white">¿Olvidaste tu contraseña?</a>
-                        </div>
                     </form>
+                    <div class="form-group d-flex justify-content-center">
+                        <a href="@Url.Action("EnviarCodigoSeguridad","Acceso")" class="text-white">¿Olvidaste tu contraseña?</a>
+                    </div>
                 </div>
             </div>
         </div>

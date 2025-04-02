@@ -1,4 +1,5 @@
 using FrontEnd.Models;
+using FrontEnd.Models.modelsDataParameterMethods;
 using FrontEnd.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -258,6 +259,83 @@ namespace FrontEnd.Controllers
 
 
 
+        //// Recuperar contrasena metodos
+
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult EnviarCodigoSeguridad()
+        {
+            return View();
+        }
+
+
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult EnviarCodigoSeguridad(CorreoParameter correoUsuario)
+        {
+            // Buscar el cliente en la base de datos
+            var cliente = _context.Clientes
+                .FirstOrDefault(u => u.Correo == correoUsuario.Correo);
+            if (cliente != null)
+            {
+
+                    // se envia correo indicando alguien solicito recuperar la contrasena y el codigo de seguridad
+                    Task<ActionResult> taskSendEmail = _correoController.enviarCorreoCambioContrasenaCodigoSeguridadCliente(cliente);
+
+                return RedirectToAction("EnviarContrasenaNueva", cliente);
+            }
+            else
+            {
+                // Si no coincide usuario o contraseña
+                TempData["MensajeCorreoUsuarioNoEncontrado"] = "Correo no registrado en el sistema";
+                return RedirectToAction("InicioSesionCliente");
+            }            
+        }
+
+
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult EnviarContrasenaNueva(Cliente cliente)
+        {
+            return View(cliente);
+        }
+
+
+
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult EnviarContrasenaAleatoria(Cliente clienteRecibido)
+        {
+            // Buscar el cliente en la base de datos
+            var cliente = _context.Clientes
+                .FirstOrDefault(u => u.IdCliente == clienteRecibido.IdCliente);
+
+            if (cliente.ClaveRecupera == clienteRecibido.ClaveRecupera)
+            {
+
+                // se envia correo indicando la contrasena nueva para que el usuario pueda iniciar sesion.
+                Task<ActionResult> taskSendEmail = _correoController.enviarCorreoCambioContrasenaTemporalCliente(cliente);
+
+                TempData["MensajeContrasenaTemporalEnviada"] = "Contaseña temporal enviada a su correo, favor iniciar sesión con la contraseña nueva";
+                return RedirectToAction("InicioSesionCliente");
+
+
+            }
+            else
+            {
+                // Si no coincide usuario o contraseña
+                TempData["MensajeCodigoDeSeguridadIncorrecto"] = "El Código de seguridad es incorrecto, favor intente de nuevo el proceso";
+                return RedirectToAction("InicioSesionCliente");
+            }
+        }
+
+
+
+
+
     }
+  
 }
 
