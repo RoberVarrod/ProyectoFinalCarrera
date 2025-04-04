@@ -14,7 +14,7 @@ namespace FrontEnd.Models
         public string Contrasena { get; set; }
         public string Direccion { get; set; }
         public string Oficina { get; set; }
-        public int IdRol { get; set; } = 1; // rol regular por defecto
+        public int IdRol { get; set; } = 2; // rol regular por defecto
         public int IdSucursal { get; set; } = 1; // sucursal virtual por defecto
         public string FotoPerfil { get; set; } = "/imagenesperfil/profile.jpg"; // foro de perfil por defecto
 

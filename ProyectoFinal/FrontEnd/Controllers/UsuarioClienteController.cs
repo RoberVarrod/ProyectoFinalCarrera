@@ -184,6 +184,9 @@ namespace FrontEnd.Controllers
 
         public async Task<IActionResult> Paquetes(string buscar)
         {
+            var sucursales = await _context.Sucursals.ToListAsync();
+            ViewBag.Sucursales = sucursales;
+
             var sessionId = HttpContext.Session.GetString("ClienteId");
             if (string.IsNullOrEmpty(sessionId) || !int.TryParse(sessionId, out int clienteId))
             {
@@ -399,6 +402,9 @@ namespace FrontEnd.Controllers
 
         public async Task<IActionResult> EstadoPaquetes(string buscar)
         {
+            var sucursales = await _context.Sucursals.ToListAsync();
+            ViewBag.Sucursales = sucursales;
+
             var sessionId = HttpContext.Session.GetString("ClienteId");
             if (string.IsNullOrEmpty(sessionId) || !int.TryParse(sessionId, out int clienteId))
             {
@@ -524,6 +530,9 @@ namespace FrontEnd.Controllers
 
         public async Task<IActionResult> OrdenesProceso(string buscar)
         {
+            var sucursales = await _context.Sucursals.ToListAsync();
+            ViewBag.Sucursales = sucursales;
+
             var sessionId = HttpContext.Session.GetString("ClienteId");
             if (string.IsNullOrEmpty(sessionId) || !int.TryParse(sessionId, out int clienteId))
             {

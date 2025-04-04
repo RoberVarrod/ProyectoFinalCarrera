@@ -89,120 +89,128 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var paquete in Model)
+            @if (!Model.Any())
             {
                 <tr>
-                    <td>@paquete.NumeroRegistro</td>
-                    <td>@paquete.PaqueteSucursalNombre</td>
-                    <td><strong style="color: @(paquete.EstadoPago == "Cancelado" ? "#1F1F2E" : "#9E1218")">@paquete.EstadoPago</strong></td>
-                    <td>@(paquete.FechaEntregaEstimada?.ToString("dd/MM/yyyy") ?? "Fecha no disponible")</td>
-                    <td>@paquete.TipoEntrega</td>
-                    <td>@paquete.Precio</td>
-                    <td>
-                        @if (paquete.EstadoRuta == "Pendiente")
-                        {
-                            <strong style="color: #757575;">@paquete.EstadoRuta</strong>
-                        }
-                        else if (paquete.EstadoRuta == "En ruta")
-                        {
-                            <strong style="color: #9E1218;">@paquete.EstadoRuta</strong>
-                        }
-                        else if (paquete.EstadoRuta == "Entregado")
-                        {
-                            <strong style="color: #1F1F2E;">@paquete.EstadoRuta</strong>
-                        }
-                        else if (paquete.EstadoRuta == "En sucursal")
-                        {
-                            <strong style="color: #C4161C;">@paquete.EstadoRuta</strong>
-                        }
+                    <td colspan="9" class="text-center text-muted">No hay paquetes registrados</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var paquete in Model)
+                {
+                    <tr>
+                        <td>@paquete.NumeroRegistro</td>
+                        <td>@paquete.PaqueteSucursalNombre</td>
+                        <td><strong style="color: @(paquete.EstadoPago == "Cancelado" ? "#1F1F2E" : "#9E1218")">@paquete.EstadoPago</strong></td>
+                        <td>@(paquete.FechaEntregaEstimada?.ToString("dd/MM/yyyy") ?? "Fecha no disponible")</td>
+                        <td>@paquete.TipoEntrega</td>
+                        <td>@paquete.Precio</td>
+                        <td>
+                            @if (paquete.EstadoRuta == "Pendiente")
+                            {
+                                <strong style="color: #757575;">@paquete.EstadoRuta</strong>
+                            }
+                            else if (paquete.EstadoRuta == "En ruta")
+                            {
+                                <strong style="color: #9E1218;">@paquete.EstadoRuta</strong>
+                            }
+                            else if (paquete.EstadoRuta == "Entregado")
+                            {
+                                <strong style="color: #1F1F2E;">@paquete.EstadoRuta</strong>
+                            }
+                            else if (paquete.EstadoRuta == "En sucursal")
+                            {
+                                <strong style="color: #C4161C;">@paquete.EstadoRuta</strong>
+                            }
 
-                    </td>
-                    <td>
-                        <!-- Botón para abrir el modal de ver detalles -->
-                        <button class="btn btn-link text-danger" data-toggle="modal" data-target="#deleteModal-@paquete.IdPaquete">
-                            <i class="fas fa-ellipsis-h"></i>
-                        </button>
-                        <!-- Modal de detalles -->
-                        <div class="modal fade" id="deleteModal-@paquete.IdPaquete" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel-@paquete.IdPaquete" aria-hidden="true">
-                            <div class="modal-dialog modal-md" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="deleteModalLabel-@paquete.IdPaquete">Detalles del Paquete</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p><strong>Tracking ID:</strong>@paquete.NumeroRegistro</p>
-                                        <p><strong>Nombre del Cliente:</strong>@paquete.PaqueteUsuarioNombre</p>
-                                        <p>
-                                            <strong>Detalles:</strong>
-                                            <ul>
-                                                <li>Alto : @paquete.PaqueteAlto</li>
-                                                <li>Largo: @paquete.PaqueteLargo</li>
-                                                <li>Ancho: @paquete.PaqueteAncho</li>
-                                            </ul>
-                                        </p>
-                                        <p><strong>Estado de pago:</strong> @paquete.EstadoPago</p>
-                                        <p><strong>Fecha Aproximada de Entrega:</strong> @paquete.FechaRegistro</p>
-                                        <p><strong>Tipo de Entrega:</strong> @paquete.TipoEntrega</p>
-                                        <p><strong>Descripción:</strong> @paquete.Descripcion</p>
-                                        <hr />
+                        </td>
+                        <td>
+                            <!-- Botón para abrir el modal de ver detalles -->
+                            <button class="btn btn-link text-danger" data-toggle="modal" data-target="#deleteModal-@paquete.IdPaquete">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                            <!-- Modal de detalles -->
+                            <div class="modal fade" id="deleteModal-@paquete.IdPaquete" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel-@paquete.IdPaquete" aria-hidden="true">
+                                <div class="modal-dialog modal-md" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="deleteModalLabel-@paquete.IdPaquete">Detalles del Paquete</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p><strong>Tracking ID:</strong>@paquete.NumeroRegistro</p>
+                                            <p><strong>Nombre del Cliente:</strong>@paquete.PaqueteUsuarioNombre</p>
+                                            <p>
+                                                <strong>Detalles:</strong>
+                                                <ul>
+                                                    <li>Alto : @paquete.PaqueteAlto</li>
+                                                    <li>Largo: @paquete.PaqueteLargo</li>
+                                                    <li>Ancho: @paquete.PaqueteAncho</li>
+                                                </ul>
+                                            </p>
+                                            <p><strong>Estado de pago:</strong> @paquete.EstadoPago</p>
+                                            <p><strong>Fecha Aproximada de Entrega:</strong> @paquete.FechaRegistro</p>
+                                            <p><strong>Tipo de Entrega:</strong> @paquete.TipoEntrega</p>
+                                            <p><strong>Descripción:</strong> @paquete.Descripcion</p>
+                                            <hr />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- Modal de detalles End -->
-                        <!-- Botón para entrega -->
-                        <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal-@paquete.IdPaquete">
-                            <i class="fas fa-truck"></i>
-                        </button>
-                        <!-- Modal entrega paquete Start -->
-                        <div class="modal fade" id="detailsModal-@paquete.IdPaquete" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-lg" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="detailsModalLabel">Detalles del Paquete</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <!-- Información de Paquete -->
-                                        <p><strong>Tracking ID:</strong> @paquete.NumeroRegistro</p>
-                                        <p>
-                                            <strong>Detalles:</strong>
-                                            <ul>
-                                                <li>Alto: @paquete.PaqueteAlto</li>
-                                                <li>Largo: @paquete.PaqueteLargo</li>
-                                                <li>Ancho: @paquete.PaqueteAncho</li>
+                            <!-- Modal de detalles End -->
+                            <!-- Botón para entrega -->
+                            <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal-@paquete.IdPaquete">
+                                <i class="fas fa-truck"></i>
+                            </button>
+                            <!-- Modal entrega paquete Start -->
+                            <div class="modal fade" id="detailsModal-@paquete.IdPaquete" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="detailsModalLabel">Detalles del Paquete</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <!-- Información de Paquete -->
+                                            <p><strong>Tracking ID:</strong> @paquete.NumeroRegistro</p>
+                                            <p>
+                                                <strong>Detalles:</strong>
+                                                <ul>
+                                                    <li>Alto: @paquete.PaqueteAlto</li>
+                                                    <li>Largo: @paquete.PaqueteLargo</li>
+                                                    <li>Ancho: @paquete.PaqueteAncho</li>
+                                                </ul>
+                                            </p>
+                                            <p><strong>Estado de pago:</strong> @paquete.EstadoPago</p>
+                                            <p><strong>Fecha Aproximada de Entrega:</strong> @paquete.FechaEntregaEstimada</p>
+                                            <p><strong>Tipo de Entrega:</strong> <span id="tipoEntrega">@paquete.TipoEntrega</span></p>
+                                            <p><strong>Sucursal Seleccionada:</strong> <span id="sucursalSeleccionada">@paquete.PaqueteSucursalNombre</span></p>
+                                            <p><strong>Descripción:</strong> @paquete.Descripcion</p>
+                                            <hr />
+                                            <!-- Navs para seleccionar el método de entrega -->
+                                            <ul class="nav nav-tabs" id="deliveryTabs_@paquete.IdPaquete" role="tablist">
+                                                <li class="nav-item" role="presentation">
+                                                    <a class="nav-link active" id="domicilioTab_@paquete.IdPaquete" data-toggle="tab" href="#domicilioTabContent_@paquete.IdPaquete" role="tab" aria-controls="domicilioTabContent_@paquete.IdPaquete" aria-selected="true">Entrega a Domicilio</a>
+                                                </li>
+                                                <li class="nav-item" role="presentation">
+                                                    <a class="nav-link" id="sucursalTab_@paquete.IdPaquete" data-toggle="tab" href="#sucursalTabContent_@paquete.IdPaquete" role="tab" aria-controls="sucursalTabContent_@paquete.IdPaquete" aria-selected="false">Retiro en Sucursal</a>
+                                                </li>
                                             </ul>
-                                        </p>
-                                        <p><strong>Estado de pago:</strong> @paquete.EstadoPago</p>
-                                        <p><strong>Fecha Aproximada de Entrega:</strong> @paquete.FechaEntregaEstimada</p>
-                                        <p><strong>Tipo de Entrega:</strong> <span id="tipoEntrega">@paquete.TipoEntrega</span></p>
-                                        <p><strong>Sucursal Seleccionada:</strong> <span id="sucursalSeleccionada">@paquete.PaqueteSucursalNombre</span></p>
-                                        <p><strong>Descripción:</strong> @paquete.Descripcion</p>
-                                        <hr />
-                                        <!-- Navs para seleccionar el método de entrega -->
-                                        <ul class="nav nav-tabs" id="deliveryTabs_@paquete.IdPaquete" role="tablist">
-                                            <li class="nav-item" role="presentation">
-                                                <a class="nav-link active" id="domicilioTab_@paquete.IdPaquete" data-toggle="tab" href="#domicilioTabContent_@paquete.IdPaquete" role="tab" aria-controls="domicilioTabContent_@paquete.IdPaquete" aria-selected="true">Entrega a Domicilio</a>
-                                            </li>
-                                            <li class="nav-item" role="presentation">
-                                                <a class="nav-link" id="sucursalTab_@paquete.IdPaquete" data-toggle="tab" href="#sucursalTabContent_@paquete.IdPaquete" role="tab" aria-controls="sucursalTabContent_@paquete.IdPaquete" aria-selected="false">Retiro en Sucursal</a>
-                                            </li>
-                                        </ul>
-                                        <div class="tab-content mt-3" id="deliveryTabsContent_@paquete.IdPaquete">
-                                            <!-- Contenido Entrega a Domicilio -->
-                                            <div class="tab-pane fade show active" id="domicilioTabContent_@paquete.IdPaquete" role="tabpanel" aria-labelledby="domicilioTab_@paquete.IdPaquete">
-                                                <p><strong>Descripción:</strong> La entrega a domicilio tarda entre 3-4 días hábiles.</p>
-                                                <p><strong>Costo:</strong> Ya está incluido con el servicio.</p>
-                                                <button class="btn btn-outline-dark" data-toggle="collapse" href="#domicilioAddressForm_@paquete.IdPaquete" role="button" aria-expanded="false" aria-controls="domicilioAddressForm_@paquete.IdPaquete" onclick="updateTipoEntrega('Domicilio')">Confirmar Entrega a Domicilio</button>
-                                                <div class="collapse" id="domicilioAddressForm_@paquete.IdPaquete">
-                                                  
+                                            <div class="tab-content mt-3" id="deliveryTabsContent_@paquete.IdPaquete">
+                                                <!-- Contenido Entrega a Domicilio -->
+                                                <div class="tab-pane fade show active" id="domicilioTabContent_@paquete.IdPaquete" role="tabpanel" aria-labelledby="domicilioTab_@paquete.IdPaquete">
+                                                    <p><strong>Descripción:</strong> La entrega a domicilio tarda entre 3-4 días hábiles.</p>
+                                                    <p><strong>Costo:</strong> Ya está incluido con el servicio.</p>
+                                                    <button class="btn btn-outline-dark" data-toggle="collapse" href="#domicilioAddressForm_@paquete.IdPaquete" role="button" aria-expanded="false" aria-controls="domicilioAddressForm_@paquete.IdPaquete" onclick="updateTipoEntrega('Domicilio')">Confirmar Entrega a Domicilio</button>
+                                                    <div class="collapse" id="domicilioAddressForm_@paquete.IdPaquete">
+
                                                         <form method="post" asp-action="ActualizarDireccion" asp-route-idPaquete="@paquete.IdPaquete" asp-route-idSucursal="@paquete.IdSucursal">
-                                                           
+
                                                             <div class="form-group">
                                                                 <label class="mt-4">Provincia</label>
                                                                 <input type="text" class="form-control" name="provincia" value="@paquete.PaqueteUsuarioProvincia" required />
@@ -226,68 +234,82 @@
 
                                                             <input type="hidden" name="tipoEntrega" value="Domicilio" />
 
-                                                             <div class="d-flex justify-content-start mt-3">
+                                                            <div class="d-flex justify-content-start mt-3">
                                                                 <button class="btn btn-dark mr-2" type="submit">Modificar Dirección</button>
                                                                 <form method="post" asp-action="ActualizarMetodoEntrega" asp-route-idPaquete="@paquete.IdPaquete" asp-route-tipoEntrega="Domicilio" asp-route-idSucursal="@paquete.IdSucursal">
                                                                     <button class="btn btn-primary" type="submit">Verificar Dirección</button>
                                                                 </form>
                                                             </div>
                                                         </form>
-                                                    
+
+                                                    </div>
+                                                </div>
+                                                <!-- Contenido Retiro en Sucursal -->
+                                                <div class="tab-pane fade" id="sucursalTabContent_@paquete.IdPaquete" role="tabpanel" aria-labelledby="sucursalTab_@paquete.IdPaquete">
+                                                    <p><strong>Descripción:</strong> El retiro en sucursal se puede realizar en cualquiera de las sucursales disponibles.</p>
+                                                    <ul>
+                                                        <li>
+                                                            <strong>Naranjo (CR) </strong>
+                                                            <br />
+                                                            <br /><strong>Horario: </strong>Lunes a Viernes 8:00 a.m. a 5:00 p.m. - Sábado 8:00 a.m. a 12:00 m.d.
+                                                            <br /><strong>Teléfono: </strong> +506 2455 1600
+                                                            <br /><strong>Dirección: </strong> Cruce de Naranjo, 500m Oeste de la Soda Jairos contiguo al Bar la Gallera.
+                                                            <br />Alajuela, Naranjo, San Miguel
+                                                            <br />20602 - Costa Rica
+                                                        </li>
+                                                        <br />
+                                                        <li>
+                                                            <strong>Pérez Zeledón (CR) </strong>
+                                                            <br />
+                                                            <br /><strong>Horario: </strong>Lunes a Viernes 8:00 a.m. a 12:00 m.d. y de 1:00 p.m. 5:00 p.m. - Sábado 8:00 a.m. a 12:00 m.d.
+                                                            <br /><strong>Teléfono: </strong> +506 2771 9715
+                                                            <br /><strong>Dirección: </strong> Barrio San Luis, 100m Norte y 100m Oeste de la Gasolinera Gasotica.
+                                                        </li>
+                                                        <br />
+                                                    </ul>
+                                                    <!-- Formulario para Retiro en Sucursal -->
+                                                    <form method="post" asp-action="ActualizarMetodoEntrega" asp-route-idPaquete="@paquete.IdPaquete" asp-route-tipoEntrega="Sucursal">
+                                                        <div class="form-group">
+                                                            <label>Seleccione la Sucursal:</label>
+                                                            <div class="form-group">
+                                                                <label for="SucursalId">Sucursal</label>
+                                                                @if (ViewBag.Sucursales != null)
+                                                                {
+                                                                    <select class="form-control" id="SucursalId" name="IdSucursal" required>
+                                                                        @foreach (var sucursal in ViewBag.Sucursales as List<Sucursal>)
+                                                                        {
+                                                                            <option value="@sucursal.IdSucursal" selected="@(paquete.IdSucursal == sucursal.IdSucursal)">
+                                                                                @sucursal.Nombre
+                                                                            </option>
+                                                                        }
+                                                                    </select>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <p class="text-danger">No hay sucursales disponibles.</p>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                        <button class="btn btn-primary" type="submit">Confirmar Retiro en Sucursal</button>
+                                                    </form>
                                                 </div>
                                             </div>
-                                            <!-- Contenido Retiro en Sucursal -->
-                                            <div class="tab-pane fade" id="sucursalTabContent_@paquete.IdPaquete" role="tabpanel" aria-labelledby="sucursalTab_@paquete.IdPaquete">
-                                                <p><strong>Descripción:</strong> El retiro en sucursal se puede realizar en cualquiera de las sucursales disponibles.</p>
-                                                <ul>
-                                                    <li>
-                                                        <strong>Naranjo (CR) </strong>
-                                                        <br />
-                                                        <br /><strong>Horario: </strong>Lunes a Viernes 8:00 a.m. a 5:00 p.m. - Sábado 8:00 a.m. a 12:00 m.d.
-                                                        <br /><strong>Teléfono: </strong> +506 2455 1600
-                                                        <br /><strong>Dirección: </strong> Cruce de Naranjo, 500m Oeste de la Soda Jairos contiguo al Bar la Gallera.
-                                                        <br />Alajuela, Naranjo, San Miguel
-                                                        <br />20602 - Costa Rica
-                                                    </li>
-                                                    <br />
-                                                    <li>
-                                                        <strong>Pérez Zeledón (CR) </strong>
-                                                        <br />
-                                                        <br /><strong>Horario: </strong>Lunes a Viernes 8:00 a.m. a 12:00 m.d. y de 1:00 p.m. 5:00 p.m. - Sábado 8:00 a.m. a 12:00 m.d.
-                                                        <br /><strong>Teléfono: </strong> +506 2771 9715
-                                                        <br /><strong>Dirección: </strong> Barrio San Luis, 100m Norte y 100m Oeste de la Gasolinera Gasotica.
-                                                    </li>
-                                                    <br />
-                                                </ul>
-                                                <!-- Formulario para Retiro en Sucursal -->
-                                                <form method="post" asp-action="ActualizarMetodoEntrega" asp-route-idPaquete="@paquete.IdPaquete" asp-route-tipoEntrega="Sucursal">
-                                                    <div class="form-group">
-                                                        <label>Seleccione la Sucursal:</label>
-                                                        <select class="form-control" name="idSucursal">
-                                                            <option value="@paquete.IdSucursal">@paquete.PaqueteSucursalNombre</option>
-                                                            <option value="2">Naranjo (CR)</option>
-                                                            <option value="3">Pérez Zeledón (CR)</option>
-                                                        </select>
-                                                    </div>
-                                                    <button class="btn btn-primary" type="submit">Confirmar Retiro en Sucursal</button>
-                                                </form>
-                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- Modal entrega paquete End -->
-                        <!-- Historial del paquete -->
-                        <form asp-action="Historial" asp-controller="UsuarioCliente" method="post">
-                            <input type="text" class="form-control" name="pid" value="@paquete.IdPaquete" hidden />
-                            <button type="submit" class="btn btn-link"><i class="fas fa-history"></i></button>
-                        </form>
-                    </td>
-                </tr>
+                            <!-- Modal entrega paquete End -->
+                            <!-- Historial del paquete -->
+                            <form asp-action="Historial" asp-controller="UsuarioCliente" method="post">
+                                <input type="text" class="form-control" name="pid" value="@paquete.IdPaquete" hidden />
+                                <button type="submit" class="btn btn-link"><i class="fas fa-history"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
     </table>
