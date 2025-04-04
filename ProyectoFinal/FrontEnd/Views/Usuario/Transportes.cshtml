@@ -87,7 +87,7 @@
             autocompleteOrigin = new google.maps.places.Autocomplete(
                 document.getElementById("origin"),
                 {
-                    types: ["geocode"], // Limita los resultados a direcciones geográficas
+                   // types: ["geocode"], // Limita los resultados a direcciones geográficas
                 }
             );
 
@@ -95,21 +95,30 @@
             autocompleteDestination = new google.maps.places.Autocomplete(
                 document.getElementById("destination"),
                 {
-                    types: ["geocode"], // Limita los resultados a direcciones geográficas
+                   // types: ["geocode"], // Limita los resultados a direcciones geográficas
                 }
             );
         }
 
+       // var origin = document.getElementById("origin");
+       // var destination = document.getElementById("destination");
+
         // Función para calcular y mostrar la ruta usando la API de Routes
-        async function calculateAndDisplayRoute(origin, destination) {
-            const apiKey = "AIzaSyCSzgCfKggkWFEA3ZTF8ZHwrRQluVgz1GU"; // Reemplaza con tu clave de API
+        async function calculateAndDisplayRoute() {
+            const apiKey = "AIzaSyDC8ZJMw9pqASh8A6OkkUdB3vvXFCB5H4A"; // Reemplaza con tu clave de API
             const requestUrl = `https://routes.googleapis.com/directions/v2:computeRoutes?key=${apiKey}`;
+
+            var origin = document.getElementById("origin").value;
+            var destination = document.getElementById("destination").value;
 
             const requestBody = {
                 origin: { address: origin },
                 destination: { address: destination },
                 travelMode: "DRIVE",
-                routingPreference: "TRAFFIC_AWARE",
+               // X-Goog-FieldMask: *
+               routingPreference: "TRAFFIC_AWARE_OPTIMAL"
+                
+               
             };
 
             try {
@@ -117,15 +126,44 @@
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
+                        "X-Goog-FieldMask": "routes"
+
                     },
                     body: JSON.stringify(requestBody),
                 });
 
+              //  if (!response.ok) {
+               //     throw new Error("Error al calcular la ruta");
+              //  }
                 if (!response.ok) {
-                    throw new Error("Error al calcular la ruta");
+
+                    const errorData = await response.json();
+
+                    console.error("Respuesta con error:", errorData);
+
+                    throw new Error("Error al calcular la ruta respuesta mala: " + (errorData.error?.message || "Desconocido"));
+
                 }
 
+
+
                 const data = await response.json();
+
+
+                //obtener detalles de la ruta
+                var routeDetailsDistanceMeters = data.routes[0].distanceMeters;
+                var routeDetailsDistanceKMeters = routeDetailsDistanceMeters / 1000;
+
+                var routeDetailsDurationS = (data.routes[0].duration).replaceAll("s", "");
+                var routeDetailsDurationM = routeDetailsDurationS / 60;
+
+                var routeDetailsDurationH = routeDetailsDurationS / 3600;
+
+
+
+
+                alert("La mejor ruta tomando en cuenta el tráfico tiene una distancia de: " + routeDetailsDistanceKMeters + "Km" + "\n" + "y una duración de: " + routeDetailsDurationM + " minutos" + "\n" + "lo que equivale a un total de: " + routeDetailsDurationH + " Horas");
+
 
                 // Dibujar la ruta en el mapa
                 const route = data.routes[0];
@@ -142,6 +180,9 @@
 
                 routePath.setMap(map);
 
+
+               
+
                 // Ajustar el mapa para que se vea toda la ruta
                 const bounds = new google.maps.LatLngBounds();
                 decodedPath.forEach((point) => bounds.extend(point));
@@ -150,6 +191,7 @@
             } catch (error) {
                 alert("Error al calcular la ruta: " + error.message);
             }
+                    
         }
 
         // Manejar el envío del formulario
@@ -166,7 +208,7 @@
         // Cargar la API de Google Maps con la biblioteca de Places
         function loadGoogleMapsScript() {
             const script = document.createElement("script");
-            script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDl_hVi8ToU_Pv1BHohwA1EOsZCEMSNe_s&callback=initMap&libraries=places,geometry`;
+            script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDC8ZJMw9pqASh8A6OkkUdB3vvXFCB5H4A&callback=initMap&libraries=places,geometry`;
             script.defer = true;
             document.head.appendChild(script);
         }
