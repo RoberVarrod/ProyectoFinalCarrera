@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<FrontEnd.Models.Paquete>
+
+@{
     ViewData["Title"] = "Pagos";
     Layout = "~/Views/Shared/_LayoutUsuarios.cshtml";
 }
@@ -34,19 +36,28 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var paquete in Model)
+            @if (!Model.Any())
             {
                 <tr>
-                    <td>@paquete.NumeroRegistro</td>
-                    <td><strong style="color: @(paquete.EstadoPago == "Cancelado" ? "#1F1F2E" : "#9E1218")">@paquete.EstadoPago</strong></td>
-                    <td>$@paquete.Precio</td>
-                    <td>@paquete.IdClienteNavigation.Nombre @paquete.IdClienteNavigation.PrimerApellido</td>
-                    <td>
-                        <button class="btn btn-link btn-detalles-pago" data-id="@paquete.IdPaquete">
-                            <i class="fas fa-ellipsis-h"></i>
-                        </button>
-                    </td>
+                    <td colspan="9" class="text-center text-muted">No hay pagos registrados</td>
                 </tr>
+            }
+            else
+            {
+                @foreach (var paquete in Model)
+                {
+                    <tr>
+                        <td>@paquete.NumeroRegistro</td>
+                        <td><strong style="color: @(paquete.EstadoPago == "Cancelado" ? "#1F1F2E" : "#9E1218")">@paquete.EstadoPago</strong></td>
+                        <td>$@paquete.Precio</td>
+                        <td>@paquete.IdClienteNavigation.Nombre @paquete.IdClienteNavigation.PrimerApellido</td>
+                        <td>
+                            <button class="btn btn-link btn-detalles-pago" data-id="@paquete.IdPaquete">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
     </table>

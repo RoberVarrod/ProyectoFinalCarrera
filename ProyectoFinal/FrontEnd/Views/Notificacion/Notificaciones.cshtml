@@ -28,10 +28,15 @@
 
     <div class="list-group" id="notificationsList">
         
-        @foreach(
-            var row in Model
-
-        )
+        @if (!Model.Any())
+        {
+            <div class="alert alert-dark text-center text-muted" role="alert">
+                No hay notificaciones recientes
+            </div>
+        }
+        else
+        {
+        @foreach(var row in Model)
         {
             <a href="#" class="list-group-item list-group-item-action notif-item" id=@row.IdNotificacion>
                 <div class="d-flex w-100 justify-content-between">
@@ -42,9 +47,10 @@
                 <small class="text-muted d-block mt-1">@row.FechaRegistro</small>
             </a>
         }
+        }
 
-
-
+    </div>
 </div>
+
 <!-- Lista de Notificaciones End -->
 

@@ -5,76 +5,76 @@
 }
 @model FrontEnd.Models.Pago
 
-<!-- Pago Start -->
-<div class="container-fluid bg-secondary my-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6 py-5 py-lg-0">
-                <h6 class="text-primary text-uppercase font-weight-bold">Registro de pago</h6>
-                <h1 class="mb-4">Registra el pago de un paquete</h1>
-                <p class="mb-4">Ingresa el número de tracking para buscar el paquete a pagar.</p>
-            </div>
-            <div class="col-lg-6">
-                <div class="bg-primary py-5 px-4 px-sm-5">
-
-                    <div class="form-group">
-                        <input id="TrackingBuscar" type="text" class="form-control border-0 p-4" placeholder="Tracking ID (Número de Registro)" name="TrackingBuscar" required="required" />
+<div class="jumbotron jumbotron-fluid mb-5">
+    <div class="container py-5">
+        <!-- Pago Start -->
+                <div class="row align-items-center">
+                    <div class="col-lg-6 py-5 py-lg-0">
+                        <h6 class="text-primary text-uppercase font-weight-bold">Registro de pago</h6>
+                <h1 class="text-white mb-4">Registra el pago de un paquete</h1>
+                <p class="text-white-50 mb-4">Ingresa el número de tracking para buscar el paquete a pagar.</p>
                     </div>
-                    <div>
-                        <button id="buscarPaquete" class="btn btn-dark btn-block border-0 py-3" type="button">Buscar Paquete</button>
-                    </div>
+                    <div class="col-lg-6">
+                        <div class="bg-primary py-5 px-4 px-sm-5">
 
-                    <form class="py-5" asp-controller="Usuario" asp-action="RegistrarPago" method="post" id="pagoForm">
-                        @if (TempData["MensajePagoRegistrado"] != null)
-                        {
-                            <div class="alert alert-success" role="alert">
-                                @TempData["MensajePagoRegistrado"]
+                            <div class="form-group">
+                                <input id="TrackingBuscar" type="text" class="form-control border-0 p-4" placeholder="Tracking ID (Número de Registro)" name="TrackingBuscar" required="required" />
                             </div>
-                        }
+                            <div>
+                                <button id="buscarPaquete" class="btn btn-dark btn-block border-0 py-3" type="button">Buscar Paquete</button>
+                            </div>
 
-                        <div asp-validation-summary="All" class="text-danger"></div>
+                            <form class="py-5" asp-controller="Usuario" asp-action="RegistrarPago" method="post" id="pagoForm">
+                                @if (TempData["MensajePagoRegistrado"] != null)
+                                {
+                                    <div class="alert alert-success" role="alert">
+                                        @TempData["MensajePagoRegistrado"]
+                                    </div>
+                                }
 
-                        <h6 class="text-primary text-uppercase font-weight-bold" style="color:black !important">Datos del pago</h6>
-                        <div class="form-group">
-                            <input id="IdPaquete" type="hidden" class="form-control border-0 p-4" name="IdPaquete" required="required" />
-                        </div>
-                        <div class="form-group">
-                            <input id="IdCliente" type="hidden" class="form-control border-0 p-4" name="IdCliente" required="required" />
-                        </div>
-                        <div class="form-group">
-                            <input id="NumeroRegistro" type="text" class="form-control border-0 p-4" placeholder="Tracking ID" name="NumeroRegistro" required="required" readonly />
-                        </div>
-                        <div class="form-group">
-                            <input id="Total" type="text" class="form-control border-0 p-4" placeholder="Total" name="Total" required="required" />
-                        </div>
-                        <div class="form-group">
-                            <input id="Descripcion" type="text" class="form-control border-0 p-4" placeholder="Número de transacción" name="Descripcion" />
-                        </div>
+                                <div asp-validation-summary="All" class="text-danger"></div>
 
-                        <h6 class="text-primary text-uppercase font-weight-bold" style="color:black !important">Método de pago</h6>
-                        <div class="form-group" style="color: white;">
-                            <label><input type="radio" name="PagoMetodo" value="Sinpe"> Sinpe</label><br>
-                            <label><input type="radio" name="PagoMetodo" value="Transaccion"> Transacción</label><br>
-                            <label><input type="radio" name="PagoMetodo" value="Tarjeta"> Tarjeta</label><br>
-                            <label><input type="radio" name="PagoMetodo" value="Efectivo"> Efectivo</label>
-                        </div>
+                                <h6 class="text-primary text-uppercase font-weight-bold" style="color:black !important">Datos del pago</h6>
+                                <div class="form-group">
+                                    <input id="IdPaquete" type="hidden" class="form-control border-0 p-4" name="IdPaquete" required="required" />
+                                </div>
+                                <div class="form-group">
+                                    <input id="IdCliente" type="hidden" class="form-control border-0 p-4" name="IdCliente" required="required" />
+                                </div>
+                                <div class="form-group">
+                                    <input id="NumeroRegistro" type="text" class="form-control border-0 p-4" placeholder="Tracking ID" name="NumeroRegistro" required="required" readonly />
+                                </div>
+                                <div class="form-group">
+                                    <input id="Total" type="text" class="form-control border-0 p-4" placeholder="Total" name="Total" required="required" />
+                                </div>
+                                <div class="form-group">
+                                    <input id="Descripcion" type="text" class="form-control border-0 p-4" placeholder="Número de transacción" name="Descripcion" />
+                                </div>
 
-                        <hr />
-                        <h6 class="text-primary text-uppercase font-weight-bold" style="color:black !important">Datos del cliente</h6>
-                        <div class="form-group">
-                            <input id="nombreCliente" type="text" class="form-control border-0 p-4" placeholder="Nombre cliente" name="nombreCliente" readonly />
-                        </div>
-                        <div class="form-group">
-                            <input id="Cedula" type="text" class="form-control border-0 p-4" placeholder="Cédula cliente" name="Cedula" readonly />
-                        </div>
+                                <h6 class="text-primary text-uppercase font-weight-bold" style="color:black !important">Método de pago</h6>
+                                <div class="form-group" style="color: white;">
+                                    <label><input type="radio" name="PagoMetodo" value="Sinpe"> Sinpe</label><br>
+                                    <label><input type="radio" name="PagoMetodo" value="Transaccion"> Transacción</label><br>
+                                    <label><input type="radio" name="PagoMetodo" value="Tarjeta"> Tarjeta</label><br>
+                                    <label><input type="radio" name="PagoMetodo" value="Efectivo"> Efectivo</label>
+                                </div>
 
-                        <div>
-                            <button id="registrarPago" class="btn btn-dark btn-block border-0 py-3" type="submit">Registrar pago</button>
+                                <hr />
+                                <h6 class="text-primary text-uppercase font-weight-bold" style="color:black !important">Datos del cliente</h6>
+                                <div class="form-group">
+                                    <input id="nombreCliente" type="text" class="form-control border-0 p-4" placeholder="Nombre cliente" name="nombreCliente" readonly />
+                                </div>
+                                <div class="form-group">
+                                    <input id="Cedula" type="text" class="form-control border-0 p-4" placeholder="Cédula cliente" name="Cedula" readonly />
+                                </div>
+
+                                <div>
+                                    <button id="registrarPago" class="btn btn-dark btn-block border-0 py-3" type="submit">Registrar pago</button>
+                                </div>
+                            </form>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
-        </div>
     </div>
 </div>
 <!-- Pago End -->
