@@ -8,7 +8,6 @@
     <div class="container py-5">
         <div class="row align-items-center">
             <div class="col-lg-6 py-5 py-lg-0">
-                <h6 class="text-primary text-uppercase font-weight-bold">Crea tu cuenta</h6>
                 <h1 class="text-white mb-4">Registro de usuarios</h1>
                 <p class="text-white-50 mb-4">Completa los campos para obtener acceso al sistema administrativo.</p>
             </div>
@@ -21,7 +20,7 @@
                                 @TempData["MensajeRegistroCorrecto"]
                             </div>
                         }
-                        <h5 class="text-white text-uppercase font-weight-bold mt-4">Datos</h5>
+                        <h5 class="text-white text-uppercase font-weight-bold mt-4 " style="color:#1F1F2E !important">Datos</h5>
                         <div class="form-group">
                             <input asp-for="Nombre" type="text" class="form-control border-0 p-4" placeholder="Nombre" name="Nombre" required="required" />
                         </div>
@@ -48,7 +47,7 @@
                         <div class="form-group">
                             <input asp-for="Oficina" type="text" class="form-control border-0 p-4" placeholder="Oficina atención al cliente" name="Oficina" required="required" />
                         </div>
-                        <h5 class="text-white text-uppercase font-weight-bold mt-4">Contraseña</h5>
+                        <h5 class="text-white text-uppercase font-weight-bold mt-4" style="color:#1F1F2E !important">Contraseña</h5>
                         <div class="form-group">
                             <input asp-for="Contrasena" type="password" class="form-control border-0 p-4" id="password" placeholder="Contraseña"
                                    name="Contrasena" required="required" />

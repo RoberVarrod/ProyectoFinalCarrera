@@ -7,8 +7,8 @@
 <!-- Header Start -->
 <div class="jumbotron jumbotron-fluid mb-5">
     <div class="container text-center py-5">
-        <h1 class="text-primary mb-4">Perfil</h1>
-        <h1 class="text-white display-3 mb-5">Configura tus datos</h1>
+        <h1 class="text-white display-4 font-weight-bold mb-4 ">Configura tu</h1>
+        <h1 class="text-white display-4 font-weight-bold mb-4 "> Perfil</h1>
     </div>
 </div>
 <!-- Header End -->
@@ -53,10 +53,10 @@
             <div class="bg-light py-4 px-3 rounded-bottom shadow">
                 <!-- Información Personal Start -->
                 <h5 class="text-dark">Información Personal</h5>
-                <p><strong>Cédula:</strong> @Model.Cedula</p>
-                <p><strong>Correo Electrónico:</strong> @Model.Correo</p>
-                <p><strong>Teléfono:</strong> @Model.TelefonoPrincipal</p>
-                <p><strong>Dirección:</strong> @Model.Direccion</p>
+                <p><strong style="color:#1F1F2E">Cédula:</strong> @Model.Cedula</p>
+                <p><strong style="color:#1F1F2E">Correo Electrónico:</strong> @Model.Correo</p>
+                <p><strong style="color:#1F1F2E">Teléfono:</strong> @Model.TelefonoPrincipal</p>
+                <p><strong style ="color:#1F1F2E">Dirección:</strong> @Model.Direccion</p>
 
                 <div class="d-flex justify-content-between mt-4">
                     <a href="#" data-toggle="collapse" data-target="#editInfoForm" class="btn btn-outline-dark">
@@ -67,6 +67,7 @@
                     </a>
                 </div>
 
+             
                 <!-- Formulario para Editar Información Start -->
                 <div id="editInfoForm" class="collapse mt-4">
                     <form method="post" action="/Usuario/EditarInformacion">
