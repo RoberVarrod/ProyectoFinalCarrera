@@ -1,17 +1,20 @@
 ﻿@model IEnumerable<FrontEnd.Models.Notificacion>
 @{
     ViewData["Title"] = "Notificaciones";
-    var clienteRol = Context.Session.GetString("ClienteRol");
+    var usuarioRol = Context.Session.GetString("UsuarioRol");
 
-    if (clienteRol != null)
+    if (usuarioRol != null && usuarioRol == "3")
     {
-        Layout = "~/Views/Shared/_LayoutClientes.cshtml";
-
-    } else
+        Layout = "~/Views/Shared/_LayoutTransportistas.cshtml";
+    }
+    else if (usuarioRol != null)
     {
         Layout = "~/Views/Shared/_LayoutUsuarios.cshtml";
     }
-    
+    else
+    {
+        Layout = "~/Views/Shared/_LayoutClientes.cshtml";
+    }
 }
 
 <!-- Header Start -->

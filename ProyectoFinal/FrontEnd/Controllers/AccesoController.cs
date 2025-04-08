@@ -119,7 +119,7 @@ namespace FrontEnd.Controllers
             {
                 // Buscar el usuario en la base de datos
                 var usuario = _context.Usuarios
-                    .FirstOrDefault(u => u.Correo == modelo.Correo && u.Contrasena == modelo.Contrasena); /// deberiaa ser con cedula tambien --->Ariel
+                    .FirstOrDefault(u => u.Correo == modelo.Correo && u.Contrasena == modelo.Contrasena); /// debería ser con cédula también --->Ariel
 
                 if (usuario != null)
                 {
@@ -130,11 +130,15 @@ namespace FrontEnd.Controllers
 
                     TempData["Mensaje"] = $"Bienvenido {usuario.Nombre}";
 
-                    // Aqui hay que crear un objeto de tipo Usuario model completo y pasar ese objeto al redirect to aaction para la vista configuracion. --->Ariel
+                    // Verificar el rol del usuario
+                    if (usuario.IdRol == 3)
+                    {
+                        // Redirigir a la vista de configuración de transportista, pasando el objeto del usuario
+                        return RedirectToAction("Configuracion", "UsuarioTransportista", new { usuarioId = usuario.IdUsuario });
+                    }
 
-
-
-                    return RedirectToAction("Configuracion", "Usuario");
+                    // Redirigir a otra vista si no es rol 3
+                    return RedirectToAction("Configuracion", "Usuario", new { usuarioId = usuario.IdUsuario });
                 }
 
                 // Si no coincide usuario o contraseña
@@ -144,6 +148,7 @@ namespace FrontEnd.Controllers
 
             return View();
         }
+
 
         [AllowAnonymous]
         [HttpGet]

@@ -126,6 +126,7 @@
 
                         </td>
                         <td>
+                            <div class="d-flex justify-content-start">
                             <!-- Botón para abrir el modal de ver detalles -->
                             <button class="btn btn-link text-danger" data-toggle="modal" data-target="#deleteModal-@paquete.IdPaquete">
                                 <i class="fas fa-ellipsis-h"></i>
@@ -141,8 +142,8 @@
                                             </button>
                                         </div>
                                         <div class="modal-body">
-                                            <p><strong>Tracking ID:</strong>@paquete.NumeroRegistro</p>
-                                            <p><strong>Nombre del Cliente:</strong>@paquete.PaqueteUsuarioNombre</p>
+                                            <p><strong>Tracking ID:</strong> @paquete.NumeroRegistro</p>
+                                            <p><strong>Nombre del Cliente:</strong> @paquete.PaqueteUsuarioNombre</p>
                                             <p>
                                                 <strong>Detalles:</strong>
                                                 <ul>
@@ -307,6 +308,7 @@
                                 <input type="text" class="form-control" name="pid" value="@paquete.IdPaquete" hidden />
                                 <button type="submit" class="btn btn-link"><i class="fas fa-history"></i></button>
                             </form>
+                            </div>
                         </td>
                     </tr>
                 }

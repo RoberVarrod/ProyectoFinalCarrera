@@ -109,6 +109,7 @@
                             }
                         </td>
                         <td>
+                            <div class="d-flex justify-content-start">
                             <!-- Botón para abrir el modal de ver detalles -->
                             <button class="btn btn-link text-danger" data-toggle="modal" data-target="#deleteModal-@paquete.IdPaquete">
                                 <i class="fas fa-ellipsis-h"></i>
@@ -292,7 +293,7 @@
                                 <input type="text" class="form-control" name="pid" value="@paquete.IdPaquete" hidden />
                                 <button type="submit" class="btn btn-link"><i class="fas fa-history"></i></button>
                             </form>
-                            <!--  <button class="btn btn-link"> <a href="@Url.Action("Historial", "UsuarioCliente", paquete.IdPaquete)"><i class="fas fa-history"></i></a> </button>-->
+                            </div>
                         </td>
                     </tr>
                 }

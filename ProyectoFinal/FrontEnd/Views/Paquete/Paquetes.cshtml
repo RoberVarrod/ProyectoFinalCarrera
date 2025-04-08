@@ -176,6 +176,90 @@
                             <button class="btn btn-link" data-toggle="modal" data-target="#detailsModalUpdate-@paquete.IdPaquete">
                                 <i class="fas fa-edit"></i>
                             </button>
+                            <!-- Modal update paquete Start-->
+                            <div class="modal fade" id="detailsModalUpdate-@paquete.IdPaquete" tabindex="-1" role="dialog">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Detalles del Paquete</h5>
+                                            <button type="button" class="close" data-dismiss="modal">
+                                                <span>&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form asp-action="ActualizarPaquete" asp-controller="Paquete" method="post">
+                                                <input type="hidden" name="IdPaquete" value="@paquete.IdPaquete" />
+
+                                                <div class="form-group">
+                                                    <label>Tracking ID:</label>
+                                                    <input type="text" class="form-control" name="NumeroRegistro" value="@paquete.NumeroRegistro" readonly />
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Descripción del Paquete:</label>
+                                                    <input type="text" class="form-control" name="Descripcion" value="@paquete.Descripcion" />
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Alto:</label>
+                                                    <input type="text" class="form-control" name="PaqueteAlto" value="@paquete.PaqueteAlto" />
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Largo:</label>
+                                                    <input type="text" class="form-control" name="PaqueteLargo" value="@paquete.PaqueteLargo" />
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Ancho:</label>
+                                                    <input type="text" class="form-control" name="PaqueteAncho" value="@paquete.PaqueteAncho" />
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Tipo de Entrega:</label>
+                                                    <input type="text" class="form-control" name="TipoEntrega" value="@paquete.TipoEntrega" />
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Estado del Paquete:</label>
+                                                    @if (paquete.EstadoPago == "Pendiente")
+                                                    {
+                                                        <input type="text" class="form-control" name="EstadoRuta" value="@paquete.EstadoRuta" readonly />
+                                                    }
+                                                    else
+                                                    {
+                                                        <select name="EstadoRuta" class="form-control">
+                                                            <option value="@paquete.EstadoRuta">@paquete.EstadoRuta</option>
+                                                            <option value="En sucursal">En sucursal</option>
+                                                            <option value="Pendiente">Pendiente</option>
+                                                            <option value="Entregado">Entregado</option>
+                                                        </select>
+                                                    }
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Pago:</label>
+                                                    <input type="text" class="form-control" name="EstadoPago" value="@paquete.EstadoPago" readonly />
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Fecha Aproximada de Entrega:</label>
+                                                    <input type="date" class="form-control" name="FechaEntregaEstimada" value="@paquete.FechaEntregaEstimada?.ToString("yyyy-MM-dd")" />
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label>Precio:</label>
+                                                    <input type="text" class="form-control" name="Precio" value="@paquete.Precio" />
+                                                </div>
+
+                                                <hr />
+                                                <button type="submit" class="btn btn-primary">Actualizar Paquete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal update paquete End-->
 
                             <!-- Historial del paquete -->
                             <form asp-action="Historial" asp-controller="Paquete" method="post" style="display: inline;">

@@ -136,6 +136,9 @@ namespace FrontEnd.Controllers
             var sucursal = _context.Sucursals
                .FirstOrDefault(u => u.IdSucursal == paqueteActual.IdSucursal);
 
+            // buscar Datos del usuario.
+            var usuario = _context.Usuarios
+               .FirstOrDefault(u => u.IdUsuario == paqueteActual.IdUsuario);
 
             string emailReceiver = cliente.Correo;
 
@@ -149,8 +152,11 @@ namespace FrontEnd.Controllers
                 "Descripción: " + paqueteActual.Descripcion + "\n" +
                 "Estado de pago: " + paqueteActual.EstadoPago + "\n" +
                 "Dirección de entrega: " + paqueteActual.DireccionEntrega + "\n" +
-                "Ubicación actual: " + sucursal.Nombre + "\n";
-                //+"Fecha de entrega estimada: " + paqueteActual.FechaEntregaEstimada  -- se supone que cuando el usuario elige la entrega ahi se debe de estimar los 2 dias habiles para la entrega.
+                "Ubicación actual: " + sucursal.Nombre + "\n" +
+                "Nombre del repartidor: " + usuario.Nombre + " " + usuario.PrimerApellido + " " + usuario.SegundoApellido + "\n" +
+                "Teléfono del repartidor: " + usuario.TelefonoPrincipal + "\n" +
+                "Correo del repartidor: " + usuario.Correo + "\n";
+            //+"Fecha de entrega estimada: " + paqueteActual.FechaEntregaEstimada  -- se supone que cuando el usuario elige la entrega ahi se debe de estimar los 2 dias habiles para la entrega.
 
 
             await _correoService.EnviarCorreo(emailReceiver, subject, body);

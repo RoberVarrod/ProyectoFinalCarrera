@@ -58,7 +58,7 @@ namespace FrontEnd.Controllers
                     PaqueteLargo = modelo.PaqueteLargo,//
                     PaqueteAncho = modelo.PaqueteAncho,//
                     PaqueteAlto = modelo.PaqueteAlto,//
-                    TipoPaquete = null,
+                    TipoPaquete = "Sin ruta",
                     TipoEntrega = "Sucursal",
                     Descripcion = modelo.Descripcion,//
                     EstadoPago = "Pendiente",
@@ -344,6 +344,14 @@ namespace FrontEnd.Controllers
         public IActionResult ActualizarPaqueteEstado(Paquete paquete)
         {
             var paqueteExistente = _context.Paquetes.FirstOrDefault(p => p.IdPaquete == paquete.IdPaquete);
+
+            var huboCambioDeEstadoRuta = false;
+            //Se hace un IF que define si el estado del paquete cambio, esto para solo notificar al cliente por correo en caso de cambiar el estado, si el estado es el mismo, no se notifica pues no es necesario.
+            if (paquete.EstadoRuta != paqueteExistente.EstadoRuta)
+            {
+                huboCambioDeEstadoRuta = true;
+            }
+
             if (paqueteExistente != null)
             {
                 // Actualización de datos
@@ -360,8 +368,50 @@ namespace FrontEnd.Controllers
                 paqueteExistente.FechaEntregaEstimada = paquete.FechaEntregaEstimada;
 
                 _context.SaveChanges();
-                return RedirectToAction("EstadoPaquetes");
+
+                //Se hace un IF que define si el estado del paquete cambio, esto para solo notificar al cliente por correo en caso de cambiar el estado, si el estado es el mismo, no se notifica pues no es necesario.
+                if (huboCambioDeEstadoRuta)
+                {
+
+                    // se create un nuevo objeto paquete con los datos nuevos para enviar al metodo
+                    Paquete paqueteActualizadoParaCorreo = new Paquete();
+                    paqueteActualizadoParaCorreo = paqueteExistente;
+                    //Se envia correo al usuario con el cambio de los datos del paquete
+
+                    // se envia correo al cliente en ruta si el estado cambio a En ruta
+                    if (paqueteActualizadoParaCorreo.EstadoRuta == "En ruta")
+                    {
+                        Task<ActionResult> taskSendEmail = _correoController.enviarCorreoActualizarEstadoPaqueteEnRuta(paqueteActualizadoParaCorreo);
+
+                        //Se registra el cambio en el historial
+                        registrarCambioHistorialPaquete(paqueteActualizadoParaCorreo, "En ruta");
+
+                    }
+                    // se envia correo al cliente en sucursal si el estado cambio a En sucursal
+                    if (paqueteActualizadoParaCorreo.EstadoRuta == "En sucursal")
+                    {
+                        Task<ActionResult> taskSendEmail = _correoController.enviarCorreoActualizarEstadoPaqueteEnSucursal(paqueteActualizadoParaCorreo);
+
+                        //Se registra el cambio en el historial
+                        registrarCambioHistorialPaquete(paqueteActualizadoParaCorreo, "En sucursal");
+                    }
+                    // se envia correo al cliente a entregado si el estado cambio a Entregado
+                    if (paqueteActualizadoParaCorreo.EstadoRuta == "Entregado")
+                    {
+                        Task<ActionResult> taskSendEmail = _correoController.enviarCorreoActualizarEstadoPaqueteEntregado(paqueteActualizadoParaCorreo);
+
+                        //Se registra el cambio en el historial
+                        registrarCambioHistorialPaquete(paqueteActualizadoParaCorreo, "Entregado");
+                    }
+
+                } // Termina el if que valida si se envia el correo o no.
+
+
+                return RedirectToAction("Paquetes");
+
             }
+
+
             return NotFound();
         }
 
@@ -461,6 +511,14 @@ namespace FrontEnd.Controllers
         public IActionResult ActualizarPaqueteOrden(Paquete paquete)
         {
             var paqueteExistente = _context.Paquetes.FirstOrDefault(p => p.IdPaquete == paquete.IdPaquete);
+
+            var huboCambioDeEstadoRuta = false;
+            //Se hace un IF que define si el estado del paquete cambio, esto para solo notificar al cliente por correo en caso de cambiar el estado, si el estado es el mismo, no se notifica pues no es necesario.
+            if (paquete.EstadoRuta != paqueteExistente.EstadoRuta)
+            {
+                huboCambioDeEstadoRuta = true;
+            }
+
             if (paqueteExistente != null)
             {
                 // Actualización de datos
@@ -477,8 +535,50 @@ namespace FrontEnd.Controllers
                 paqueteExistente.FechaEntregaEstimada = paquete.FechaEntregaEstimada;
 
                 _context.SaveChanges();
-                return RedirectToAction("OrdenesProceso");
+
+                //Se hace un IF que define si el estado del paquete cambio, esto para solo notificar al cliente por correo en caso de cambiar el estado, si el estado es el mismo, no se notifica pues no es necesario.
+                if (huboCambioDeEstadoRuta)
+                {
+
+                    // se create un nuevo objeto paquete con los datos nuevos para enviar al metodo
+                    Paquete paqueteActualizadoParaCorreo = new Paquete();
+                    paqueteActualizadoParaCorreo = paqueteExistente;
+                    //Se envia correo al usuario con el cambio de los datos del paquete
+
+                    // se envia correo al cliente en ruta si el estado cambio a En ruta
+                    if (paqueteActualizadoParaCorreo.EstadoRuta == "En ruta")
+                    {
+                        Task<ActionResult> taskSendEmail = _correoController.enviarCorreoActualizarEstadoPaqueteEnRuta(paqueteActualizadoParaCorreo);
+
+                        //Se registra el cambio en el historial
+                        registrarCambioHistorialPaquete(paqueteActualizadoParaCorreo, "En ruta");
+
+                    }
+                    // se envia correo al cliente en sucursal si el estado cambio a En sucursal
+                    if (paqueteActualizadoParaCorreo.EstadoRuta == "En sucursal")
+                    {
+                        Task<ActionResult> taskSendEmail = _correoController.enviarCorreoActualizarEstadoPaqueteEnSucursal(paqueteActualizadoParaCorreo);
+
+                        //Se registra el cambio en el historial
+                        registrarCambioHistorialPaquete(paqueteActualizadoParaCorreo, "En sucursal");
+                    }
+                    // se envia correo al cliente a entregado si el estado cambio a Entregado
+                    if (paqueteActualizadoParaCorreo.EstadoRuta == "Entregado")
+                    {
+                        Task<ActionResult> taskSendEmail = _correoController.enviarCorreoActualizarEstadoPaqueteEntregado(paqueteActualizadoParaCorreo);
+
+                        //Se registra el cambio en el historial
+                        registrarCambioHistorialPaquete(paqueteActualizadoParaCorreo, "Entregado");
+                    }
+
+                } // Termina el if que valida si se envia el correo o no.
+
+
+                return RedirectToAction("Paquetes");
+
             }
+
+
             return NotFound();
         }
 
@@ -585,6 +685,228 @@ namespace FrontEnd.Controllers
 
             return Ok();
 
+        }
+
+
+        public async Task<IActionResult> AsignarPaquetes(string buscar)
+        {
+
+            var usuarios = await _context.Usuarios.ToListAsync();
+            ViewBag.Usuarios = _context.Usuarios.Where(u => u.IdRol == 3).ToList();
+
+            var listaPaquetes = await _context.Paquetes.ToListAsync();
+            
+            List<PaqueteUsuarioSucursal> listaFinalPaquetes = new List<PaqueteUsuarioSucursal>();   //// esta es mi lista final Ienumerable para la vista
+
+            foreach (var item in listaPaquetes) // se recorre la lista de paquetes en la base de datos
+            {
+
+                //se extraen los datos del cliente y la sucursal linkeados al paquete
+
+                // buscar Datos del cliente.
+                var cliente = _context.Clientes
+                   .FirstOrDefault(u => u.IdCliente == item.IdCliente);
+
+                var NombreCliente = cliente.Nombre;
+
+                // buscar Datos de Sucursal
+                var sucursal = _context.Sucursals
+                   .FirstOrDefault(u => u.IdSucursal == item.IdSucursal);
+
+                var NombreSucursal = sucursal.Nombre;
+
+                // buscar datos del cliente
+                var nombreUsuario = _context.Usuarios
+                   .FirstOrDefault(u => u.IdUsuario == item.IdUsuario);
+
+                var nombreUsuarioTransportista = nombreUsuario.Nombre;
+
+                PaqueteUsuarioSucursal paqueteNuevo = new PaqueteUsuarioSucursal(); // se hace el nuevo objeto 
+
+                paqueteNuevo.IdPaquete = item.IdPaquete;
+                paqueteNuevo.NumeroRegistro = item.NumeroRegistro;
+                paqueteNuevo.Nombre = item.Nombre;
+                paqueteNuevo.Precio = item.Precio;
+                paqueteNuevo.PaqueteLargo = item.PaqueteLargo;
+                paqueteNuevo.PaqueteAncho = item.PaqueteAncho;
+                paqueteNuevo.PaqueteAlto = item.PaqueteAlto;
+                paqueteNuevo.TipoPaquete = item.TipoPaquete;
+                paqueteNuevo.TipoEntrega = item.TipoEntrega;
+                paqueteNuevo.Descripcion = item.Descripcion;
+                paqueteNuevo.EstadoPago = item.EstadoPago;
+                paqueteNuevo.EstadoRuta = item.EstadoRuta;
+                paqueteNuevo.FechaRegistro = item.FechaRegistro;
+                paqueteNuevo.FechaEntrega = item.FechaEntrega;
+                paqueteNuevo.FechaEntregaEstimada = item.FechaEntregaEstimada;
+                paqueteNuevo.DireccionEntrega = item.DireccionEntrega;
+                paqueteNuevo.RetiroSucursal = item.RetiroSucursal;
+                //////////////// Nombre del usuario del paquete, aqui se asigna los nuevos valores
+                paqueteNuevo.PaqueteUsuarioNombre = NombreCliente;
+                //////////////// Nombre de la sucursal del paquete, aqui se asigna los nuevos valores
+                paqueteNuevo.PaqueteSucursalNombre = NombreSucursal;
+                //////////////// Nombre de la sucursal del paquete, aqui se asigna los nuevos valores
+                paqueteNuevo.PaqueteTransportistaNombre = nombreUsuarioTransportista;
+                //////////////// Ids opcionales, pero pueden ser utilies para otros methodos.
+                paqueteNuevo.IdSucursal = item.IdSucursal;
+                paqueteNuevo.IdUsuario = item.IdUsuario;
+                paqueteNuevo.IdCliente = item.IdCliente;
+
+                listaFinalPaquetes.Add(paqueteNuevo); // paquete agregado a la lista
+
+            }
+            // Filtrar por Número de Registro si se proporciona un valor de búsqueda
+            if (!string.IsNullOrEmpty(buscar))
+            {
+                listaFinalPaquetes = listaFinalPaquetes
+                    .Where(p => p.NumeroRegistro.Equals(buscar, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
+            return View(listaFinalPaquetes); // retornar la lista de la clase nueva con la lista de paquetes .. listo
+        }
+
+        [HttpPost]
+        public IActionResult ActualizarAsignar(Paquete paquete)
+        {
+            var paqueteExistente = _context.Paquetes.FirstOrDefault(p => p.IdPaquete == paquete.IdPaquete);
+            if (paqueteExistente != null)
+            {
+                // Actualización de datos
+                
+                paqueteExistente.TipoPaquete = paquete.TipoPaquete;
+                paqueteExistente.IdUsuario = paquete.IdUsuario;
+
+                _context.SaveChanges();
+                return RedirectToAction("AsignarPaquetes");
+            }
+            return NotFound();
+        }
+
+        public async Task<IActionResult> PaqueteAsignado(string buscar)
+        {
+            var clientes = await _context.Clientes.ToListAsync();
+            ViewBag.Clientes = clientes;
+
+            var sessionId = HttpContext.Session.GetString("UsuarioId");
+            if (string.IsNullOrEmpty(sessionId) || !int.TryParse(sessionId, out int UsuarioId))
+            {
+                return RedirectToAction("InicioSesionUsuario", "Acceso");
+            }
+
+            var listaPaquetes = await _context.Paquetes.Where(p => p.IdUsuario == UsuarioId).ToListAsync(); // Filtrar por UsuarioId
+
+            List<PaqueteUsuarioSucursal> listaFinalPaquetes = new List<PaqueteUsuarioSucursal>();
+
+            foreach (var item in listaPaquetes)
+            {
+                var cliente = _context.Clientes.FirstOrDefault(u => u.IdCliente == item.IdCliente);
+                var sucursal = _context.Sucursals.FirstOrDefault(u => u.IdSucursal == item.IdSucursal);
+
+                PaqueteUsuarioSucursal paqueteNuevo = new PaqueteUsuarioSucursal
+                {
+                    IdPaquete = item.IdPaquete,
+                    NumeroRegistro = item.NumeroRegistro,
+                    Nombre = item.Nombre,
+                    Precio = item.Precio,
+                    PaqueteLargo = item.PaqueteLargo,
+                    PaqueteAncho = item.PaqueteAncho,
+                    PaqueteAlto = item.PaqueteAlto,
+                    TipoPaquete = item.TipoPaquete,
+                    TipoEntrega = item.TipoEntrega,
+                    Descripcion = item.Descripcion,
+                    EstadoPago = item.EstadoPago,
+                    EstadoRuta = item.EstadoRuta,
+                    FechaRegistro = item.FechaRegistro,
+                    FechaEntrega = item.FechaEntrega,
+                    FechaEntregaEstimada = item.FechaEntregaEstimada,
+                    DireccionEntrega = item.DireccionEntrega,
+                    RetiroSucursal = item.RetiroSucursal,
+                    PaqueteUsuarioNombre = cliente?.Nombre,
+                    PaqueteSucursalNombre = sucursal?.Nombre,
+                    IdSucursal = item.IdSucursal,
+                    IdUsuario = item.IdUsuario,
+                    IdCliente = item.IdCliente
+                };
+
+                listaFinalPaquetes.Add(paqueteNuevo);
+            }
+
+            // Filtrar por Número de Registro si se proporciona un valor de búsqueda
+            if (!string.IsNullOrEmpty(buscar))
+            {
+                listaFinalPaquetes = listaFinalPaquetes
+                    .Where(p => p.NumeroRegistro.Equals(buscar, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
+            return View(listaFinalPaquetes); // Retornar la lista filtrada
+        }
+
+
+        // POST: Usuarios/Edit/5
+        [HttpPost]
+        public IActionResult ActualizarPaqueteAsignado(Paquete paquete)
+        {
+            var paqueteExistente = _context.Paquetes.FirstOrDefault(p => p.IdPaquete == paquete.IdPaquete);
+
+            var huboCambioDeEstadoRuta = false;
+            //Se hace un IF que define si el estado del paquete cambio, esto para solo notificar al cliente por correo en caso de cambiar el estado, si el estado es el mismo, no se notifica pues no es necesario.
+            if (paquete.EstadoRuta != paqueteExistente.EstadoRuta)
+            {
+                huboCambioDeEstadoRuta = true;
+            }
+
+            if (paqueteExistente != null)
+            {
+                // Actualización de datos
+                 paqueteExistente.EstadoRuta = paquete.EstadoRuta;
+
+                _context.SaveChanges();
+
+                //Se hace un IF que define si el estado del paquete cambio, esto para solo notificar al cliente por correo en caso de cambiar el estado, si el estado es el mismo, no se notifica pues no es necesario.
+                if (huboCambioDeEstadoRuta)
+                {
+
+                    // se create un nuevo objeto paquete con los datos nuevos para enviar al metodo
+                    Paquete paqueteActualizadoParaCorreo = new Paquete();
+                    paqueteActualizadoParaCorreo = paqueteExistente;
+                    //Se envia correo al usuario con el cambio de los datos del paquete
+
+                    // se envia correo al cliente en ruta si el estado cambio a En ruta
+                    if (paqueteActualizadoParaCorreo.EstadoRuta == "En ruta")
+                    {
+                        Task<ActionResult> taskSendEmail = _correoController.enviarCorreoActualizarEstadoPaqueteEnRuta(paqueteActualizadoParaCorreo);
+
+                        //Se registra el cambio en el historial
+                        registrarCambioHistorialPaquete(paqueteActualizadoParaCorreo, "En ruta");
+
+                    }
+                    // se envia correo al cliente en sucursal si el estado cambio a En sucursal
+                    if (paqueteActualizadoParaCorreo.EstadoRuta == "En sucursal")
+                    {
+                        Task<ActionResult> taskSendEmail = _correoController.enviarCorreoActualizarEstadoPaqueteEnSucursal(paqueteActualizadoParaCorreo);
+
+                        //Se registra el cambio en el historial
+                        registrarCambioHistorialPaquete(paqueteActualizadoParaCorreo, "En sucursal");
+                    }
+                    // se envia correo al cliente a entregado si el estado cambio a Entregado
+                    if (paqueteActualizadoParaCorreo.EstadoRuta == "Entregado")
+                    {
+                        Task<ActionResult> taskSendEmail = _correoController.enviarCorreoActualizarEstadoPaqueteEntregado(paqueteActualizadoParaCorreo);
+
+                        //Se registra el cambio en el historial
+                        registrarCambioHistorialPaquete(paqueteActualizadoParaCorreo, "Entregado");
+                    }
+
+                } // Termina el if que valida si se envia el correo o no.
+
+
+                return RedirectToAction("PaqueteAsignado");
+
+            }
+
+
+            return NotFound();
         }
 
     }
