@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<FrontEnd.Models.Paquete>
+
+@{
     ViewData["Title"] = "Pagos";
     Layout = "~/Views/Shared/_LayoutUsuarios.cshtml";
 }
@@ -7,7 +9,6 @@
 <!-- Header Start -->
 <div class="jumbotron jumbotron-fluid mb-5">
     <div class="container text-center py-5">
-        <h1 class="text-primary mb-4">Pago Seguro</h1>
         <h1 class="text-white display-3 mb-5">Historial pagos de clientes</h1>
         <div class="mx-auto" style="width: 100%; max-width: 600px;">
             <div class="input-group">
@@ -34,19 +35,28 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var paquete in Model)
+            @if (!Model.Any())
             {
                 <tr>
-                    <td>@paquete.NumeroRegistro</td>
-                    <td><strong style="color: @(paquete.EstadoPago == "Cancelado" ? "#1F1F2E" : "#9E1218")">@paquete.EstadoPago</strong></td>
-                    <td>$@paquete.Precio</td>
-                    <td>@paquete.IdClienteNavigation.Nombre @paquete.IdClienteNavigation.PrimerApellido</td>
-                    <td>
-                        <button class="btn btn-link btn-detalles-pago" data-id="@paquete.IdPaquete">
-                            <i class="fas fa-ellipsis-h"></i>
-                        </button>
-                    </td>
+                    <td colspan="9" class="text-center text-muted">No hay pagos registrados</td>
                 </tr>
+            }
+            else
+            {
+                @foreach (var paquete in Model)
+                {
+                    <tr>
+                        <td>@paquete.NumeroRegistro</td>
+                        <td><strong style="color: @(paquete.EstadoPago == "Cancelado" ? "#1F1F2E" : "#9E1218")">@paquete.EstadoPago</strong></td>
+                        <td>$@paquete.Precio</td>
+                        <td>@paquete.IdClienteNavigation.Nombre @paquete.IdClienteNavigation.PrimerApellido</td>
+                        <td>
+                            <button class="btn btn-link btn-detalles-pago" data-id="@paquete.IdPaquete">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
     </table>

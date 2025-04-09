@@ -1,4 +1,5 @@
 using FrontEnd.Models;
+using FrontEnd.Models.modelsDataParameterMethods;
 using FrontEnd.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -118,7 +119,7 @@ namespace FrontEnd.Controllers
             {
                 // Buscar el usuario en la base de datos
                 var usuario = _context.Usuarios
-                    .FirstOrDefault(u => u.Correo == modelo.Correo && u.Contrasena == modelo.Contrasena); /// deberiaa ser con cedula tambien --->Ariel
+                    .FirstOrDefault(u => u.Correo == modelo.Correo && u.Contrasena == modelo.Contrasena); /// debería ser con cédula también --->Ariel
 
                 if (usuario != null)
                 {
@@ -129,11 +130,15 @@ namespace FrontEnd.Controllers
 
                     TempData["Mensaje"] = $"Bienvenido {usuario.Nombre}";
 
-                    // Aqui hay que crear un objeto de tipo Usuario model completo y pasar ese objeto al redirect to aaction para la vista configuracion. --->Ariel
+                    // Verificar el rol del usuario
+                    if (usuario.IdRol == 3)
+                    {
+                        // Redirigir a la vista de configuración de transportista, pasando el objeto del usuario
+                        return RedirectToAction("Configuracion", "UsuarioTransportista", new { usuarioId = usuario.IdUsuario });
+                    }
 
-
-
-                    return RedirectToAction("Configuracion", "Usuario");
+                    // Redirigir a otra vista si no es rol 3
+                    return RedirectToAction("Configuracion", "Usuario", new { usuarioId = usuario.IdUsuario });
                 }
 
                 // Si no coincide usuario o contraseña
@@ -143,6 +148,7 @@ namespace FrontEnd.Controllers
 
             return View();
         }
+
 
         [AllowAnonymous]
         [HttpGet]
@@ -258,6 +264,83 @@ namespace FrontEnd.Controllers
 
 
 
+        //// Recuperar contrasena metodos
+
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult EnviarCodigoSeguridad()
+        {
+            return View();
+        }
+
+
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult EnviarCodigoSeguridad(CorreoParameter correoUsuario)
+        {
+            // Buscar el cliente en la base de datos
+            var cliente = _context.Clientes
+                .FirstOrDefault(u => u.Correo == correoUsuario.Correo);
+            if (cliente != null)
+            {
+
+                    // se envia correo indicando alguien solicito recuperar la contrasena y el codigo de seguridad
+                    Task<ActionResult> taskSendEmail = _correoController.enviarCorreoCambioContrasenaCodigoSeguridadCliente(cliente);
+
+                return RedirectToAction("EnviarContrasenaNueva", cliente);
+            }
+            else
+            {
+                // Si no coincide usuario o contraseña
+                TempData["MensajeCorreoUsuarioNoEncontrado"] = "Correo no registrado en el sistema";
+                return RedirectToAction("InicioSesionCliente");
+            }            
+        }
+
+
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult EnviarContrasenaNueva(Cliente cliente)
+        {
+            return View(cliente);
+        }
+
+
+
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult EnviarContrasenaAleatoria(Cliente clienteRecibido)
+        {
+            // Buscar el cliente en la base de datos
+            var cliente = _context.Clientes
+                .FirstOrDefault(u => u.IdCliente == clienteRecibido.IdCliente);
+
+            if (cliente.ClaveRecupera == clienteRecibido.ClaveRecupera)
+            {
+
+                // se envia correo indicando la contrasena nueva para que el usuario pueda iniciar sesion.
+                Task<ActionResult> taskSendEmail = _correoController.enviarCorreoCambioContrasenaTemporalCliente(cliente);
+
+                TempData["MensajeContrasenaTemporalEnviada"] = "Contaseña temporal enviada a su correo, favor iniciar sesión con la contraseña nueva";
+                return RedirectToAction("InicioSesionCliente");
+
+
+            }
+            else
+            {
+                // Si no coincide usuario o contraseña
+                TempData["MensajeCodigoDeSeguridadIncorrecto"] = "El Código de seguridad es incorrecto, favor intente de nuevo el proceso";
+                return RedirectToAction("InicioSesionCliente");
+            }
+        }
+
+
+
+
+
     }
+  
 }
 

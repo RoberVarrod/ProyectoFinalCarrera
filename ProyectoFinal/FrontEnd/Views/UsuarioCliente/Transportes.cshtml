@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<FrontEnd.Models.PaqueteUsuarioSucursal>
+@{
     ViewData["Title"] = "Estado de Transporte";
     Layout = "~/Views/Shared/_LayoutClientes.cshtml";
 }
@@ -6,14 +7,17 @@
 <!-- Header Start -->
 <div class="jumbotron jumbotron-fluid mb-5">
     <div class="container text-center py-5">
-        <h1 class="text-primary mb-4">Transportes</h1>
-        <h1 class="text-white display-3 mb-5">Gestión de envíos y rutas</h1>
+        <h4 class="text-white display-3 mb-4">Envíos a Costa Rica</h4>
+        <h4 class="text-primary display-3 mb-5">Envios</h4>
+
         <div class="mx-auto" style="width: 100%; max-width: 600px;">
             <div class="input-group">
-                <input type="text" class="form-control border-light" style="padding: 30px;" placeholder="Ingrese su Tracking ID">
-                <div class="input-group-append">
-                    <button class="btn btn-primary px-3" data-toggle="modal" data-target="#detailsModal">Consultar</button>
-                </div>
+                <form asp-controller="UsuarioCliente" asp-action="Transportes" method="get" class="w-100 d-flex">
+                    <input type="text" name="buscar" class="form-control border-light" style="padding: 30px;" placeholder="Tracking Id">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary px-3">Buscar</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -23,84 +27,111 @@
 <div class="container-fluid py-4">
     <div class="row">
         <!-- Panel 1: Estado del Paquete -->
-        <div class="col-md-6 mb-4">
+        <div class="col-md-12 mb-4">
             <div class="card border-0 shadow-lg">
                 <div class="card-body text-center">
-                    <h4 class="card-title text-primary">Notificaciones de Envío</h4>
-                    <h1 class="text-primary mb-2" data-toggle="counter-up">5</h1>
-                    <a href="@Url.Action("Notificaciones","Cliente")" class="btn btn-outline-dark btn-sm mt-2">Ver Notificaciones</a>
+                    <h4 class="card-title text-primary">Paquetes en Ruta</h4>
+                    <h1 class="text-primary mb-2" data-toggle="counter-up">
+                        @(Model?.Count(p => p.EstadoRuta == "En ruta"))
+                    </h1>
                 </div>
             </div>
         </div>
 
-        <!-- Panel 2: Información del Transportista -->
-        <div class="col-md-6 mb-4">
-            <div class="card border-0 shadow-lg">
-                <div class="card-body text-center">
-                    <h4 class="card-title text-primary">Transportista Asignado</h4>
-                    <p><strong>Nombre:</strong> Juan Pérez</p>
-                    <p><strong>Teléfono:</strong> +506 8888-8888</p>
-                    <a href="tel:+50688888888" class="btn btn-outline-dark btn-sm mt-2">Llamar al Transportista</a>
-                </div>
-            </div>
+        <!-- Panels Section End -->
+        <!-- Lista de Paquetes Start -->
+        <div class="container-fluid py-4">
+            <h4 class="mb-4 text-primary">Lista de Paquetes</h4>
+            <table class="table table-hover table-striped shadow-sm">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Tracking ID</th>
+                        <th>Estado</th>
+                        <th>Fecha de Registro</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (!Model.Any())
+                    {
+                        <tr>
+                            <td colspan="9" class="text-center text-muted">No hay paquetes registrados</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        @foreach (var paquete in Model)
+                        {
+                            <tr>
+                                <td>@paquete.NumeroRegistro</td>
+                                <td>
+                                    @if (paquete.EstadoRuta == "Pendiente")
+                                    {
+                                        <strong style="color: #757575;">@paquete.EstadoRuta</strong>
+                                    }
+                                    else if (paquete.EstadoRuta == "En ruta")
+                                    {
+                                        <strong style="color: #9E1218;">@paquete.EstadoRuta</strong>
+                                    }
+                                    else if (paquete.EstadoRuta == "Entregado")
+                                    {
+                                        <strong style="color: #1F1F2E;">@paquete.EstadoRuta</strong>
+                                    }
+                                    else if (paquete.EstadoRuta == "En sucursal")
+                                    {
+                                        <strong style="color: #C4161C;">@paquete.EstadoRuta</strong>
+                                    }
+                                <td>@paquete.FechaRegistro</td>
+
+
+                                <td>
+                                    <div class="d-flex justify-content-start">
+                                        <!-- Botón para abrir el modal de ver detalles -->
+                                        <button class="btn btn-link text-danger" data-toggle="modal" data-target="#deleteModal-@paquete.IdPaquete">
+                                            <i class="fas fa-info-circle"></i>
+                                        </button>
+                                        <!-- Modal de detalles -->
+                                        <div class="modal fade" id="deleteModal-@paquete.IdPaquete" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel-@paquete.IdPaquete" aria-hidden="true">
+                                            <div class="modal-dialog modal-md" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="deleteModalLabel-@paquete.IdPaquete">Detalles del Paquete</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <p><strong>Tracking ID:</strong> @paquete.NumeroRegistro</p>
+                                                        <p><strong>Nombre del Cliente:</strong> @paquete.PaqueteUsuarioNombre</p>
+                                                        <p>
+                                                            <strong>Detalles:</strong>
+                                                            <ul>
+                                                                <li>Alto : @paquete.PaqueteAlto</li>
+                                                                <li>Largo: @paquete.PaqueteLargo</li>
+                                                                <li>Ancho: @paquete.PaqueteAncho</li>
+                                                            </ul>
+                                                        </p>
+                                                        <p><strong>Estado de pago:</strong> @paquete.EstadoPago</p>
+                                                        <p><strong>Tipo de Entrega:</strong> @paquete.TipoEntrega</p>
+                                                        <hr />
+                                                            @if (!string.IsNullOrEmpty(paquete.PaqueteTransportistaNombre))
+                                                            {
+                                                            <p><strong>Transportista Asignado:</strong> @paquete.PaqueteTransportistaNombre</p>
+                                                            }
+                                                            else
+                                                            {
+                                                            <p><strong>Transportista Asignado:</strong> No asignado</p>
+                                                            }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Modal de detalles End -->
+
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
         </div>
-    </div>
-</div>
-<!-- Panels Section End -->
-<!-- Lista de Paquetes Start -->
-<div class="container-fluid py-4">
-    <h4 class="mb-4 text-primary">Historial de Paquetes</h4>
-    <table class="table table-hover table-striped shadow-sm">
-        <thead class="thead-dark">
-            <tr>
-                <th>Tracking ID</th>
-                <th>Estado</th>
-                <th>Fecha de Actualización</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>CR123456789</td>
-                <td><strong style="color: #C4161C;">En Ruta</strong></td>
-                <td>04/12/2024</td>
-                <td>
-                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal"><i class="fas fa-info-circle"></i> Detalles</button>
-                </td>
-            </tr>
-            <tr>
-                <td>CR987654321</td>
-                <td><strong style="color: #1F1F2E;">Procesado</strong></td>
-                <td>03/12/2024</td>
-                <td>
-                    <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal"><i class="fas fa-info-circle"></i> Detalles</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<!-- Lista de Paquetes End -->
-<!-- Modal Start -->
-<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="detailsModalLabel">Detalles del Paquete</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p><strong>Tracking ID:</strong> CR123456789</p>
-                <p><strong>Estado:</strong> En Ruta</p>
-                <p><strong>Transportista:</strong> Juan Pérez</p>
-                <p><strong>Teléfono:</strong> +506 8888-8888</p>
-                <p><strong>Última Actualización:</strong> 04/12/2024</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal End -->

@@ -7,7 +7,7 @@
 <!-- Header Start -->
 <div class="jumbotron jumbotron-fluid mb-5">
     <div class="container text-center py-5">
-        <h1 class="text-primary mb-4">Administración</h1>
+        
         <h1 class="text-white display-3 mb-5">Administración de empleados</h1>
         <div class="mx-auto" style="width: 100%; max-width: 600px;">
             <div class="input-group">
@@ -45,28 +45,45 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var usuario in Model)
+            @if (!Model.Any())
             {
                 <tr>
-                    <td>@usuario.Cedula</td>
-                    <td>@usuario.Nombre @usuario.PrimerApellido @usuario.SegundoApellido</td>
-                    <td>@usuario.Correo</td>
-                    <td>@usuario.TelefonoPrincipal</td>
-                    <td>@usuario.IdSucursal</td>
-                    <td>@usuario.Oficina</td>
-                    <td>@usuario.IdRol</td>
-                    <td>
-                        <button class="btn btn-link text-danger" data-toggle="modal" data-target="#deleteModal-@usuario.IdUsuario">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                        <button class="btn btn-link" data-toggle="modal" data-target="#detailsModalUpdate-@usuario.IdUsuario">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal-@usuario.IdUsuario">
-                            <i class="fas fa-ellipsis-h"></i>
-                        </button>
-                    </td>
+                    <td colspan="9" class="text-center text-muted">No hay empleados registrados</td>
                 </tr>
+            }
+            else
+            {
+                @foreach (var usuario in Model)
+                {
+                    <tr>
+                        <td>@usuario.Cedula</td>
+                        <td>@usuario.Nombre @usuario.PrimerApellido @usuario.SegundoApellido</td>
+                        <td>@usuario.Correo</td>
+                        <td>@usuario.TelefonoPrincipal</td>
+                        <td>
+                            @(usuario.IdSucursal == 1 ? "Virtual/Temporal" :
+                              usuario.IdSucursal == 2 ? "Naranjo (CR)" :
+                              usuario.IdSucursal == 3 ? "Pérez Zeledón (CR)" : "Sin sucursal")
+                        </td>
+                        <td>@usuario.Oficina</td>
+                        <td>@(usuario.IdRol == 1 ? "Regular" :
+                              usuario.IdRol == 2 ? "Empleado" :
+                              usuario.IdRol == 3 ? "Tranportista" :
+                              usuario.IdRol == 4 ? "Administrador" : "Sin rol")
+                        </td>
+                        <td>
+                            <button class="btn btn-link text-danger" data-toggle="modal" data-target="#deleteModal-@usuario.IdUsuario">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                            <button class="btn btn-link" data-toggle="modal" data-target="#detailsModalUpdate-@usuario.IdUsuario">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn btn-link" data-toggle="modal" data-target="#detailsModal-@usuario.IdUsuario">
+                                <i class="fas fa-ellipsis-h"></i>
+                            </button>
+                        </td>
+                    </tr>
+                }
             }
         </tbody>
     </table>
@@ -86,9 +103,21 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <p><strong>Nombre completo:</strong> @usuario.Nombre @usuario.PrimerApellido @usuario.SegundoApellido</p>
                     <p><strong>Cédula:</strong> @usuario.Cedula</p>
-                    <p><strong>Nombre:</strong> @usuario.Nombre @usuario.PrimerApellido @usuario.SegundoApellido</p>
-                    <p><strong>Correo:</strong> @usuario.Correo</p>
+                    <p><strong>Correo Electrónico:</strong> @usuario.Correo</p>
+                    <p><strong>Teléfono:</strong> @usuario.TelefonoPrincipal</p>
+                    <p><strong>Dirección:</strong> @usuario.Direccion</p>
+                    <p><strong>Sucursal:</strong> @(usuario.IdSucursal == 1 ? "Virtual/Temporal" :
+                                                    usuario.IdSucursal == 2 ? "Naranjo (CR)" :
+                                                    usuario.IdSucursal == 3 ? "Pérez Zeledón (CR)" : "Sin sucursal")
+                    </p>
+                    <p><strong>Oficina:</strong> @usuario.Oficina</p>
+                    <p><strong>Rol:</strong> @(usuario.IdRol == 1 ? "Regular" :
+                                               usuario.IdRol == 2 ? "Empleado" :
+                                               usuario.IdRol == 3 ? "Tranportista" :
+                                               usuario.IdRol == 4 ? "Administrador" : "Sin rol")
+                    </p>
                     <hr />
                     <h5 class="text-danger">¿Seguro que desea eliminar este empleado?</h5>
                     <form asp-action="Delete" asp-controller="Usuario" method="post">
@@ -103,7 +132,6 @@
 }
 
 <!-- Modal de eliminación End -->
-
 <!-- Modal de actualización de sucursal, oficina y rol -->
 @foreach (var usuario in Model)
 {
@@ -187,10 +215,17 @@
                     <p><strong>Correo Electrónico:</strong> @usuario.Correo</p>
                     <p><strong>Teléfono:</strong> @usuario.TelefonoPrincipal</p>
                     <p><strong>Dirección:</strong> @usuario.Direccion</p>
-                    <p><strong>Sucursal:</strong> @usuario.IdSucursal</p>
+                    <p><strong>Sucursal:</strong> @(usuario.IdSucursal == 1 ? "Virtual/Temporal" :
+                                                    usuario.IdSucursal == 2 ? "Naranjo (CR)" :
+                                                    usuario.IdSucursal == 3 ? "Pérez Zeledón (CR)" : "Sin sucursal")
+                                                </p>
                     <p><strong>Oficina:</strong> @usuario.Oficina</p>
-                    <p><strong>Rol:</strong> @usuario.IdRol</p>
-                    
+                    <p><strong>Rol:</strong> @(usuario.IdRol == 1 ? "Regular" :
+                                               usuario.IdRol == 2 ? "Empleado" :
+                                               usuario.IdRol == 3 ? "Tranportista" :
+                                               usuario.IdRol == 4 ? "Administrador" : "Sin rol")
+                    </p>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

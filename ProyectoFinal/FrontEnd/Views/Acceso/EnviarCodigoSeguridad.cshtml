@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Inicio de Sesión";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model FrontEnd.Models.modelsDataParameterMethods.CorreoParameter
+
+<!-- CorreoUsario Start -->
+<div class="container-fluid bg-secondary my-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 py-5 py-lg-0">
+                <h6 class="text-primary text-uppercase font-weight-bold">Registro de Notificación</h6>
+                <h1 class="mb-4">Ingresa tu correo de usuario</h1>
+                <p class="mb-4">Se enviará una código de seguridad si el correo se encuentra registrado</p>
+            </div>
+            <div class="col-lg-6">
+                <div class="bg-primary py-5 px-4 px-sm-5">
+
+                    <form class="py-5" asp-controller="Acceso" asp-action="EnviarCodigoSeguridad" method="post" id="codigoForm">
+                       
+                        <div asp-validation-summary="All" class="text-danger"></div>
+
+                        <h6 class="text-primary text-uppercase font-weight-bold" style="color:black !important">Tu correo de cliente</h6>
+
+                        <div class="form-group">
+                            <input id="correo" type="text" class="form-control border-0 p-4" placeholder="cliente@gmail.com" name="correo" required="required" />
+                        </div>
+  
+                        <div>
+                            <button id="enviarCodigo" class="btn btn-dark btn-block border-0 py-3" type="submit">Solicitar Código de recuperación</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- CorreoUsario End -->

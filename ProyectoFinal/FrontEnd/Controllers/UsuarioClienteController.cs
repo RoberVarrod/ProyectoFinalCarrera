@@ -166,9 +166,71 @@ namespace FrontEnd.Controllers
         }
 
 
-        public IActionResult Transportes()
+        public async Task<IActionResult> Transportes(string buscar)
         {
-            return View();
+            var sucursales = await _context.Sucursals.ToListAsync();
+            ViewBag.Sucursales = sucursales;
+
+            var sessionId = HttpContext.Session.GetString("ClienteId");
+            if (string.IsNullOrEmpty(sessionId) || !int.TryParse(sessionId, out int clienteId))
+            {
+                return RedirectToAction("InicioSesionCliente", "Acceso");
+            }
+
+            // Obtener los paquetes para el cliente
+            var listaPaquetes = await _context.Paquetes
+                .Where(p => p.IdCliente == clienteId)
+                .ToListAsync();
+
+            List<PaqueteUsuarioSucursal> listaFinalPaquetes = new List<PaqueteUsuarioSucursal>();
+
+            foreach (var item in listaPaquetes)
+            {
+                var cliente = await _context.Clientes.FirstOrDefaultAsync(u => u.IdCliente == item.IdCliente);
+                var sucursal = await _context.Sucursals.FirstOrDefaultAsync(u => u.IdSucursal == item.IdSucursal);
+
+                PaqueteUsuarioSucursal paqueteNuevo = new PaqueteUsuarioSucursal()
+                {
+                    IdPaquete = item.IdPaquete,
+                    NumeroRegistro = item.NumeroRegistro,
+                    Nombre = item.Nombre,
+                    Precio = item.Precio,
+                    PaqueteLargo = item.PaqueteLargo,
+                    PaqueteAncho = item.PaqueteAncho,
+                    PaqueteAlto = item.PaqueteAlto,
+                    TipoPaquete = item.TipoPaquete,
+                    TipoEntrega = item.TipoEntrega,
+                    Descripcion = item.Descripcion,
+                    EstadoPago = item.EstadoPago,
+                    EstadoRuta = item.EstadoRuta,
+                    FechaRegistro = item.FechaRegistro,
+                    FechaEntrega = item.FechaEntrega,
+                    FechaEntregaEstimada = item.FechaEntregaEstimada,
+                    DireccionEntrega = item.DireccionEntrega,
+                    RetiroSucursal = item.RetiroSucursal,
+                    PaqueteUsuarioNombre = cliente?.Nombre ?? "Desconocido",
+                    PaqueteUsuarioProvincia = cliente?.Provincia ?? "Desconocido",
+                    PaqueteUsuarioCanton = cliente?.Canton ?? "Desconocido",
+                    PaqueteUsuarioDistrito = cliente?.Distrito ?? "Desconocido",
+                    PaqueteUsuarioCodigoPostal = cliente?.CodigoPostal ?? "Desconocido",
+                    PaqueteUsuarioDireccion = cliente?.Direccion ?? "Desconocido",
+                    PaqueteSucursalNombre = sucursal?.Nombre ?? "Desconocida",
+                    IdSucursal = item.IdSucursal,
+                    IdUsuario = item.IdUsuario,
+                    IdCliente = item.IdCliente
+                };
+
+                listaFinalPaquetes.Add(paqueteNuevo);
+            }
+
+            if (!string.IsNullOrEmpty(buscar))
+            {
+                listaFinalPaquetes = listaFinalPaquetes
+                    .Where(p => p.NumeroRegistro.Equals(buscar, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
+            return View(listaFinalPaquetes);
         }
 
         public IActionResult Notificaciones()
@@ -184,6 +246,9 @@ namespace FrontEnd.Controllers
 
         public async Task<IActionResult> Paquetes(string buscar)
         {
+            var sucursales = await _context.Sucursals.ToListAsync();
+            ViewBag.Sucursales = sucursales;
+
             var sessionId = HttpContext.Session.GetString("ClienteId");
             if (string.IsNullOrEmpty(sessionId) || !int.TryParse(sessionId, out int clienteId))
             {
@@ -399,6 +464,9 @@ namespace FrontEnd.Controllers
 
         public async Task<IActionResult> EstadoPaquetes(string buscar)
         {
+            var sucursales = await _context.Sucursals.ToListAsync();
+            ViewBag.Sucursales = sucursales;
+
             var sessionId = HttpContext.Session.GetString("ClienteId");
             if (string.IsNullOrEmpty(sessionId) || !int.TryParse(sessionId, out int clienteId))
             {
@@ -524,6 +592,9 @@ namespace FrontEnd.Controllers
 
         public async Task<IActionResult> OrdenesProceso(string buscar)
         {
+            var sucursales = await _context.Sucursals.ToListAsync();
+            ViewBag.Sucursales = sucursales;
+
             var sessionId = HttpContext.Session.GetString("ClienteId");
             if (string.IsNullOrEmpty(sessionId) || !int.TryParse(sessionId, out int clienteId))
             {

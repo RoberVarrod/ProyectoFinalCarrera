@@ -6,13 +6,12 @@
 @model FrontEnd.Models.Notificacion
 
 <!-- Notificacion Start -->
-<div class="container-fluid bg-secondary my-5">
-    <div class="container">
+<div class="jumbotron jumbotron-fluid mb-5">
+    <div class="container py-5">
         <div class="row align-items-center">
             <div class="col-lg-6 py-5 py-lg-0">
-                <h4 class="text-primary text-uppercase font-weight-bold">Registro de Notificación</h4>
-                <h1 class="mb-4">Registra una notificación</h1>
-                <p class="mb-4">Las notificaciónes se compartiran a los usuarios del sistema</p>
+                <h1 class="text-white mb-4">Registra una notificación</h1>
+                <p class="text-white-50 mb-4">Las notificaciónes se compartiran a los usuarios del sistema</p>
             </div>
             <div class="col-lg-6">
                 <div class="bg-primary py-5 px-4 px-sm-5">
@@ -27,7 +26,7 @@
 
                         <div asp-validation-summary="All" class="text-danger"></div>
 
-                        <h6 class="text-primary text-uppercase font-weight-bold" style="color:#1F1F2E !important">Datos de la notificación</h6>
+                        <h6 class="text-primary text-uppercase font-weight-bold" style="color:#1F1F2E !important" !important">Datos de la notificación</h6>
 
                         <div class="form-group">
                             <input id="Titulo" type="text" class="form-control border-0 p-4" placeholder="Título de la notificación" name="Titulo" required="required" />

@@ -1,0 +1,177 @@
+﻿@model IEnumerable<FrontEnd.Models.PaqueteUsuarioSucursal>
+@{
+    ViewData["Title"] = "Gestion de paquetes";
+    Layout = "~/Views/Shared/_LayoutTransportistas.cshtml";
+}
+
+
+
+<!-- Header Start -->
+<div class="jumbotron jumbotron-fluid mb-5">
+    <div class="container text-center py-5">
+        <h1 class="text-primary mb-4">Económica y Segura</h1>
+        <h1 class="text-white display-3 mb-5">Envíos a Costa Rica</h1>
+        <div class="mx-auto" style="width: 100%; max-width: 600px;">
+            <div class="input-group">
+                <form asp-controller="Paquete" asp-action="PaqueteAsignado" method="get" class="w-100 d-flex">
+                    <input type="text" name="buscar" class="form-control border-light" style="padding: 30px;" placeholder="Tracking Id">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-primary px-3">Buscar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Header End -->
+
+<!-- Lista de Paquetes Start-->
+<div class="container-fluid py-4">
+    <h4 class="mb-4 text-primary">Lista de Paquetes</h4>
+    <table class="table table-hover table-striped shadow-sm">
+        <thead class="thead-dark">
+            <tr>
+                <th>Tracking ID</th>
+                <th>Oficina</th>
+                <th>Nombre Cliente</th>
+                <th>Estado de pago</th>
+                <th>Fecha de entrega estimada</th>
+                <th>Tipo de Entrega</th>
+                <th>Precio</th>
+                <th>Estado de paquete</th>
+                <th>Opciones</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Any())
+            {
+                <tr>
+                    <td colspan="9" class="text-center text-muted">No hay paquetes registrados</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var paquete in Model.Where(p => p.EstadoRuta == "En ruta" || p.EstadoRuta == "Pendiente" && p.EstadoPago == "Cancelado" && p.TipoEntrega == "Domicilio"))
+                {
+                    <tr>
+                        <td>@paquete.NumeroRegistro</td>
+                        <td>@paquete.PaqueteSucursalNombre</td>
+                        <td>@paquete.PaqueteUsuarioNombre</td>
+                        <td>
+                            <strong style="color: @(paquete.EstadoPago == "Cancelado" ? "#1F1F2E" : "#9E1218")">
+                                @paquete.EstadoPago
+                            </strong>
+                        </td>
+                        <td>@(paquete.FechaEntregaEstimada?.ToString("dd/MM/yyyy") ?? "Fecha no disponible")</td>
+                        <td>@paquete.TipoEntrega</td>
+                        <td>@paquete.Precio</td>
+                        <td>
+                            <strong style="color:
+                        @(paquete.EstadoRuta == "Pendiente" ? "#757575" :
+                          paquete.EstadoRuta == "En ruta" ? "#9E1218" :
+                          paquete.EstadoRuta == "Entregado" ? "#1F1F2E" :
+                          paquete.EstadoRuta == "En sucursal" ? "#C4161C" : "#000")">
+                                @paquete.EstadoRuta
+                            </strong>
+                        </td>
+                        <td>
+
+                            <!-- Botón para editar -->
+                            <button class="btn btn-link" data-toggle="modal" data-target="#detailsModalUpdate-@paquete.IdPaquete">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <!-- Modal update paquete Start-->
+                            <div class="modal fade" id="detailsModalUpdate-@paquete.IdPaquete" tabindex="-1" role="dialog">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Detalles del Paquete</h5>
+                                            <button type="button" class="close" data-dismiss="modal">
+                                                <span>&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p><strong>Tracking ID:</strong> @paquete.NumeroRegistro</p>
+                                            <p>
+                                                <strong>Detalles:</strong>
+                                                <ul>
+                                                    <li>Alto : @paquete.PaqueteAlto</li>
+                                                    <li>Largo: @paquete.PaqueteLargo</li>
+                                                    <li>Ancho: @paquete.PaqueteAncho</li>
+                                                </ul>
+                                            </p>
+                                            <p><strong>Estado de pago:</strong> @paquete.EstadoPago</p>
+                                            <p><strong>Precio:</strong> @paquete.Precio</p>
+                                            <p><strong>Tipo de Entrega:</strong> @paquete.TipoEntrega</p>
+                                            <p><strong>Descripción:</strong> @paquete.Descripcion</p>
+                                            <p><strong>Ruta:</strong> @paquete.TipoPaquete</p>
+                                            <hr />
+                                            <h5>Detalles del Cliente</h5><br />
+                                            @if (ViewBag.Clientes != null)
+                                            {
+                                                var clientes = ViewBag.Clientes as List<Cliente>;
+
+                                                if (clientes != null)
+                                                {
+                                                    var cliente = clientes.FirstOrDefault(c => c.IdCliente == paquete.IdCliente);
+
+                                                    if (cliente != null)
+                                                    {
+                                                        <p><strong>Nombre:</strong> @cliente.Nombre @cliente.PrimerApellido @cliente.SegundoApellido</p>
+                                                        <p><strong>Cédula:</strong> @cliente.Cedula</p>
+                                                        <p><strong>Teléfonos:</strong> @cliente.TelefonoPrincipal -- @cliente.TelefonoSecundario</p>
+                                                        <p><strong>Dirección:</strong> @cliente.Provincia, @cliente.Canton, @cliente.Distrito, @cliente.CodigoPostal, @cliente.Direccion</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p class="text-danger">No se encontró el cliente asignado a este paquete.</p>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <p class="text-danger">Los clientes no están disponibles en el formato esperado.</p>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <p class="text-danger">No hay clientes disponibles</p>
+                                            }
+
+                                            <hr>
+                                            <form asp-action="ActualizarPaqueteAsignado" asp-controller="Paquete" method="post">
+                                                <input type="hidden" name="NumeroRegistro" value="@paquete.NumeroRegistro" />
+                                                <input type="hidden" name="IdPaquete" value="@paquete.IdPaquete" />
+
+                                                <div class="form-group">
+                                                    <label>Estado del Paquete:</label>
+                                                    @if (paquete.EstadoPago == "Pendiente")
+                                                    {
+                                                        <input type="text" class="form-control" name="EstadoRuta" value="@paquete.EstadoRuta" readonly />
+                                                    }
+                                                    else
+                                                    {
+                                                        <select name="EstadoRuta" class="form-control">
+                                                            <option value="@paquete.EstadoRuta">@paquete.EstadoRuta</option>
+                                                            <option value="En ruta">En ruta</option>
+                                                            <option value="Entregado">Entregado</option>
+                                                        </select>
+                                                    }
+                                                </div>
+
+                                                <hr />
+                                                <button type="submit" class="btn btn-primary">Actualizar Paquete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal update paquete End-->
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

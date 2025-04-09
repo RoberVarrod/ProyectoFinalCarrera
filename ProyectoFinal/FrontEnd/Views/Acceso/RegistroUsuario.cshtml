@@ -4,13 +4,12 @@
 }
 @model FrontEnd.Models.RegistroModeloUsuario
 <!-- Registro Start                           Cambiaado...-->
-<div class="container-fluid bg-secondary my-5">
-    <div class="container">
+<div class="jumbotron jumbotron-fluid mb-5">
+    <div class="container py-5">
         <div class="row align-items-center">
             <div class="col-lg-6 py-5 py-lg-0">
-                <h4 class="text-primary text-uppercase font-weight-bold">Crea tu cuenta</h4>
-                <h1 class="mb-4">Registro de usuarios</h1>
-                <p class="mb-4">Completa los campos para obtener acceso al sistema administrativo.</p>
+                <h1 class="text-white mb-4">Registro de usuarios</h1>
+                <p class="text-white-50 mb-4">Completa los campos para obtener acceso al sistema administrativo.</p>
             </div>
             <div class="col-lg-6">
                 <div class="bg-primary py-5 px-4 px-sm-5">
@@ -21,7 +20,7 @@
                                 @TempData["MensajeRegistroCorrecto"]
                             </div>
                         }
-                        <h5 class="text-white text-uppercase font-weight-bold mt-4" style="color:#1F1F2E">Datos</h5>
+                        <h5 class="text-white text-uppercase font-weight-bold mt-4 " style="color:#1F1F2E !important">Datos</h5>
                         <div class="form-group">
                             <input asp-for="Nombre" type="text" class="form-control border-0 p-4" placeholder="Nombre" name="Nombre" required="required" />
                         </div>
@@ -48,7 +47,7 @@
                         <div class="form-group">
                             <input asp-for="Oficina" type="text" class="form-control border-0 p-4" placeholder="Oficina atención al cliente" name="Oficina" required="required" />
                         </div>
-                        <h5 class="text-white text-uppercase font-weight-bold mt-4" style="color:#1F1F2E">Contraseña</h5>
+                        <h5 class="text-white text-uppercase font-weight-bold mt-4" style="color:#1F1F2E !important">Contraseña</h5>
                         <div class="form-group">
                             <input asp-for="Contrasena" type="password" class="form-control border-0 p-4" id="password" placeholder="Contraseña"
                                    name="Contrasena" required="required" />
@@ -70,7 +69,7 @@
                                 <strong>Las contraseñas no coinciden.</strong>
                             </div>
                         </div>
-                        
+
                         <div>
                             <button class="btn btn-dark btn-block border-0 py-3" type="submit">Registrarse</button>
                         </div>
@@ -78,7 +77,7 @@
                             <p class="text-white">¿Ya tienes una cuenta? <a href="/Acceso/InicioSesion" class="text-dark font-weight-bold">Inicia Sesión</a></p>
                         </div>-->
                     </form>
-                    
+
                 </div>
             </div>
         </div>

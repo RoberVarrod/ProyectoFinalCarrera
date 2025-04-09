@@ -1,14 +1,14 @@
-﻿@model FrontEnd.Models.Cliente
+﻿@model FrontEnd.Models.Usuario
 @{
     ViewData["Title"] = "Configuración";
-    Layout = "~/Views/Shared/_LayoutClientes.cshtml";
+    Layout = "~/Views/Shared/_LayoutTransportistas.cshtml";
 }
 
 <!-- Header Start -->
 <div class="jumbotron jumbotron-fluid mb-5">
     <div class="container text-center py-5">
-        <h1 class="text-white display-4 font-weight-bold mb-4 ">Configura tu</h1>
-        <h1 class="text-white display-4 font-weight-bold mb-4 "> Perfil</h1>
+        <h1 class="text-primary mb-4">Perfil</h1>
+        <h1 class="text-white display-3 mb-5">Configura tus datos</h1>
     </div>
 </div>
 <!-- Header End -->
@@ -16,7 +16,6 @@
 <div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-
             <!-- Header del Perfil Start -->
             <div class="text-center bg-primary py-4 rounded-top">
                 <img src="@Model.FotoPerfil" class="rounded-circle border border-light mb-3" alt="Imagen de Perfil" style="width: 120px; height: 120px;">
@@ -37,7 +36,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form method="post" action="/UsuarioCliente/Configuracion" enctype="multipart/form-data">
+                            <form method="post" action="/Usuario/Configuracion" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <label>Subir nueva foto</label>
                                     <input type="file" class="form-control" name="ProfileImage" accept=".jpg,.png" required>
@@ -54,10 +53,10 @@
             <div class="bg-light py-4 px-3 rounded-bottom shadow">
                 <!-- Información Personal Start -->
                 <h5 class="text-dark">Información Personal</h5>
-                <p><strong style="color:#1F1F2E">Cédula:</strong> @Model.Cedula</p>
-                <p><strong style="color:#1F1F2E">Correo Electrónico:</strong> @Model.Correo</p>
-                <p><strong style="color:#1F1F2E">Teléfono:</strong> @Model.TelefonoPrincipal</p>
-                <p><strong style="color:#1F1F2E">Dirección:</strong> @Model.Direccion, @Model.Provincia, @Model.Canton, @Model.Distrito, @Model.CodigoPostal</p>
+                <p><strong>Cédula:</strong> @Model.Cedula</p>
+                <p><strong>Correo Electrónico:</strong> @Model.Correo</p>
+                <p><strong>Teléfono:</strong> @Model.TelefonoPrincipal</p>
+                <p><strong>Dirección:</strong> @Model.Direccion</p>
 
                 <div class="d-flex justify-content-between mt-4">
                     <a href="#" data-toggle="collapse" data-target="#editInfoForm" class="btn btn-outline-dark">
@@ -70,9 +69,9 @@
 
                 <!-- Formulario para Editar Información Start -->
                 <div id="editInfoForm" class="collapse mt-4">
-                    <form method="post" action="/UsuarioCliente/EditarInformacion">
+                    <form method="post" action="/Usuario/EditarInformacion">
                         <!-- Agregar el campo oculto para el ID del cliente -->
-                        <input type="hidden" name="IdCliente" value="@Model.IdCliente" />
+                        <input type="hidden" name="IdUsuario" value="@Model.IdUsuario" />
 
                         <div class="form-group">
                             <label>Nombre</label>
@@ -101,27 +100,6 @@
                                    pattern="\d{8}" title="El número de teléfono debe tener 8 dígitos." required>
                         </div>
                         <div class="form-group">
-                            <label>Número de Teléfono Secundario</label>
-                            <input type="text" class="form-control" name="TelefonoSecundario" value="@Model.TelefonoSecundario"
-                                   pattern="\d{8}" title="El número de teléfono debe tener 8 dígitos." required>
-                        </div>
-                        <div class="form-group">
-                            <label>Provincia</label>
-                            <input type="text" class="form-control" name="Provincia" value="@Model.Provincia" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Cantón</label>
-                            <input type="text" class="form-control" name="Canton" value="@Model.Canton" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Distrito</label>
-                            <input type="text" class="form-control" name="Distrito" value="@Model.Distrito" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Código Postal</label>
-                            <input type="number" class="form-control" name="CodigoPostal" value="@Model.CodigoPostal">
-                        </div>
-                        <div class="form-group">
                             <label>Dirección</label>
                             <textarea class="form-control" name="Direccion" required>@Model.Direccion</textarea>
                         </div>
@@ -131,7 +109,7 @@
                 <!-- Formulario para Editar Información End -->
                 <!-- Formulario para Cambiar Contraseña Start -->
                 <div id="changePasswordForm" class="collapse mt-4">
-                    <form method="post" action="/UsuarioCliente/CambiarContrasena">
+                    <form method="post" action="/Usuario/CambiarContrasena">
                         @if (TempData["ErrorContrasena"] != null)
                         {
                             <div class="alert alert-danger">@TempData["ErrorContrasena"]</div>
@@ -142,7 +120,7 @@
                             <div class="alert alert-success">@TempData["ExitoContrasena"]</div>
                         }
 
-                        <input type="hidden" name="IdCliente" value="@Model.IdCliente" />
+                        <input type="hidden" name="IdUsuario" value="@Model.IdUsuario" />
 
                         <div class="form-group">
                             <label>Contraseña Actual</label>

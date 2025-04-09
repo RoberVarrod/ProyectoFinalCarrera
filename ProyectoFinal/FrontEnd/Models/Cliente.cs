@@ -23,6 +23,8 @@ public partial class Cliente
 
     public string Contrasena { get; set; } = null!;
 
+    public string? ClaveRecupera { get; set; }
+
     public int? IdRol { get; set; }
 
     public string? Provincia { get; set; }
