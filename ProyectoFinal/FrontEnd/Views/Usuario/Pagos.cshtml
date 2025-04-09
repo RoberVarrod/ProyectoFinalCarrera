@@ -1,10 +1,16 @@
 ﻿@model List<FrontEnd.Models.Paquete>
-
+@using Microsoft.AspNetCore.Http
 @{
-    ViewData["Title"] = "Pagos";
+    ViewData["Title"] = "Gestión de Empleados";
     Layout = "~/Views/Shared/_LayoutUsuarios.cshtml";
+
+    var usuarioNombre = Context.Session.GetString("UsuarioNombre");
+    var idRol = Context.Session.GetString("UsuarioRol");
+    var usuarioId = Context.Session.GetString("UsuarioId");
+    var sesionActiva = !string.IsNullOrEmpty(usuarioNombre);
 }
 
+@if (idRol == "4" || idRol == "2"){
 
 <!-- Header Start -->
 <div class="jumbotron jumbotron-fluid mb-5">
@@ -82,7 +88,7 @@
     </div>
 </div>
 <!-- Modal End -->
-
+}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>

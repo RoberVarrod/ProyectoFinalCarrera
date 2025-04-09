@@ -1,7 +1,15 @@
-﻿@{
-    ViewData["Title"] = "Gestión de Sucursales";
+﻿@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Gestión de Empleados";
     Layout = "~/Views/Shared/_LayoutUsuarios.cshtml";
+
+    var usuarioNombre = Context.Session.GetString("UsuarioNombre");
+    var idRol = Context.Session.GetString("UsuarioRol");
+    var usuarioId = Context.Session.GetString("UsuarioId");
+    var sesionActiva = !string.IsNullOrEmpty(usuarioNombre);
 }
+
+@if (idRol == "4"){
 
 <!-- Header Start -->
 <div class="jumbotron jumbotron-fluid mb-5">
@@ -144,3 +152,4 @@
     </table>
 </div>
 <!-- Lista de Sucursales End -->
+}

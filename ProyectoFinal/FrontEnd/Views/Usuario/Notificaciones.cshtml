@@ -1,55 +1,65 @@
-﻿@{
-    ViewData["Title"] = "Notificaciones";
+﻿@model IEnumerable<FrontEnd.Models.Usuario>
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Gestión de Empleados";
     Layout = "~/Views/Shared/_LayoutUsuarios.cshtml";
+
+    var usuarioNombre = Context.Session.GetString("UsuarioNombre");
+    var idRol = Context.Session.GetString("UsuarioRol");
+    var usuarioId = Context.Session.GetString("UsuarioId");
+    var sesionActiva = !string.IsNullOrEmpty(usuarioNombre);
 }
 
-<!-- Header Start -->
-<div class="jumbotron jumbotron-fluid mb-5">
-    <div class="container text-center py-5">
-        <h1 class="text-primary mb-4">Notificaciones Recientes</h1>
-        <h1 class="text-white display-3 mb-5">Mantente informado</h1>
+@if (idRol == "4")
+{
+
+    <!-- Header Start -->
+    <div class="jumbotron jumbotron-fluid mb-5">
+        <div class="container text-center py-5">
+            <h1 class="text-primary mb-4">Notificaciones Recientes</h1>
+            <h1 class="text-white display-3 mb-5">Mantente informado</h1>
+        </div>
     </div>
-</div>
-<!-- Header End -->
-<!-- Lista de Notificaciones Start -->
-<div class="container-fluid py-4">
-    <h4 class="mb-4 text-primary">Últimas Notificaciones <span class="badge badge-danger" id="pendingCount">3</span></h4>
+    <!-- Header End -->
+    <!-- Lista de Notificaciones Start -->
+    <div class="container-fluid py-4">
+        <h4 class="mb-4 text-primary">Últimas Notificaciones <span class="badge badge-danger" id="pendingCount">3</span></h4>
 
-    <div class="list-group" id="notificationsList">
-        
-        <a href="#" class="list-group-item list-group-item-action notif-item" id="notif1">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">Notificación de Mantenimiento</h5>
-                <button class="btn btn-sm btn-link" onclick="toggleReadStatus('notif1', this)">Marcar como Leída</button>
-            </div>
-            <p class="mb-1">La aplicación estará en mantenimiento el 04/12/2024.</p>
-            <small class="text-muted">Información</small>
-            <small class="text-muted d-block mt-1">01/12/2024</small>
-        </a>
+        <div class="list-group" id="notificationsList">
 
-        <a href="#" class="list-group-item list-group-item-action notif-item" id="notif2">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">Nuevo Pago Realizado</h5>
-                <button class="btn btn-sm btn-link" onclick="toggleReadStatus('notif2', this)">Marcar como Leída</button>
-            </div>
-            <p class="mb-1">Tu pago de $50.00 ha sido procesado correctamente.</p>
-            <small class="text-warning">Alerta</small>
-            <small class="text-muted d-block mt-1">02/12/2024</small>
-        </a>
+            <a href="#" class="list-group-item list-group-item-action notif-item" id="notif1">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Notificación de Mantenimiento</h5>
+                    <button class="btn btn-sm btn-link" onclick="toggleReadStatus('notif1', this)">Marcar como Leída</button>
+                </div>
+                <p class="mb-1">La aplicación estará en mantenimiento el 04/12/2024.</p>
+                <small class="text-muted">Información</small>
+                <small class="text-muted d-block mt-1">01/12/2024</small>
+            </a>
 
-        <a href="#" class="list-group-item list-group-item-action notif-item" id="notif3">
-            <div class="d-flex w-100 justify-content-between">
-                <h5 class="mb-1">Cambio en la Política de Privacidad</h5>
-                <button class="btn btn-sm btn-link" onclick="toggleReadStatus('notif3', this)">Marcar como Leída</button>
-            </div>
-            <p class="mb-1">Revisa los cambios en nuestros términos y condiciones.</p>
-            <small class="text-success">Actualización</small>
-            <small class="text-muted d-block mt-1">03/12/2024</small>
-        </a>
+            <a href="#" class="list-group-item list-group-item-action notif-item" id="notif2">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Nuevo Pago Realizado</h5>
+                    <button class="btn btn-sm btn-link" onclick="toggleReadStatus('notif2', this)">Marcar como Leída</button>
+                </div>
+                <p class="mb-1">Tu pago de $50.00 ha sido procesado correctamente.</p>
+                <small class="text-warning">Alerta</small>
+                <small class="text-muted d-block mt-1">02/12/2024</small>
+            </a>
+
+            <a href="#" class="list-group-item list-group-item-action notif-item" id="notif3">
+                <div class="d-flex w-100 justify-content-between">
+                    <h5 class="mb-1">Cambio en la Política de Privacidad</h5>
+                    <button class="btn btn-sm btn-link" onclick="toggleReadStatus('notif3', this)">Marcar como Leída</button>
+                </div>
+                <p class="mb-1">Revisa los cambios en nuestros términos y condiciones.</p>
+                <small class="text-success">Actualización</small>
+                <small class="text-muted d-block mt-1">03/12/2024</small>
+            </a>
+        </div>
     </div>
-</div>
-<!-- Lista de Notificaciones End -->
-
+    <!-- Lista de Notificaciones End -->
+}
 <script>
     // Función para marcar/desmarcar notificación como leída
     function toggleReadStatus(notificationId, button) {

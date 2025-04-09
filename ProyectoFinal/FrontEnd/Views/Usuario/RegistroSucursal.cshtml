@@ -1,7 +1,17 @@
-﻿@{
-    ViewData["Title"] = "Registro de Sucursales";
+﻿@model IEnumerable<FrontEnd.Models.Usuario>
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Gestión de Empleados";
     Layout = "~/Views/Shared/_LayoutUsuarios.cshtml";
+
+    var usuarioNombre = Context.Session.GetString("UsuarioNombre");
+    var idRol = Context.Session.GetString("UsuarioRol");
+    var usuarioId = Context.Session.GetString("UsuarioId");
+    var sesionActiva = !string.IsNullOrEmpty(usuarioNombre);
 }
+
+@if (idRol == "4")
+{
 
 <!-- Registro Start -->
 <div class="jumbotron jumbotron-fluid mb-5">
@@ -42,6 +52,7 @@
         </div>
     </div>
 </div>
+}
 <!-- Registro End -->
 
 <script>
