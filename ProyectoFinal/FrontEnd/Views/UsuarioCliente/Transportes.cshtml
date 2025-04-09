@@ -47,7 +47,9 @@
                     <tr>
                         <th>Tracking ID</th>
                         <th>Estado</th>
-                        <th>Fecha de Registro</th>
+                        <th>Fecha de entrega estimada</th>
+                        <th>Tipo de Entrega</th>
+                        <th>Nombre Transportista</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -60,7 +62,7 @@
                     }
                     else
                     {
-                        @foreach (var paquete in Model)
+                        foreach (var paquete in Model.Where(p => (p.EstadoRuta == "Pendiente" || p.EstadoRuta == "En ruta") && p.EstadoPago == "Cancelado" && p.TipoEntrega == "Domicilio"))
                         {
                             <tr>
                                 <td>@paquete.NumeroRegistro</td>
@@ -81,14 +83,38 @@
                                     {
                                         <strong style="color: #C4161C;">@paquete.EstadoRuta</strong>
                                     }
-                                <td>@paquete.FechaRegistro</td>
+                                <td>@(paquete.FechaEntregaEstimada?.ToString("dd/MM/yyyy") ?? "Fecha no disponible")</td>
+                                <td>@paquete.TipoEntrega</td>
+                                <td>
+                                        @if (ViewBag != null && ViewBag.Usuarios != null)
+                                        {
+                                            var usuarios = ViewBag.Usuarios as List<Usuario>;
+                                            var transportista = usuarios.FirstOrDefault(u => u.IdUsuario == paquete.IdUsuario);
 
+                                            if (transportista != null)
+                                            {
+                                            <label>@transportista.Nombre @transportista.PrimerApellido @transportista.SegundoApellido</label>
+                                            }
+                                            else
+                                            {
+                                            <label>Sin transportista</label>
+                                            }
+                                        }
+                                        else
+                                        {
+                                        <label>No hay transportistas disponibles</label>
+                                        }
+                                </td>
 
                                 <td>
                                     <div class="d-flex justify-content-start">
                                         <!-- Botón para abrir el modal de ver detalles -->
                                         <button class="btn btn-link text-danger" data-toggle="modal" data-target="#deleteModal-@paquete.IdPaquete">
-                                            <i class="fas fa-info-circle"></i>
+                                            <span>
+                                                <i class="fas fa-box"></i>
+                                                <i class="fas fa-arrow-right"></i>
+                                                <i class="fas fa-user"></i>
+                                            </span>
                                         </button>
                                         <!-- Modal de detalles -->
                                         <div class="modal fade" id="deleteModal-@paquete.IdPaquete" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel-@paquete.IdPaquete" aria-hidden="true">
@@ -111,8 +137,10 @@
                                                                 <li>Ancho: @paquete.PaqueteAncho</li>
                                                             </ul>
                                                         </p>
+                                                        <p><strong>Precio:</strong> $@paquete.Precio</p>
                                                         <p><strong>Estado de pago:</strong> @paquete.EstadoPago</p>
-                                                        <p><strong>Tipo de Entrega:</strong> @paquete.TipoEntrega</p>
+                                                        <p><strong>Fecha Aproximada de Entrega:</strong> @paquete.FechaRegistro</p>
+                                                        <p><strong>Descripción:</strong> @paquete.Descripcion</p>
                                                         <hr />
                                                         <h5>Detalles del Transportista</h5><br />
                                                             @if (ViewBag != null && ViewBag.Usuarios != null)
@@ -139,7 +167,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- Modal de detalles End -->
+                                    </div>
+                                    <!-- Modal de detalles End -->
 
                                 </td>
                             </tr>

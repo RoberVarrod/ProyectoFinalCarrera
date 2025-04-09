@@ -20,8 +20,8 @@ builder.Services.AddDistributedMemoryCache(); // Necesario para almacenar sesion
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30); // Tiempo de expiración de la sesión
-   // options.Cookie.HttpOnly = true; // Asegura que la cookie de sesión no sea accesible por scripts
-   // options.Cookie.IsEssential = true; // Necesario para que funcione en GDPR-compliance
+    options.Cookie.HttpOnly = true; // Asegura que la cookie de sesión no sea accesible por scripts
+    options.Cookie.IsEssential = true; // Necesario para que funcione en GDPR-compliance
 });
 
 // Agregar servicios para controladores y vistas

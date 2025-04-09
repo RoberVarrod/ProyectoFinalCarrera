@@ -85,7 +85,7 @@
                             <td><strong style="color: @(paquete.EstadoPago == "Cancelado" ? "#1F1F2E" : "#9E1218")">@paquete.EstadoPago</strong></td>
                             <td>@(paquete.FechaEntregaEstimada?.ToString("dd/MM/yyyy") ?? "Fecha no disponible")</td>
                             <td>@paquete.TipoEntrega</td>
-                            <td>@paquete.Precio</td>
+                            <td>$@paquete.Precio</td>
                             <td>
                                 @if (paquete.EstadoRuta == "Pendiente")
                                 {
@@ -133,7 +133,8 @@
                                                     </ul>
                                                 </p>
                                                 <p><strong>Estado de pago:</strong> @paquete.EstadoPago</p>
-                                                <p><strong>Fecha Aproximada de Entrega:</strong> @paquete.FechaEntregaEstimada</p>
+                                                <p><strong>Fecha Registro:</strong> @(@paquete.FechaRegistro?.ToString("dd/MM/yyyy") ?? "Fecha no disponible")</p>
+                                                <p><strong>Fecha Aproximada de Entrega:</strong> @(paquete.FechaEntregaEstimada?.ToString("dd/MM/yyyy") ?? "Fecha no disponible")</p>
                                                 <p><strong>Tipo de Entrega:</strong> @paquete.TipoEntrega</p>
                                                 <p><strong>Descripción:</strong> @paquete.Descripcion</p>
                                                 <hr />
@@ -168,6 +169,7 @@
                                                         <li>Ancho: @paquete.PaqueteAncho</li>
                                                     </ul>
                                                 </p>
+                                                    <p><strong>Precio:</strong> $@paquete.Precio</p>
                                                 <p><strong>Estado de pago:</strong> @paquete.EstadoPago</p>
                                                 <p><strong>Fecha Aproximada de Entrega:</strong> @paquete.FechaEntregaEstimada</p>
                                                 <p><strong>Tipo de Entrega:</strong> <span id="tipoEntrega">@paquete.TipoEntrega</span></p>
