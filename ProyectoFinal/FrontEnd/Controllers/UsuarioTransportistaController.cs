@@ -74,8 +74,9 @@ namespace FrontEnd.Controllers
         [HttpPost]
         public IActionResult EditarInformacion(Usuario usuario)
         {
+
             var usuarioExistente = _context.Usuarios.FirstOrDefault(c => c.IdUsuario == usuario.IdUsuario);
-            if (usuarioExistente != null)
+                if (usuarioExistente != null)
             {
                 usuarioExistente.Nombre = usuario.Nombre;
                 usuarioExistente.PrimerApellido = usuario.PrimerApellido;
@@ -86,9 +87,12 @@ namespace FrontEnd.Controllers
                 usuarioExistente.Direccion = usuario.Direccion;
 
                 _context.SaveChanges();
+
+                TempData["MensajeInformacionCorrecto"] = "Informacion cambiada correctamente.";
                 return RedirectToAction("Configuracion");
+                
             }
-            return NotFound();
+            return RedirectToAction("Configuracion");
         }
 
         [HttpPost]
