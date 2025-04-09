@@ -171,6 +171,9 @@ namespace FrontEnd.Controllers
             var sucursales = await _context.Sucursals.ToListAsync();
             ViewBag.Sucursales = sucursales;
 
+            var usuarios = await _context.Usuarios.ToListAsync();
+            ViewBag.Usuarios = usuarios;
+
             var sessionId = HttpContext.Session.GetString("ClienteId");
             if (string.IsNullOrEmpty(sessionId) || !int.TryParse(sessionId, out int clienteId))
             {
@@ -717,6 +720,6 @@ namespace FrontEnd.Controllers
 
             return RedirectToAction("OrdenesProceso");
         }
-        
+
     }
 }

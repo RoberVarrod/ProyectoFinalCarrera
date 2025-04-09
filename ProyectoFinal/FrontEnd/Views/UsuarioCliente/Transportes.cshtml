@@ -114,13 +114,26 @@
                                                         <p><strong>Estado de pago:</strong> @paquete.EstadoPago</p>
                                                         <p><strong>Tipo de Entrega:</strong> @paquete.TipoEntrega</p>
                                                         <hr />
-                                                            @if (!string.IsNullOrEmpty(paquete.PaqueteTransportistaNombre))
+                                                        <h5>Detalles del Transportista</h5><br />
+                                                            @if (ViewBag != null && ViewBag.Usuarios != null)
                                                             {
-                                                            <p><strong>Transportista Asignado:</strong> @paquete.PaqueteTransportistaNombre</p>
+                                                                var usuarios = ViewBag.Usuarios as List<Usuario>;
+                                                                var transportista = usuarios.FirstOrDefault(u => u.IdUsuario == paquete.IdUsuario);
+
+                                                                if (transportista != null)
+                                                                {
+                                                                <p><strong>Nombre:</strong> @transportista.Nombre @transportista.PrimerApellido @transportista.SegundoApellido</p>
+                                                                <p><strong>Teléfonos:</strong> @transportista.TelefonoPrincipal</p>
+                                                                <p><strong>Correo:</strong> @transportista.Correo</p>
+                                                                }
+                                                                else
+                                                                {
+                                                                <label>Sin transportista</label>
+                                                                }
                                                             }
                                                             else
                                                             {
-                                                            <p><strong>Transportista Asignado:</strong> No asignado</p>
+                                                            <label>No hay transportistas disponibles</label>
                                                             }
                                                     </div>
                                                 </div>
