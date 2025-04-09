@@ -193,10 +193,9 @@
                                                     <p><strong>Descripción:</strong> La entrega a domicilio tarda entre 3-4 días hábiles.</p>
                                                     <p><strong>Costo:</strong> Ya está incluido con el servicio.</p>
                                                     <button class="btn btn-outline-dark" data-toggle="collapse" href="#domicilioAddressForm" role="button" aria-expanded="false" aria-controls="domicilioAddressForm" onclick="updateTipoEntrega('Domicilio')">Confirmar Entrega a Domicilio</button>
-                                                    <!-- Formulario Dirección para Entrega a Domicilio -->
+                                                    
                                                     <div class="collapse" id="domicilioAddressForm">
-                                                        @foreach (var PaqueteUsuarioSucursal in Model)
-                                                        {
+                                                        
                                                             <form method="post" asp-action="ActualizarDireccionOrdenes" asp-route-idPaquete="@paquete.IdPaquete" asp-route-idSucursal="@paquete.IdSucursal">
 
                                                                 <div class="form-group">
@@ -227,7 +226,7 @@
                                                                     </form>
                                                                 </div>
                                                             </form>
-                                                        }
+                                                        
                                                     </div>
                                                 </div>
                                                 <!-- Contenido Retiro en Sucursal -->
