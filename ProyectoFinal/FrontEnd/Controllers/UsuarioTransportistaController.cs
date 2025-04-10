@@ -88,8 +88,6 @@ namespace FrontEnd.Controllers
 
                 _context.SaveChanges();
 
-                TempData["MensajeInformacionCorrecto"] = "Informacion cambiada correctamente.";
-                return RedirectToAction("Configuracion");
                 
             }
             return RedirectToAction("Configuracion");

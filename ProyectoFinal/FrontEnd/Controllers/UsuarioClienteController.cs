@@ -89,6 +89,7 @@ namespace FrontEnd.Controllers
                 clienteExistente.Direccion = cliente.Direccion;
 
                 _context.SaveChanges();
+                TempData["MensajeInformacionCorrecto"] = "Informacion cambiada correctamente.";
                 return RedirectToAction("Configuracion");
             }
             return NotFound();
