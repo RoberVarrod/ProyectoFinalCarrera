@@ -1,9 +1,17 @@
-﻿@{
-    ViewData["Title"] = "Registro de Pago";
+﻿@model FrontEnd.Models.Notificacion
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Gestión de Empleados";
     Layout = "~/Views/Shared/_LayoutUsuarios.cshtml";
+
+    var usuarioNombre = Context.Session.GetString("UsuarioNombre");
+    var idRol = Context.Session.GetString("UsuarioRol");
     var usuarioId = Context.Session.GetString("UsuarioId");
+    var sesionActiva = !string.IsNullOrEmpty(usuarioNombre);
 }
-@model FrontEnd.Models.Notificacion
+
+@if (idRol == "4" || idRol=="2")
+{
 
 <!-- Notificacion Start -->
 <div class="jumbotron jumbotron-fluid mb-5">
@@ -53,3 +61,4 @@
     </div>
 </div>
 <!-- Notificacion End -->
+}

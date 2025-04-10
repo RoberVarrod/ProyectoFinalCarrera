@@ -60,6 +60,20 @@
     </div>
     <!-- Lista de Notificaciones End -->
 }
+else
+{
+    <div class="jumbotron jumbotron-fluid mb-5">
+        <div class="container text-center py-5">
+            <h1 class="text-white display-3 mb-5">No tienes acceso</h1>
+            <div class="mx-auto" style="width: 100%; max-width: 600px;">
+                <div class="input-group d-flex justify-content-center">
+                    <img src="~/assets/img/no-autorizado.png" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
 <script>
     // Función para marcar/desmarcar notificación como leída
     function toggleReadStatus(notificationId, button) {

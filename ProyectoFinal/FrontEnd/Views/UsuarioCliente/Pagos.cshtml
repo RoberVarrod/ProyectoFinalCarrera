@@ -1,35 +1,57 @@
-﻿@{
-    ViewData["Title"] = "Pagos";
+﻿@model List<FrontEnd.Models.Paquete>
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Gestión de Empleados";
     Layout = "~/Views/Shared/_LayoutClientes.cshtml";
+
+    var usuarioNombre = Context.Session.GetString("UsuarioNombre");
+    var idRol = Context.Session.GetString("ClienteRol");
+    var usuarioId = Context.Session.GetString("UsuarioId");
+    var sesionActiva = !string.IsNullOrEmpty(usuarioNombre);
 }
 
-<!-- Header Start -->
-<div class="jumbotron jumbotron-fluid mb-5">
-    <div class="container text-center py-5">
-        <h1 class="text-white display-3 mb-4">Envíos a Costa Rica</h1>
-        <h4 class="text-primary display-3 mb-5">Historial de mis pagos</h4>
+@if (idRol == "1")
+{
+    <!-- Header Start -->
+    <div class="jumbotron jumbotron-fluid mb-5">
+        <div class="container text-center py-5">
+            <h1 class="text-white display-3 mb-5">Historial de mis pagos</h1>
+        </div>
     </div>
-</div>
-<!-- Header End -->
-<!-- Lista de Pagos Start -->
-<div class="container-fluid py-4">
-    <h4 class="mb-4 text-primary">Lista de Pagos</h4>
-    <table class="table table-hover table-striped shadow-sm">
-        <thead class="thead-dark">
-            <tr>
-                <th>Tracking ID</th>
-                <th>Fecha de Pago</th>
-                <th>Estado</th>
-                <th>Monto</th>
-            </tr>
-        </thead>
-        <tbody id="tablaPagosBody">
-            <!-- Aquí se llenarán los pagos dinámicamente -->
-        </tbody>
-    </table>
-</div>
-<!-- Lista de Pagos End -->
+    <!-- Header End -->
+    <!-- Lista de Pagos Start -->
+    <div class="container-fluid py-4">
+        <h4 class="mb-4 text-primary">Lista de Pagos</h4>
+        <table class="table table-hover table-striped shadow-sm">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Tracking ID</th>
+                    <th>Fecha de Pago</th>
+                    <th>Estado</th>
+                    <th>Monto</th>
+                </tr>
+            </thead>
+            <tbody id="tablaPagosBody">
+                <!-- Aquí se llenarán los pagos dinámicamente -->
+            </tbody>
+        </table>
+    </div>
+    <!-- Lista de Pagos End -->
+}
+else
+{
+    <div class="jumbotron jumbotron-fluid mb-5">
+        <div class="container text-center py-5">
+            <h1 class="text-white display-3 mb-5">No tienes acceso</h1>
+            <div class="mx-auto" style="width: 100%; max-width: 600px;">
+                <div class="input-group d-flex justify-content-center">
+                    <img src="~/assets/img/no-autorizado.png" />
+                </div>
+            </div>
+        </div>
+    </div>
 
+}
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>

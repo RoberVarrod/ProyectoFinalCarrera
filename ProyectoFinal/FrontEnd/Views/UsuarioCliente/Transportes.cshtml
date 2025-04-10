@@ -1,44 +1,51 @@
 ﻿@model IEnumerable<FrontEnd.Models.PaqueteUsuarioSucursal>
+@using Microsoft.AspNetCore.Http
 @{
-    ViewData["Title"] = "Estado de Transporte";
+    ViewData["Title"] = "Gestión de Empleados";
     Layout = "~/Views/Shared/_LayoutClientes.cshtml";
+
+    var usuarioNombre = Context.Session.GetString("UsuarioNombre");
+    var idRol = Context.Session.GetString("ClienteRol");
+    var usuarioId = Context.Session.GetString("UsuarioId");
+    var sesionActiva = !string.IsNullOrEmpty(usuarioNombre);
 }
 
-<!-- Header Start -->
-<div class="jumbotron jumbotron-fluid mb-5">
-    <div class="container text-center py-5">
-        <h4 class="text-white display-3 mb-4">Envíos a Costa Rica</h4>
-        <h4 class="text-primary display-3 mb-5">Envios</h4>
+@if (idRol == "1")
+{
+    <!-- Header Start -->
+    <div class="jumbotron jumbotron-fluid mb-5">
+        <div class="container text-center py-5">
+            <h1 class="text-white display-3 mb-5">Envios y Entregas</h1>
 
-        <div class="mx-auto" style="width: 100%; max-width: 600px;">
-            <div class="input-group">
-                <form asp-controller="UsuarioCliente" asp-action="Transportes" method="get" class="w-100 d-flex">
-                    <input type="text" name="buscar" class="form-control border-light" style="padding: 30px;" placeholder="Tracking Id">
-                    <div class="input-group-append">
-                        <button type="submit" class="btn btn-primary px-3">Buscar</button>
-                    </div>
-                </form>
+            <div class="mx-auto" style="width: 100%; max-width: 600px;">
+                <div class="input-group">
+                    <form asp-controller="UsuarioCliente" asp-action="Transportes" method="get" class="w-100 d-flex">
+                        <input type="text" name="buscar" class="form-control border-light" style="padding: 30px;" placeholder="Tracking Id">
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary px-3">Buscar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!-- Header End -->
-<!-- Panels Section Start -->
-<div class="container-fluid py-4">
-    <div class="row">
-        <!-- Panel 1: Estado del Paquete -->
-        <div class="col-md-12 mb-4">
-            <div class="card border-0 shadow-lg">
-                <div class="card-body text-center">
-                    <h4 class="card-title text-primary">Paquetes en Ruta</h4>
-                    <h1 class="text-primary mb-2" data-toggle="counter-up">
-                        @(Model?.Count(p => p.EstadoRuta == "En ruta"))
-                    </h1>
+    <!-- Header End -->
+    <!-- Panels Section Start -->
+    <div class="container-fluid py-4">
+        <div class="row">
+            <!-- Panel 1: Estado del Paquete -->
+            <div class="col-md-12 mb-4">
+                <div class="card border-0 shadow-lg">
+                    <div class="card-body text-center">
+                        <h4 class="card-title text-primary">Paquetes en Ruta</h4>
+                        <h1 class="text-primary mb-2" data-toggle="counter-up">
+                            @(Model?.Count(p => p.EstadoRuta == "En ruta"))
+                        </h1>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Panels Section End -->
         <!-- Lista de Paquetes Start -->
         <div class="container-fluid py-4">
             <h4 class="mb-4 text-primary">Lista de Paquetes</h4>
@@ -57,7 +64,7 @@
                     @if (!Model.Any())
                     {
                         <tr>
-                            <td colspan="9" class="text-center text-muted">No hay paquetes registrados</td>
+                            <td colspan="6" class="text-center text-muted">No hay paquetes registrados</td>
                         </tr>
                     }
                     else
@@ -67,48 +74,42 @@
                             <tr>
                                 <td>@paquete.NumeroRegistro</td>
                                 <td>
-                                    @if (paquete.EstadoRuta == "Pendiente")
-                                    {
-                                        <strong style="color: #757575;">@paquete.EstadoRuta</strong>
+                                    @{
+                                        string color = paquete.EstadoRuta switch
+                                        {
+                                            "Pendiente" => "#757575",
+                                            "En ruta" => "#9E1218",
+                                            "Entregado" => "#1F1F2E",
+                                            "En sucursal" => "#C4161C",
+                                            _ => "#000"
+                                        };
                                     }
-                                    else if (paquete.EstadoRuta == "En ruta")
-                                    {
-                                        <strong style="color: #9E1218;">@paquete.EstadoRuta</strong>
-                                    }
-                                    else if (paquete.EstadoRuta == "Entregado")
-                                    {
-                                        <strong style="color: #1F1F2E;">@paquete.EstadoRuta</strong>
-                                    }
-                                    else if (paquete.EstadoRuta == "En sucursal")
-                                    {
-                                        <strong style="color: #C4161C;">@paquete.EstadoRuta</strong>
-                                    }
+                                    <strong style="color:@color;">@paquete.EstadoRuta</strong>
+                                </td>
                                 <td>@(paquete.FechaEntregaEstimada?.ToString("dd/MM/yyyy") ?? "Fecha no disponible")</td>
                                 <td>@paquete.TipoEntrega</td>
                                 <td>
-                                        @if (ViewBag != null && ViewBag.Usuarios != null)
+                                    @{
+                                        if (ViewBag?.Usuarios is List<Usuario> usuarios)
                                         {
-                                            var usuarios = ViewBag.Usuarios as List<Usuario>;
                                             var transportista = usuarios.FirstOrDefault(u => u.IdUsuario == paquete.IdUsuario);
-
                                             if (transportista != null)
                                             {
-                                            <label>@transportista.Nombre @transportista.PrimerApellido @transportista.SegundoApellido</label>
+                                                <label>@transportista.Nombre @transportista.PrimerApellido @transportista.SegundoApellido</label>
                                             }
                                             else
                                             {
-                                            <label>Sin transportista</label>
+                                                <label>Sin transportista</label>
                                             }
                                         }
                                         else
                                         {
-                                        <label>No hay transportistas disponibles</label>
+                                            <label>No hay transportistas disponibles</label>
                                         }
+                                    }
                                 </td>
-
                                 <td>
                                     <div class="d-flex justify-content-start">
-                                        <!-- Botón para abrir el modal de ver detalles -->
                                         <button class="btn btn-link text-danger" data-toggle="modal" data-target="#deleteModal-@paquete.IdPaquete">
                                             <span>
                                                 <i class="fas fa-box"></i>
@@ -116,12 +117,13 @@
                                                 <i class="fas fa-user"></i>
                                             </span>
                                         </button>
+
                                         <!-- Modal de detalles -->
                                         <div class="modal fade" id="deleteModal-@paquete.IdPaquete" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel-@paquete.IdPaquete" aria-hidden="true">
                                             <div class="modal-dialog modal-md" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="deleteModalLabel-@paquete.IdPaquete">Detalles del Paquete</h5>
+                                                        <h5 class="modal-title">Detalles del Paquete</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
                                                         </button>
@@ -139,37 +141,35 @@
                                                         </p>
                                                         <p><strong>Precio:</strong> $@paquete.Precio</p>
                                                         <p><strong>Estado de pago:</strong> @paquete.EstadoPago</p>
-                                                        <p><strong>Fecha Aproximada de Entrega:</strong> @paquete.FechaRegistro</p>
+                                                        <p><strong>Fecha Aproximada de Entrega:</strong> @paquete.FechaRegistro?.ToString("dd/MM/yyyy")</p>
                                                         <p><strong>Descripción:</strong> @paquete.Descripcion</p>
                                                         <hr />
                                                         <h5>Detalles del Transportista</h5><br />
-                                                            @if (ViewBag != null && ViewBag.Usuarios != null)
+                                                        @{
+                                                            if (ViewBag?.Usuarios is List<Usuario> usuariosModal)
                                                             {
-                                                                var usuarios = ViewBag.Usuarios as List<Usuario>;
-                                                                var transportista = usuarios.FirstOrDefault(u => u.IdUsuario == paquete.IdUsuario);
-
+                                                                var transportista = usuariosModal.FirstOrDefault(u => u.IdUsuario == paquete.IdUsuario);
                                                                 if (transportista != null)
                                                                 {
-                                                                <p><strong>Nombre:</strong> @transportista.Nombre @transportista.PrimerApellido @transportista.SegundoApellido</p>
-                                                                <p><strong>Teléfonos:</strong> @transportista.TelefonoPrincipal</p>
-                                                                <p><strong>Correo:</strong> @transportista.Correo</p>
+                                                                    <p><strong>Nombre:</strong> @transportista.Nombre @transportista.PrimerApellido @transportista.SegundoApellido</p>
+                                                                    <p><strong>Teléfonos:</strong> @transportista.TelefonoPrincipal</p>
+                                                                    <p><strong>Correo:</strong> @transportista.Correo</p>
                                                                 }
                                                                 else
                                                                 {
-                                                                <label>Sin transportista</label>
+                                                                    <label>Sin transportista</label>
                                                                 }
                                                             }
                                                             else
                                                             {
-                                                            <label>No hay transportistas disponibles</label>
+                                                                <label>No hay transportistas disponibles</label>
                                                             }
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- Modal de detalles End -->
-
                                 </td>
                             </tr>
                         }
@@ -177,3 +177,19 @@
                 </tbody>
             </table>
         </div>
+    </div>
+}
+else
+{
+    <div class="jumbotron jumbotron-fluid mb-5">
+        <div class="container text-center py-5">
+            <h1 class="text-white display-3 mb-5">No tienes acceso</h1>
+            <div class="mx-auto" style="width: 100%; max-width: 600px;">
+                <div class="input-group d-flex justify-content-center">
+                    <img src="~/assets/img/no-autorizado.png" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+}

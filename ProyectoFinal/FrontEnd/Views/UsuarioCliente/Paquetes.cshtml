@@ -1,16 +1,23 @@
 ﻿@model IEnumerable<FrontEnd.Models.PaqueteUsuarioSucursal>
+@using Microsoft.AspNetCore.Http
 @{
-    ViewData["Title"] = "Gestion de paquetes";
+    ViewData["Title"] = "Gestión de Empleados";
     Layout = "~/Views/Shared/_LayoutClientes.cshtml";
+
+    var usuarioNombre = Context.Session.GetString("UsuarioNombre");
+    var idRol = Context.Session.GetString("ClienteRol");
+    var usuarioId = Context.Session.GetString("UsuarioId");
+    var sesionActiva = !string.IsNullOrEmpty(usuarioNombre);
 }
 
+@if (idRol == "1")
+{
 
 
 <!-- Header Start -->
 <div class="jumbotron jumbotron-fluid mb-5">
     <div class="container text-center py-5">
-        <h4 class="text-white display-3 mb-4">Envíos a Costa Rica</h4> 
-        <h4 class="text-primary display-3 mb-5">Mis Paquetes</h4>
+        <h1 class="text-white display-3 mb-5">Mis Paquetes</h1>
 
         <div class="mx-auto" style="width: 100%; max-width: 600px;">
             <div class="input-group">
@@ -319,5 +326,19 @@
         </tbody>
     </table>
 </div>
+}
+else
+{
+    <div class="jumbotron jumbotron-fluid mb-5">
+        <div class="container text-center py-5">
+            <h1 class="text-white display-3 mb-5">No tienes acceso</h1>
+            <div class="mx-auto" style="width: 100%; max-width: 600px;">
+                <div class="input-group d-flex justify-content-center">
+                    <img src="~/assets/img/no-autorizado.png" />
+                </div>
+            </div>
+        </div>
+    </div>
 
+}
 

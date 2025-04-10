@@ -1,16 +1,25 @@
 ﻿@model IEnumerable<FrontEnd.Models.PaqueteUsuarioSucursal>
+@using Microsoft.AspNetCore.Http
 @{
-    ViewData["Title"] = "Gestion de paquetes";
+    ViewData["Title"] = "Gestión de Transportes";
     Layout = "~/Views/Shared/_LayoutTransportistas.cshtml";
+
+    var usuarioNombre = Context.Session.GetString("UsuarioNombre");
+    var idRol = Context.Session.GetString("UsuarioRol");
+    var usuarioId = Context.Session.GetString("UsuarioId");
+    var sesionActiva = !string.IsNullOrEmpty(usuarioNombre);
 }
+
+@if (idRol == "3")
+{
+
 
 
 
 <!-- Header Start -->
 <div class="jumbotron jumbotron-fluid mb-5">
     <div class="container text-center py-5">
-        <h1 class="text-primary mb-4">Económica y Segura</h1>
-        <h1 class="text-white display-3 mb-5">Envíos a Costa Rica</h1>
+        <h1 class="text-white mb-4">Paquetes Asignados</h1>
         <div class="mx-auto" style="width: 100%; max-width: 600px;">
             <div class="input-group">
                 <form asp-controller="Paquete" asp-action="PaqueteAsignado" method="get" class="w-100 d-flex">
@@ -175,3 +184,18 @@
         </tbody>
     </table>
 </div>
+}
+else
+{
+    <div class="jumbotron jumbotron-fluid mb-5">
+        <div class="container text-center py-5">
+            <h1 class="text-white display-3 mb-5">No tienes acceso</h1>
+            <div class="mx-auto" style="width: 100%; max-width: 600px;">
+                <div class="input-group d-flex justify-content-center">
+                    <img src="~/assets/img/no-autorizado.png" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
