@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Http
 @{
     ViewData["Title"] = "Gestión de Empleados";
-    Layout = "~/Views/Shared/_LayoutClientes.cshtml";
+    Layout = "~/Views/Shared/_LayoutPaqueteHistorial.cshtml";
 
     var usuarioNombre = Context.Session.GetString("UsuarioNombre");
     var idRol = Context.Session.GetString("ClienteRol");
