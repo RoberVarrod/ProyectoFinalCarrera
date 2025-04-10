@@ -15,8 +15,7 @@
     <!-- Header Start -->
     <div class="jumbotron jumbotron-fluid mb-5">
         <div class="container text-center py-5">
-            <h1 class="text-white display-4 font-weight-bold mb-4 ">Configura tu</h1>
-            <h1 class="text-white display-4 font-weight-bold mb-4 "> Perfil</h1>
+            <h1 class="text-white display-3 mb-5">Perfil</h1>
         </div>
     </div>
     <!-- Header End -->
@@ -163,43 +162,7 @@
         </div>
     </div>
     }
-    <script>
-        // Validación de la nueva contraseña
-            document.getElementById("nuevaPassword").addEventListener("input", function () {
-                const password = this.value;
-                const length = document.getElementById("length");
-                const uppercase = document.getElementById("uppercase");
-                const lowercase = document.getElementById("lowercase");
-                const number = document.getElementById("number");
-                const special = document.getElementById("special");
-                const passwordHelp = document.getElementById("passwordHelp");
 
-                passwordHelp.style.display = "block";
-
-                // Validaciones
-                length.classList.toggle("text-success", password.length >= 8);
-                length.classList.toggle("text-danger", password.length < 8);
-                uppercase.classList.toggle("text-success", /[A-Z]/.test(password));
-                uppercase.classList.toggle("text-danger", !/[A-Z]/.test(password));
-
-                lowercase.classList.toggle("text-success", /[a-z]/.test(password));
-                lowercase.classList.toggle("text-danger", !/[a-z]/.test(password));
-
-                number.classList.toggle("text-success", /\d/.test(password));
-                number.classList.toggle("text-danger", !/\d/.test(password));
-
-                special.classList.toggle("text-success", /[#$%^&+=!]/.test(password));
-                special.classList.toggle("text-danger", !/[#$%^&+=!]/.test(password));
-            });
-
-            // Validación de coincidencia de contraseñas
-            document.getElementById("confirmNuevaPassword").addEventListener("input", function () {
-                const password = document.getElementById("nuevaPassword").value;
-                const confirmPassword = this.value;
-                const passwordMismatch = document.getElementById("passwordMismatch");
-                passwordMismatch.style.display = (password !== confirmPassword) ? "block" : "none";
-            });
-    </script>
 
 else
 {
@@ -215,3 +178,40 @@ else
     </div>
 
 }
+<script>
+    // Validación de la nueva contraseña
+        document.getElementById("nuevaPassword").addEventListener("input", function () {
+            const password = this.value;
+            const length = document.getElementById("length");
+            const uppercase = document.getElementById("uppercase");
+            const lowercase = document.getElementById("lowercase");
+            const number = document.getElementById("number");
+            const special = document.getElementById("special");
+            const passwordHelp = document.getElementById("passwordHelp");
+
+            passwordHelp.style.display = "block";
+
+            // Validaciones
+            length.classList.toggle("text-success", password.length >= 8);
+            length.classList.toggle("text-danger", password.length < 8);
+            uppercase.classList.toggle("text-success", /[A-Z]/.test(password));
+            uppercase.classList.toggle("text-danger", !/[A-Z]/.test(password));
+
+            lowercase.classList.toggle("text-success", /[a-z]/.test(password));
+            lowercase.classList.toggle("text-danger", !/[a-z]/.test(password));
+
+            number.classList.toggle("text-success", /\d/.test(password));
+            number.classList.toggle("text-danger", !/\d/.test(password));
+
+            special.classList.toggle("text-success", /[#$%^&+=!]/.test(password));
+            special.classList.toggle("text-danger", !/[#$%^&+=!]/.test(password));
+        });
+
+        // Validación de coincidencia de contraseñas
+        document.getElementById("confirmNuevaPassword").addEventListener("input", function () {
+            const password = document.getElementById("nuevaPassword").value;
+            const confirmPassword = this.value;
+            const passwordMismatch = document.getElementById("passwordMismatch");
+            passwordMismatch.style.display = (password !== confirmPassword) ? "block" : "none";
+        });
+</script>

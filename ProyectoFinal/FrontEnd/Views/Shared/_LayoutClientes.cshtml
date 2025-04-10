@@ -91,62 +91,59 @@
     @RenderBody()
 
 
-
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-white mt-5 py-5 px-sm-3 px-md-5">
         <div class="row pt-5">
-            <div class="col-lg-7 col-md-6">
-                <div class="row">
-                    <div class="col-md-6 mb-5">
-                        <h3 class="text-primary mb-4">Póngase en contacto</h3>
-                        <p><i class="fa fa-map-marker-alt mr-2"></i>Naranjo, CR</p>
-                        <p>
-                            <i class="fa fa-phone-alt mr-2"></i>+506 2455 1600
-                        </p>
-                        <p><i class="fa fa-envelope mr-2"></i>Ventas@TransportesACostaRica.com</p>
-                        <div class="d-flex justify-content-start mt-4">
-                            <!--<a class="btn btn-outline-light btn-social mr-2" href="#"><i class="fab fa-twitter"></i></a>
-                            <a class="btn btn-outline-light btn-social mr-2" href="#"><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn btn-outline-light btn-social mr-2" href="#"><i class="fab fa-linkedin-in"></i></a>
-                            <a class="btn btn-outline-light btn-social" href="#"><i class="fab fa-instagram"></i></a>-->
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-5">
-                        <h3 class="text-primary mb-4">Links rápidos</h3>
-                        <div class="d-flex flex-column justify-content-start">
-                            <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Inicio</a>
-                            <a class="text-white mb-2" asp-area="" asp-controller="UsuarioCliente" asp-action="Pagos"><i class="fa fa-angle-right mr-2"></i>Mis Pagos</a>
-                            <a class="text-white mb-2" asp-area="" asp-controller="UsuarioCliente" asp-action="Paquetes"><i class="fa fa-angle-right mr-2"></i>Mis Paquetes</a>
-                            <a class="text-white mb-2" asp-area="" asp-controller="UsuarioCliente" asp-action="Notificaciones"><i class="fa fa-angle-right mr-2"></i>Notificaciones</a>
-                            <a class="text-white mb-2" asp-area="" asp-controller="UsuarioCliente" asp-action="Configuracion"><i class="fa fa-angle-right mr-2"></i>Configuracion</a>
-                        </div>
-                    </div>
+            <!-- Logo y Acerca de al lado -->
+            <div class="col-lg-4 col-md-12 d-flex align-items-center mb-5">
+                <img src="/assets/img/icono.png" alt="Logo" style="max-width: 100px;" class="mr-4">
+                <div>
+                    <h5 class="text-primary mb-3">Acerca de</h5>
+                    <p class="mb-0">
+                        Transportes a Costa Rica es una empresa especializada en transporte
+                        de carga puerta a puerta desde los Estados Unidos hacia Costa Rica.
+                    </p>
                 </div>
             </div>
-            <div class="col-lg-5 col-md-6 mb-5">
-                <h3 class="text-primary mb-4">Horario de atención</h3>
-                <p>
-                    <i class="fa fa-clock mr-2"></i> Lunes a viernes de  8am 5pm
-                </p>
-                <div class="w-100">
+
+            <!-- Enlaces útiles y Horario de atención (juntos) -->
+            <div class="col-lg-5 col-md-6 mb-5 d-flex">
+                <!-- Enlaces útiles -->
+                <div class="me-4" style="width: 50%;">
+                    <h5 class="text-primary mb-4">Enlaces útiles</h5>
+                    <div class="d-flex flex-column">
+                        <a class="text-white mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Inicio</a>
+                        <a class="text-white mb-2" asp-area="" asp-controller="UsuarioCliente" asp-action="Pagos"><i class="fa fa-angle-right mr-2"></i>Mis Pagos</a>
+                        <a class="text-white mb-2" asp-area="" asp-controller="UsuarioCliente" asp-action="Paquetes"><i class="fa fa-angle-right mr-2"></i>Mis Paquetes</a>
+                        <a class="text-white mb-2" asp-area="" asp-controller="Notificacion" asp-action="Notificaciones"><i class="fa fa-angle-right mr-2"></i>Notificaciones</a>
+                        <a class="text-white mb-2" asp-area="" asp-controller="UsuarioCliente" asp-action="Configuracion"><i class="fa fa-angle-right mr-2"></i>Configuracion</a>
+                    </div>
                 </div>
+
+                <!-- Horario de atención -->
+                <div style="width: 50%;">
+                    <h5 class="text-primary mb-4">Horario de atención</h5>
+                    <p><i class="fa fa-clock mr-2"></i>Lunes a Viernes: 8am - 5pm</p>
+                    <p><i class="fa fa-clock mr-2"></i>Sábado y Domingo: 8am - 12pm</p>
+                </div>
+            </div>
+
+            <!-- Contacto -->
+            <div class="col-lg-3 col-md-6 mb-5">
+                <h5 class="text-primary mb-4">Contáctenos</h5>
+                <p><i class="fa fa-map-marker-alt mr-2"></i>San José, Costa Rica</p>
+                <p><i class="fa fa-phone-alt mr-2"></i>+506 2455 1600</p>
+                <p style="word-break: break-word;"><i class="fa fa-envelope mr-2"></i>Ventas@TransportesACostaRica.com</p>
             </div>
         </div>
     </div>
+
+    <!-- Footer Bottom -->
     <div class="container-fluid bg-dark text-white border-top py-4 px-sm-3 px-md-5" style="border-color: #3E3E4E !important;">
-        <div class="row">
-            <div class="col-lg-6 text-center text-md-left mb-3 mb-md-0">
-                <p class="m-0 text-white">
-                    &copy; <a>Transportes a Costa Rica</a>. Todos los derechos reservados.
-                </p>
-            </div>
-            <div class="col-lg-6 text-center text-md-right">
-                <ul class="nav d-inline-flex">
-                    <li class="nav-item">
-                        <a class="nav-link text-white py-0" href="#">Terminos y Condiciones</a>
-                    </li>
-                </ul>
-            </div>
+        <div class=" text-center mb-3 mb-md-0">
+            <p class="m-0 text-white">
+                &copy; <a class="text-primary" href="#">Transportes a Costa Rica</a>. Todos los derechos reservados.
+            </p>
         </div>
     </div>
     <!-- Footer End -->
