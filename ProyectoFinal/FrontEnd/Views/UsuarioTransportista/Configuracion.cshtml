@@ -44,7 +44,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form method="post" action="/Usuario/Configuracion" enctype="multipart/form-data">
+                                <form method="post" action="/UsuarioTransportista/Configuracion" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <label>Subir nueva foto</label>
                                     <input type="file" class="form-control" name="ProfileImage" accept=".jpg,.png" required>
@@ -77,7 +77,7 @@
 
                 <!-- Formulario para Editar Información Start -->
                 <div id="editInfoForm" class="collapse mt-4">
-                    <form method="post" action="/Usuario/EditarInformacion">
+                    <form method="post" action="/UsuarioTransportista/EditarInformacion">
                         <!-- Agregar el campo oculto para el ID del cliente -->
                         <input type="hidden" name="IdUsuario" value="@Model.IdUsuario" />
 
@@ -117,7 +117,7 @@
                 <!-- Formulario para Editar Información End -->
                 <!-- Formulario para Cambiar Contraseña Start -->
                 <div id="changePasswordForm" class="collapse mt-4">
-                    <form method="post" action="/Usuario/CambiarContrasena">
+                        <form method="post" action="/UsuarioTransportista/CambiarContrasena">
                         @if (TempData["ErrorContrasena"] != null)
                         {
                             <div class="alert alert-danger">@TempData["ErrorContrasena"]</div>
