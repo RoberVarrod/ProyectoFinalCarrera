@@ -18,40 +18,7 @@
             <h1 class="text-white display-3 mb-5">Gestión de envíos y rutas</h1>
         </div>
     </div>
-    <!-- Header End -->
-    <!-- Gestión de Transportistas y Envíos Start
-    <div class="container-fluid py-4">
-    <h4 class="mb-4 text-primary">Gestión de Transportistas y Envíos</h4>
-    <table class="table table-hover table-striped shadow-sm">
-    <thead class="thead-dark">
-    <tr>
-    <th>Transportista</th>
-    <th>Ruta</th>
-    <th>Estado del Envío</th>
-    <th>Acciones</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-    <td>Juan Pérez</td>
-    <td>Ruta 32 (San José - Limón)</td>
-    <td><strong style="color: #1F1F2E;">En tránsito</strong></td>
-    <td>
-    <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editDetailsModal"><i class="fas fa-edit"></i> Editar</button>
-    </td>
-    </tr>
-    <tr>
-    <td>María González</td>
-    <td>Ruta 27 (San José - Caldera)</td>
-    <td><strong style="color: #1F1F2E;">Pendiente</strong></td>
-    <td>
-    <button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editDetailsModal"><i class="fas fa-edit"></i> Editar</button>
-    </td>
-    </tr>
-    </tbody>
-    </table>
-    </div>
-    Gestión de Transportistas y Envíos End -->
+
     <!-- Buscar Mejores Rutas Start -->
     <div class="container-fluid py-4">
         <h4 class="mb-4 text-primary">Buscar Mejores Rutas</h4>
@@ -66,9 +33,25 @@
                 <label for="destination">Destino:</label>
                 <input type="text" class="form-control" id="destination" name="destination" placeholder="Ejemplo: Limón, Costa Rica" required>
             </div>
-            <button type="submit" class="btn btn-primary">Obtener Ruta</button>
+            <button id="boton_Buscar" type="submit" class="btn btn-primary">Obtener Ruta</button>
         </form>
-
+        <button id="boton_Refresh" class="btn btn-primary" style="display: none" onclick="location.reload()">Buscar una Ruta nueva</button>
+        <hr />
+        <div>
+            <div class="form-group">
+                <label for="kilometros">Distancia en kilómetros</label>
+                <input type="text" class="form-control" id="kilometros" name="kilometros" placeholder="Km" required>
+            </div>
+            <div class="form-group">
+                <label for="horas">Horas</label>
+                <input type="text" class="form-control" id="horas" name="horas" placeholder="Horas" required>
+            </div>
+            <div class="form-group">
+                <label for="minutos">Minutos</label>
+                <input type="text" class="form-control" id="minutos" name="minutos" placeholder="Minutos" required>
+            </div>
+        </div>
+        <hr />
         <!-- Contenedor para el mapa -->
         <div id="map" style="height: 500px; width: 100%; margin-top: 20px;"></div>
 
@@ -80,32 +63,32 @@
             let autocompleteDestination;
 
             // Función para inicializar el mapa
-           function initMap() {
-            // Centrar el mapa en Costa Rica
-            map = new google.maps.Map(document.getElementById("map"), {
-            center: { lat: 9.7489, lng: -83.7534 }, // Coordenadas de Costa Rica
-            zoom: 8,
-            });
+            function initMap() {
+                // Centrar el mapa en Costa Rica
+                map = new google.maps.Map(document.getElementById("map"), {
+                    center: { lat: 9.7489, lng: -83.7534 }, // Coordenadas de Costa Rica
+                    zoom: 8,
+                });
 
-            // Inicializar el renderizador de direcciones
-            directionsRenderer = new google.maps.DirectionsRenderer();
-            directionsRenderer.setMap(map);
+                // Inicializar el renderizador de direcciones
+                directionsRenderer = new google.maps.DirectionsRenderer();
+                directionsRenderer.setMap(map);
 
-            // Inicializar el autocompletado para el campo de origen
-            autocompleteOrigin = new google.maps.places.Autocomplete(
-            document.getElementById("origin"),
-            {
-            // types: ["geocode"], // Limita los resultados a direcciones geográficas
-            }
-            );
+                // Inicializar el autocompletado para el campo de origen
+                autocompleteOrigin = new google.maps.places.Autocomplete(
+                    document.getElementById("origin"),
+                    {
+                        // types: ["geocode"], // Limita los resultados a direcciones geográficas
+                    }
+                );
 
-            // Inicializar el autocompletado para el campo de destino
-            autocompleteDestination = new google.maps.places.Autocomplete(
-            document.getElementById("destination"),
-            {
-            // types: ["geocode"], // Limita los resultados a direcciones geográficas
-            }
-            );
+                // Inicializar el autocompletado para el campo de destino
+                autocompleteDestination = new google.maps.places.Autocomplete(
+                    document.getElementById("destination"),
+                    {
+                        // types: ["geocode"], // Limita los resultados a direcciones geográficas
+                    }
+                );
             }
 
             // var origin = document.getElementById("origin");
@@ -113,178 +96,140 @@
 
             // Función para calcular y mostrar la ruta usando la API de Routes
             async function calculateAndDisplayRoute() {
-            const apiKey = "AIzaSyDC8ZJMw9pqASh8A6OkkUdB3vvXFCB5H4A"; // Reemplaza con tu clave de API
-            const requestUrl = `https://routes.googleapis.com/directions/v2:computeRoutes?key=${apiKey}`;
+                const apiKey = "AIzaSyDC8ZJMw9pqASh8A6OkkUdB3vvXFCB5H4A"; // Reemplaza con tu clave de API
+                const requestUrl = `https://routes.googleapis.com/directions/v2:computeRoutes?key=${apiKey}`;
 
-            var origin = document.getElementById("origin").value;
-            var destination = document.getElementById("destination").value;
+                var origin = document.getElementById("origin").value;
+                var destination = document.getElementById("destination").value;
 
-            const requestBody = {
-            origin: { address: origin },
-            destination: { address: destination },
-            travelMode: "DRIVE",
-            // X-Goog-FieldMask: *
-            routingPreference: "TRAFFIC_AWARE_OPTIMAL"
-
-
-            };
-
-            try {
-            const response = await fetch(requestUrl, {
-            method: "POST",
-            headers: {
-            "Content-Type": "application/json",
-            "X-Goog-FieldMask": "routes"
-
-            },
-            body: JSON.stringify(requestBody),
-            });
-
-            //  if (!response.ok) {
-            //     throw new Error("Error al calcular la ruta");
-            //  }
-            if (!response.ok) {
-
-            const errorData = await response.json();
-
-            console.error("Respuesta con error:", errorData);
-
-            throw new Error("Error al calcular la ruta respuesta mala: " + (errorData.error?.message || "Desconocido"));
-
-            }
+                const requestBody = {
+                    origin: { address: origin },
+                    destination: { address: destination },
+                    travelMode: "DRIVE",
+                    // X-Goog-FieldMask: *
+                    routingPreference: "TRAFFIC_AWARE_OPTIMAL"
 
 
+                };
 
-            const data = await response.json();
+                try {
+                    const response = await fetch(requestUrl, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-Goog-FieldMask": "routes"
 
+                        },
+                        body: JSON.stringify(requestBody),
+                    });
 
-            //obtener detalles de la ruta
-            var routeDetailsDistanceMeters = data.routes[0].distanceMeters;
-            var routeDetailsDistanceKMeters = routeDetailsDistanceMeters / 1000;
-            var routeDetailsDistanceKMetersRedondeado = routeDetailsDistanceKMeters.toFixed(2);
+                    //  if (!response.ok) {
+                    //     throw new Error("Error al calcular la ruta");
+                    //  }
+                    if (!response.ok) {
 
-            var routeDetailsDurationS = (data.routes[0].duration).replaceAll("s", "");
-            var routeDetailsDurationM = routeDetailsDurationS / 60;
-            var routeDetailsDurationMRedondeado = routeDetailsDurationM.toFixed(2);
+                        const errorData = await response.json();
 
-            var routeDetailsDurationH = routeDetailsDurationS / 3600;
-            var routeDetailsDurationHRedondeado = routeDetailsDurationH.toFixed(2);
+                        console.error("Respuesta con error:", errorData);
 
-            alert("La mejor ruta tomando en cuenta el tráfico tiene una distancia de: " + routeDetailsDistanceKMetersRedondeado + "Km" + "\n" + "y una duración de: " + routeDetailsDurationMRedondeado + " minutos" + "\n" + "lo que equivale a un total de: " + routeDetailsDurationHRedondeado + " Horas");
+                        throw new Error("Error al calcular la ruta respuesta mala: " + (errorData.error?.message || "Desconocido"));
 
-
-            // Dibujar la ruta en el mapa
-            const route = data.routes[0];
-            const path = route.polyline.encodedPolyline;
-            const decodedPath = google.maps.geometry.encoding.decodePath(path);
-
-            const routePath = new google.maps.Polyline({
-            path: decodedPath,
-            geodesic: true,
-            strokeColor: "#FF0000",
-            strokeOpacity: 1.0,
-            strokeWeight: 2,
-            });
-
-            routePath.setMap(map);
+                    }
 
 
 
+                    const data = await response.json();
 
-            // Ajustar el mapa para que se vea toda la ruta
-            const bounds = new google.maps.LatLngBounds();
-            decodedPath.forEach((point) => bounds.extend(point));
-            map.fitBounds(bounds);
 
-            } catch (error) {
-            alert("Error al calcular la ruta: " + error.message);
-            }
+                    //obtener detalles de la ruta
+                    var routeDetailsDistanceMeters = data.routes[0].distanceMeters;
+                    var routeDetailsDistanceKMeters = routeDetailsDistanceMeters / 1000;
+
+                    var routeDetailsDurationS = (data.routes[0].duration).replaceAll("s", "");
+                    var routeDetailsDurationM = routeDetailsDurationS / 60;
+
+                    var routeDetailsDurationH = routeDetailsDurationS / 3600;
+
+
+
+                    var inputKilometros = document.getElementById("kilometros");
+                    inputKilometros.value = routeDetailsDistanceKMeters.toFixed(2);
+
+                    var inputHoras = document.getElementById("horas");
+                    inputHoras.value = routeDetailsDurationH.toFixed(2);
+
+                    var inputMinutos = document.getElementById("minutos");
+                    inputMinutos.value = routeDetailsDurationM.toFixed(2);
+
+
+                    //alert("La mejor ruta tomando en cuenta el tráfico tiene una distancia de: " + routeDetailsDistanceKMeters.toFixed(2) + "Km" + "\n" + "y una duración de: " + routeDetailsDurationM.toFixed(2) + " minutos" + "\n" + "lo que equivale a un total de: " + routeDetailsDurationH.toFixed(2) + " Horas");
+
+
+                    // Dibujar la ruta en el mapa
+                    const route = data.routes[0];
+                    const path = route.polyline.encodedPolyline;
+                    const decodedPath = google.maps.geometry.encoding.decodePath(path);
+
+                    const routePath = new google.maps.Polyline({
+                        path: decodedPath,
+                        geodesic: true,
+                        strokeColor: "#FF0000",
+                        strokeOpacity: 1.0,
+                        strokeWeight: 2,
+                    });
+
+                    routePath.setMap(map);
+
+
+
+
+                    // Ajustar el mapa para que se vea toda la ruta
+                    const bounds = new google.maps.LatLngBounds();
+                    decodedPath.forEach((point) => bounds.extend(point));
+                    map.fitBounds(bounds);
+
+                } catch (error) {
+                    alert("Error al calcular la ruta: " + error.message);
+                }
 
             }
 
             // Manejar el envío del formulario
             document.getElementById("routesForm").addEventListener("submit", async (event) => {
-            event.preventDefault();
+                event.preventDefault();
 
-            const origin = document.getElementById("origin").value;
-            const destination = document.getElementById("destination").value;
+                const buscarButton = document.getElementById("boton_Buscar");
+                buscarButton.style.display = 'none'; // ocultar boton buscar.
 
-            // Calcular y mostrar la ruta
-            calculateAndDisplayRoute(origin, destination);
+                const refreshButton = document.getElementById("boton_Refresh");
+                refreshButton.style.display = 'block'; // mostrar boton refresh.
+
+                const origin = document.getElementById("origin").value;
+                const destination = document.getElementById("destination").value;
+
+
+
+
+
+                // Calcular y mostrar la ruta
+                calculateAndDisplayRoute(origin, destination);
             });
 
             // Cargar la API de Google Maps con la biblioteca de Places
             function loadGoogleMapsScript() {
-            const script = document.createElement("script");
-            script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDC8ZJMw9pqASh8A6OkkUdB3vvXFCB5H4A&callback=initMap&libraries=places,geometry`;
-            script.defer = true;
-            document.head.appendChild(script);
+                const script = document.createElement("script");
+                script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDC8ZJMw9pqASh8A6OkkUdB3vvXFCB5H4A&callback=initMap&libraries=places,geometry`;
+                script.defer = true;
+                document.head.appendChild(script);
             }
 
             // Cargar el script de Google Maps al cargar la página
             window.onload = loadGoogleMapsScript;
+
+
         </script>
     </div>
-    <!-- Buscar Mejores Rutas End -->
-    <!-- Notificaciones de Envíos Start
-    <div class="container-fluid py-4">
-    <h4 class="mb-4 text-primary">Enviar Notificaciones al Cliente</h4>
-    <form>
-    <div class="form-group">
-    <label for="clientEmail">Correo del Cliente</label>
-    <input type="email" class="form-control" id="clientEmail" placeholder="Ejemplo: cliente@correo.com">
-    </div>
-    <div class="form-group">
-    <label for="message">Mensaje</label>
-    <textarea class="form-control" id="message" rows="3" placeholder="Escribe el estado del envío o información relevante"></textarea>
-    </div>
-    <button type="submit" class="btn btn-success">Enviar Notificación</button>
-    </form>
-    </div>
-    -- Notificaciones de Envíos End --
-    -- Edit Details Modal Start --
-    <div class="modal fade" id="editDetailsModal" tabindex="-1" role="dialog" aria-labelledby="editDetailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-    <div class="modal-header">
-    <h5 class="modal-title" id="editDetailsModalLabel">Editar Detalles del Transportista/Envío</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-    </button>
-    </div>
-    <div class="modal-body">
-    <form>
-    <div class="form-group">
-    <label for="transporterName">Nombre del Transportista</label>
-    <input type="text" class="form-control" id="transporterName" value="Juan Pérez">
-    </div>
-    <div class="form-group">
-    <label for="route">Ruta</label>
-    <select class="form-control" id="route">
-    <option>Ruta 32 (San José - Limón)</option>
-    <option>Ruta 27 (San José - Caldera)</option>
-    <option>Ruta 1 (Interamericana Norte)</option>
-    <option>Ruta 2 (Interamericana Sur)</option>
-    </select>
-    </div>
-    <div class="form-group">
-    <label for="status">Estado del Envío</label>
-    <select class="form-control" id="status">
-    <option>En tránsito</option>
-    <option>Pendiente</option>
-    <option>Entregado</option>
-    </select>
-    </div>
-    </form>
-    </div>
-    <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-    <button type="button" class="btn btn-primary">Guardar Cambios</button>
-    </div>
-    </div>
-    </div>
-    </div>
-    Edit Details Modal End -->
+
 }
 else
 {
