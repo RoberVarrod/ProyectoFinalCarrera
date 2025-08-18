@@ -80,7 +80,7 @@
             let autocompleteDestination;
 
             // Función para inicializar el mapa
-            function initMap() {
+           function initMap() {
             // Centrar el mapa en Costa Rica
             map = new google.maps.Map(document.getElementById("map"), {
             center: { lat: 9.7489, lng: -83.7534 }, // Coordenadas de Costa Rica
@@ -161,16 +161,16 @@
             //obtener detalles de la ruta
             var routeDetailsDistanceMeters = data.routes[0].distanceMeters;
             var routeDetailsDistanceKMeters = routeDetailsDistanceMeters / 1000;
+            var routeDetailsDistanceKMetersRedondeado = routeDetailsDistanceKMeters.toFixed(2);
 
             var routeDetailsDurationS = (data.routes[0].duration).replaceAll("s", "");
             var routeDetailsDurationM = routeDetailsDurationS / 60;
+            var routeDetailsDurationMRedondeado = routeDetailsDurationM.toFixed(2);
 
             var routeDetailsDurationH = routeDetailsDurationS / 3600;
+            var routeDetailsDurationHRedondeado = routeDetailsDurationH.toFixed(2);
 
-
-
-
-            alert("La mejor ruta tomando en cuenta el tráfico tiene una distancia de: " + routeDetailsDistanceKMeters + "Km" + "\n" + "y una duración de: " + routeDetailsDurationM + " minutos" + "\n" + "lo que equivale a un total de: " + routeDetailsDurationH + " Horas");
+            alert("La mejor ruta tomando en cuenta el tráfico tiene una distancia de: " + routeDetailsDistanceKMetersRedondeado + "Km" + "\n" + "y una duración de: " + routeDetailsDurationMRedondeado + " minutos" + "\n" + "lo que equivale a un total de: " + routeDetailsDurationHRedondeado + " Horas");
 
 
             // Dibujar la ruta en el mapa
