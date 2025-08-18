@@ -33,18 +33,18 @@
                         </div>
                         <div class="form-group">
                             <input type="text" class="form-control border-0 p-4" placeholder="Cédula (Ejemplo: 011111111)" name="Cedula"
-                                   pattern="\d{10}" title="La cédula debe tener 10 dígitos." required="required" />
+                                   pattern="^\d{9,12}$" title="El número de cédula debe tener mínimo 9 dígitos, sin espacios solo números." required="required" />
                         </div>
                         <div class="form-group">
                             <input type="email" class="form-control border-0 p-4" placeholder="Correo Electrónico" name="Correo" required="required" />
                         </div>
                         <div class="form-group">
                             <input type="text" class="form-control border-0 p-4" placeholder="Teléfono (Ejemplo: 88888888)" name="TelefonoPrincipal"
-                                   pattern="\d{8}" title="El número de teléfono debe tener 8 dígitos." required="required" />
+                                   pattern="^\d{8,12}$" title="El número de teléfono debe tener mínimo 8 dígitos, sin espacios solo números." required="required" />
                         </div>
                         <div class="form-group">
                             <input type="text" class="form-control border-0 p-4" placeholder="Teléfono Secundario (Ejemplo: 88888888)" name="TelefonoSecundario"
-                                   pattern="\d{8}" title="El número de teléfono debe tener 8 dígitos." required="required" />
+                                   pattern="^\d{8,12}$" title="El número de teléfono debe tener mínimo 8 dígitos, sin espacios solo números." />
                         </div>
                         <h5 class="text-white text-uppercase font-weight-bold mt-4">Dirección</h5>
                         <div class="form-group">
