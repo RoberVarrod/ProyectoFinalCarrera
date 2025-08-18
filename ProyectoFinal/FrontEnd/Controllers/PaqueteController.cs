@@ -8,6 +8,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.CodeAnalysis.Options;
 using Newtonsoft.Json.Linq;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Security.Cryptography;
 
 namespace FrontEnd.Controllers
 {
@@ -169,6 +170,18 @@ namespace FrontEnd.Controllers
         [HttpPost]
         public async Task<IActionResult> BorrarPaquete(int id)
         {
+
+            var listaHistorialCambios = await _context.HistorialCambiosPaquetes.Where(h => h.IdPaquete == id).OrderBy(h => h.Sequencia).ToListAsync();
+
+            //Borro el historial de cambios, cada row que contenga este paquete.
+            List<HistorialCambiosPaquete> listaCambiosPaquete = new List<HistorialCambiosPaquete>();
+            listaCambiosPaquete = listaHistorialCambios;
+            foreach (HistorialCambiosPaquete cambio in listaCambiosPaquete){
+
+                _context.HistorialCambiosPaquetes.Remove(cambio);
+                await _context.SaveChangesAsync();
+            }
+
             var paquete = await _context.Paquetes.FindAsync(id);
             if (paquete != null)
             {
