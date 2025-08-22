@@ -29,6 +29,12 @@
         </div>
     </div>
 </div>
+    @if (TempData["MensajeNoBorrarUsuario"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["MensajeNoBorrarUsuario"]
+        </div>
+    }
 <!-- Header End -->
 <!-- Lista de Empleados Start -->
 <div class="container-fluid py-4">

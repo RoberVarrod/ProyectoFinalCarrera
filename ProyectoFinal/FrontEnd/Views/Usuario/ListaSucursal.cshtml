@@ -19,6 +19,13 @@
         </div>
     </div>
 </div>
+
+    @if (TempData["MensajeNoBorrarSucursal"] != null)
+    {
+        <div class="alert alert-success" role="alert">
+            @TempData["MensajeNoBorrarSucursal"]
+        </div>
+    }
 <!-- Header End -->
 <!-- Lista de Sucursales Start -->
 <div class="container-fluid py-4">

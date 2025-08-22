@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace FrontEnd.Controllers
 {
@@ -339,7 +340,7 @@ namespace FrontEnd.Controllers
             {
                 return NotFound();
             }
-
+    
             var usuario = await _context.Usuarios
                 .FirstOrDefaultAsync(m => m.IdUsuario == id);
             if (usuario == null)
@@ -350,12 +351,30 @@ namespace FrontEnd.Controllers
             return View(usuario);
         }
 
+
+
         // POST: Usuarios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+
             var usuario = await _context.Usuarios.FindAsync(id);
+
+
+            var listaPaquetesUsuario = await _context.Paquetes.Where(p => p.IdUsuario == id).ToListAsync();
+            List<Paquete> listaPaqutesAssignadoUsuario = new List<Paquete>();
+
+            listaPaqutesAssignadoUsuario = listaPaquetesUsuario;
+
+            if (listaPaqutesAssignadoUsuario.Count != 0)
+            {
+                TempData["MensajeNoBorrarUsuario"] = "El Usuario no se puede borrar porque ya cuenta con paquetes registrados"; // no se puede borrar
+                return RedirectToAction(nameof(Administracion));
+
+            }
+
+
             if (usuario != null)
             {
                 _context.Usuarios.Remove(usuario);
@@ -397,10 +416,22 @@ namespace FrontEnd.Controllers
 
         // POST: Eliminar cliente
         [HttpPost]
-        public IActionResult EliminarCliente(int id)
+        public async Task<IActionResult> EliminarCliente(int id)
         {
             var cliente = _context.Clientes.Find(id);
             if (cliente == null) return NotFound();
+
+            var listaPaquetesCliente = await _context.Paquetes.Where(p => p.IdCliente == id).ToListAsync();
+            List<Paquete> listaPaqutesDelCliente = new List<Paquete>();
+
+            listaPaqutesDelCliente = listaPaquetesCliente;
+
+            if (listaPaqutesDelCliente.Count != 0)
+            {
+                TempData["MensajeNoBorrarCliente"] = "El cliente no se puede borrar porque ya cuenta con paquetes"; // no se puede borrar
+                return RedirectToAction("AdministracionCliente");
+
+            }
 
             _context.Clientes.Remove(cliente);
             _context.SaveChanges();
@@ -493,10 +524,26 @@ namespace FrontEnd.Controllers
 
         // POST: Eliminar sucursal
         [HttpPost]
-        public IActionResult EliminarSucursal(int id)
+        public async Task<IActionResult> EliminarSucursal(int id)
         {
             var sucursal = _context.Sucursals.Find(id);
             if (sucursal == null) return NotFound();
+
+
+            var listaPaquetesSucursal = await _context.Paquetes.Where(p => p.IdSucursal == id).ToListAsync();
+            List<Paquete> listaPaqutesAssignadoSucursal = new List<Paquete>();
+
+            listaPaqutesAssignadoSucursal = listaPaquetesSucursal;
+
+            if (listaPaqutesAssignadoSucursal.Count != 0)
+            {
+                TempData["MensajeNoBorrarSucursal"] = "La Sucursal no se puede borrar porque ya cuenta con paquetes registrados"; // no se puede borrar
+                return RedirectToAction("ListaSucursal");
+
+            }
+
+
+
 
             _context.Sucursals.Remove(sucursal);
             _context.SaveChanges();
