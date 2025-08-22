@@ -31,7 +31,7 @@
 </div>
     @if (TempData["MensajeNoBorrarUsuario"] != null)
     {
-        <div class="alert alert-success" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
             @TempData["MensajeNoBorrarUsuario"]
         </div>
     }
@@ -74,10 +74,18 @@
                         <td>@usuario.Nombre @usuario.PrimerApellido @usuario.SegundoApellido</td>
                         <td>@usuario.Correo</td>
                         <td>@usuario.TelefonoPrincipal</td>
-                        <td>
-                            @(usuario.IdSucursal == 1 ? "Virtual/Temporal" :
-                              usuario.IdSucursal == 2 ? "Naranjo (CR)" :
-                              usuario.IdSucursal == 3 ? "Pérez Zeledón (CR)" : "Sin sucursal")
+                            <td>
+                                @{
+                                    var sucursalUsuario = (ViewBag.Sucursales as List<Sucursal>)?.FirstOrDefault(s => s.IdSucursal == usuario.IdSucursal);
+                                }
+                                @if (sucursalUsuario != null)
+                                {
+                                    @sucursalUsuario.Nombre
+                                }
+                                else
+                                {
+                                    <span class="text-danger">No hay sucursal asignada</span>
+                                }
                         </td>
                         <td>@usuario.Oficina</td>
                         <td>@(usuario.IdRol == 1 ? "Regular" :
@@ -229,10 +237,12 @@
                     <p><strong>Correo Electrónico:</strong> @usuario.Correo</p>
                     <p><strong>Teléfono:</strong> @usuario.TelefonoPrincipal</p>
                     <p><strong>Dirección:</strong> @usuario.Direccion</p>
-                    <p><strong>Sucursal:</strong> @(usuario.IdSucursal == 1 ? "Virtual/Temporal" :
-                                                    usuario.IdSucursal == 2 ? "Naranjo (CR)" :
-                                                    usuario.IdSucursal == 3 ? "Pérez Zeledón (CR)" : "Sin sucursal")
-                                                </p>
+                    <p>
+                        <strong>Sucursal:</strong>
+                        @(ViewBag.Sucursales != null
+                        ? ((ViewBag.Sucursales as List<Sucursal>).FirstOrDefault(s => s.IdSucursal == usuario.IdSucursal)?.Nombre ?? "No asignada")
+                            : "No hay sucursales disponibles")
+                    </p>
                     <p><strong>Oficina:</strong> @usuario.Oficina</p>
                     <p><strong>Rol:</strong> @(usuario.IdRol == 1 ? "Regular" :
                                                usuario.IdRol == 2 ? "Empleado" :

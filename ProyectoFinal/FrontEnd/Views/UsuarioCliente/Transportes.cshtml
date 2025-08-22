@@ -93,9 +93,17 @@
                                         if (ViewBag?.Usuarios is List<Usuario> usuarios)
                                         {
                                             var transportista = usuarios.FirstOrDefault(u => u.IdUsuario == paquete.IdUsuario);
+
                                             if (transportista != null)
                                             {
-                                                <label>@transportista.Nombre @transportista.PrimerApellido @transportista.SegundoApellido</label>
+                                                if (transportista.IdRol == 3)
+                                                {
+                                                    <label>@transportista.Nombre @transportista.PrimerApellido @transportista.SegundoApellido</label>
+                                                }
+                                                else
+                                                {
+                                                    <label>Pendiente</label>
+                                                }
                                             }
                                             else
                                             {
@@ -107,6 +115,7 @@
                                             <label>No hay transportistas disponibles</label>
                                         }
                                     }
+
                                 </td>
                                 <td>
                                     <div class="d-flex justify-content-start">
@@ -149,11 +158,19 @@
                                                             if (ViewBag?.Usuarios is List<Usuario> usuariosModal)
                                                             {
                                                                 var transportista = usuariosModal.FirstOrDefault(u => u.IdUsuario == paquete.IdUsuario);
+
                                                                 if (transportista != null)
                                                                 {
-                                                                    <p><strong>Nombre:</strong> @transportista.Nombre @transportista.PrimerApellido @transportista.SegundoApellido</p>
-                                                                    <p><strong>Teléfonos:</strong> @transportista.TelefonoPrincipal</p>
-                                                                    <p><strong>Correo:</strong> @transportista.Correo</p>
+                                                                    if (transportista.IdRol == 3)
+                                                                    {
+                                                                        <p><strong>Nombre:</strong> @transportista.Nombre @transportista.PrimerApellido @transportista.SegundoApellido</p>
+                                                                        <p><strong>Teléfonos:</strong> @transportista.TelefonoPrincipal</p>
+                                                                        <p><strong>Correo:</strong> @transportista.Correo</p>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <label>Pendiente</label>
+                                                                    }
                                                                 }
                                                                 else
                                                                 {

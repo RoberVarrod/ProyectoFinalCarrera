@@ -19,6 +19,67 @@
         </div>
     </div>
     <!-- Header End -->
+
+    @if (TempData["MensajeInformacionCorrecto"] != null)
+    {
+        <div class="container mt-3">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["MensajeInformacionCorrecto"]
+                <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    }
+
+    @if (TempData["ErrorContrasena"] != null)
+    {
+        <div class="container mt-3">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorContrasena"]
+                <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    }
+
+    @if (TempData["ExitoContrasena"] != null)
+    {
+        <div class="container mt-3">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["ExitoContrasena"]
+                <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    }
+
+    @if (TempData["ErrorFoto"] != null)
+    {
+        <div class="container mt-3">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["ErrorFoto"]
+                <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    }
+
+    @if (TempData["ExitoFoto"] != null)
+    {
+        <div class="container mt-3">
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["ExitoFoto"]
+                <button type="button" class="close" data-dismiss="alert" aria-label="Cerrar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </div>
+    }
+
     <!-- Página de Configuración de Usuario Start -->
     <div class="container my-5">
         <div class="row justify-content-center">
@@ -46,8 +107,8 @@
                                 <form method="post" action="/Usuario/Configuracion" enctype="multipart/form-data">
                                     <div class="form-group">
                                         <label>Subir nueva foto</label>
-                                        <input type="file" class="form-control" name="ProfileImage" accept=".jpg,.png" required>
-                                        <small class="form-text text-muted">El archivo debe ser .jpg o .png.</small>
+                                        <input type="file" class="form-control" name="ProfileImage" accept=".jpg,.png, .jpeg" required>
+                                        <small class="form-text text-muted">El archivo debe ser .jpg .png .jpeg</small>
                                     </div>
                                     <button type="submit" class="btn btn-primary btn-block">Guardar</button>
                                 </form>
@@ -96,7 +157,7 @@
                             <div class="form-group">
                                 <label>Cédula</label>
                                 <input type="text" class="form-control" name="Cedula" value="@Model.Cedula"
-                                       pattern="\d{10}" title="La cédula debe tener 10 dígitos." required>
+                                       pattern="^\d{9,12}$" title="El número de cédula debe tener mínimo 9 dígitos, sin espacios solo números." required="required" />
                             </div>
                             <div class="form-group">
                                 <label>Correo Electrónico</label>
@@ -118,16 +179,6 @@
                     <!-- Formulario para Cambiar Contraseña Start -->
                     <div id="changePasswordForm" class="collapse mt-4">
                         <form method="post" action="/Usuario/CambiarContrasena">
-                            @if (TempData["ErrorContrasena"] != null)
-                            {
-                                <div class="alert alert-danger">@TempData["ErrorContrasena"]</div>
-                            }
-
-                            @if (TempData["ExitoContrasena"] != null)
-                            {
-                                <div class="alert alert-success">@TempData["ExitoContrasena"]</div>
-                            }
-
                             <input type="hidden" name="IdUsuario" value="@Model.IdUsuario" />
 
                             <div class="form-group">

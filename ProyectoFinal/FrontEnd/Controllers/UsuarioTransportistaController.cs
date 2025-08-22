@@ -44,15 +44,34 @@ namespace FrontEnd.Controllers
 
             if (!string.IsNullOrEmpty(usuarioId) && profileImage != null)
             {
+                // Validar extensión
+                var extension = Path.GetExtension(profileImage.FileName).ToLower();
+                var extensionesPermitidas = new[] { ".jpg", ".jpeg", ".png" };
+
+                if (!extensionesPermitidas.Contains(extension))
+                {
+                    TempData["ErrorFoto"] = "Solo se permiten archivos .jpg .jpeg .png";
+                    return RedirectToAction("Configuracion");
+                }
+
                 var usuario = _context.Usuarios.FirstOrDefault(c => c.IdUsuario == int.Parse(usuarioId));
                 if (usuario != null)
                 {
+                    // Eliminar la foto anterior si existe
+                    if (!string.IsNullOrEmpty(usuario.FotoPerfil))
+                    {
+                        var oldFilePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", usuario.FotoPerfil.TrimStart('/'));
+                        if (System.IO.File.Exists(oldFilePath))
+                        {
+                            System.IO.File.Delete(oldFilePath);
+                        }
+                    }
+
                     // Usar la cédula del cliente como nombre del archivo
-                    var extension = Path.GetExtension(profileImage.FileName);
                     var nombreArchivo = usuario.Cedula + extension;
                     var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "imagenesperfil", nombreArchivo);
 
-                    // Guardar la imagen en el servidor
+                    // Guardar la nueva imagen en el servidor
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         profileImage.CopyTo(stream);
@@ -62,6 +81,7 @@ namespace FrontEnd.Controllers
                     usuario.FotoPerfil = "/imagenesperfil/" + nombreArchivo;
                     _context.SaveChanges();
 
+                    TempData["ExitoFoto"] = "Foto de perfil actualizada correctamente.";
                     return RedirectToAction("Configuracion");
                 }
             }
@@ -87,10 +107,12 @@ namespace FrontEnd.Controllers
                 usuarioExistente.Direccion = usuario.Direccion;
 
                 _context.SaveChanges();
+                TempData["MensajeInformacionCorrecto"] = "Informacion cambiada correctamente.";
+                return RedirectToAction("Configuracion");
 
-                
+
             }
-            return RedirectToAction("Configuracion");
+            return NotFound();
         }
 
         [HttpPost]
